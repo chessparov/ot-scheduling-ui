@@ -1,21 +1,21 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import {useUserStore} from "@/stores/user-store";
 
 export default defineComponent({
   name: "GreetingsMessage",
 
   data() {
-    return {}
+    return {
+      user: useUserStore()
+    }
   },
-  props: {
-    username: String,
-  }
 })
 </script>
 
 <template>
   <span class="greet-message">
-    Ciao, {{ username }}
+    Ciao, {{ user.userName }}
   </span>
 </template>
 

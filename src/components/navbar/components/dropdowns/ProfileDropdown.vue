@@ -15,7 +15,7 @@
       >
         <VaList v-for="group in options" :key="group.name">
           <header v-if="group.name" class="uppercase text-[var(--va-secondary)] opacity-80 font-bold text-xs px-4">
-            {{ `user.${group.name}` }}
+            {{ `${group.name}` }}
           </header>
           <VaListItem
             v-for="item in group.list"
@@ -24,7 +24,7 @@
             v-bind="resolveLinkAttribute(item)"
           >
             <VaIcon :name="item.icon" class="pr-1" color="secondary" />
-            {{ `user.${item.name}` }}
+            {{ `${item.name}` }}
           </VaListItem>
           <VaListSeparator v-if="group.separator" class="mx-3 my-2" />
         </VaList>
@@ -65,13 +65,13 @@ withDefaults(
         separator: true,
         list: [
           {
-            name: 'profile',
-            // to: 'preferences',
+            name: 'Profilo',
+            to: 'profile',
             icon: 'mso-account_circle',
           },
           {
-            name: 'settings',
-            // to: 'settings',
+            name: 'Impostazioni',
+            to: 'settings',
             icon: 'mso-settings',
           },
         ],
@@ -81,7 +81,7 @@ withDefaults(
         separator: true,
         list: [
           {
-            name: 'helpAndSupport',
+            name: 'Documentazione',
             icon: 'mso-error',
           },
         ],
@@ -91,7 +91,7 @@ withDefaults(
         separator: false,
         list: [
           {
-            name: 'logout',
+            name: 'Logout',
             to: 'login',
             icon: 'mso-logout',
           },

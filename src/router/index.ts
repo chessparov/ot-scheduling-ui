@@ -5,14 +5,47 @@ import AppLayout from "@/layouts/AppLayout.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {
+        name:'home',
         path: '/',
-        redirect: 'auth/login',
-    },
-    {
-        name:'dashboard',
-        path: '/dashboard',
         component: AppLayout,
         props: true,
+        children: [
+            {
+                name:'dashboard',
+                path: 'dashboard',
+                component: () => import('../pages/dashboard/Dashboard.vue'),
+            },
+            {
+                name: 'history',
+                path: 'history',
+                component: () => import('../pages/history/History.vue'),
+            },
+            {
+                name: 'schedule',
+                path: 'schedule',
+                component: () => import('../pages/scheduler/NewSchedule.vue')
+            },
+            {
+                name: 'upload',
+                path: 'upload',
+                component: () => import('../pages/upload/UploadSchedule.vue'),
+            },
+            {
+                name: 'stats',
+                path: 'stats',
+                component: () => import('../pages/stats/Stats.vue'),
+            },
+            {
+                name: 'settings',
+                path: 'settings',
+                component: () => import('../pages/settings/Settings.vue'),
+            },
+            {
+                name: 'profile',
+                path: 'profile',
+                component: () => import('../pages/profile/Profile.vue'),
+            }
+        ]
     },
     {
         path: '/auth',
