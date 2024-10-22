@@ -21,6 +21,14 @@ export default {
       display: true,
     },
     {
+      name: 'history',
+      displayName: 'Archivio',
+      meta: {
+        icon: 'folder_shared',
+      },
+      display: true,
+    },
+    {
       name: 'schedule',
       displayName: 'Nuova Schedula',
       meta: {
@@ -33,22 +41,6 @@ export default {
       displayName: 'Carica Schedula',
       meta: {
         icon: 'upload',
-      },
-      display: true,
-    },
-    {
-      name: 'history',
-      displayName: 'Archivio',
-      meta: {
-        icon: 'folder_shared',
-      },
-      display: true,
-    },
-    {
-      name: 'stats',
-      displayName: 'Statistiche',
-      meta: {
-        icon: 'view_kanban',
       },
       display: true,
     },

@@ -6,8 +6,9 @@ import ProjectCards from './widgets/ProjectCards.vue'
 import ProjectTable from './widgets/ProjectsTable.vue'
 import EditProjectForm from './widgets/EditProjectForm.vue'
 import { Project } from './types'
-import { useModal, useToast } from 'vuestic-ui'
+import {useModal, useToast, VaSelectOptionList} from 'vuestic-ui'
 import router from "@/router";
+import SearchBar from "@/components/SearchBar.vue";
 
 const doShowAsCards = useLocalStorage('projects-view', true)
 
@@ -101,6 +102,8 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
               { label: 'Elenco', value: false },
             ]"
           />
+          <SearchBar/>
+<!--          <VaSelectOptionList -->
         </div>
         <VaButton icon="add" @click="router.push({ name: 'schedule'})">Schedula</VaButton>
       </div>
@@ -134,7 +137,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
         hide-default-actions
         :before-cancel="beforeEditFormModalClose"
     >
-      <h1 v-if="projectToEdit === null" class="va-h5 mb-4">Add project</h1>
+      <h1 v-if="projectToEdit === null" class="va-h5 mb-4">Aggiungi schedula</h1>
       <h1 v-else class="va-h5 mb-4">Modifica schedula</h1>
       <EditProjectForm
           ref="editFormRef"
@@ -151,3 +154,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
     </VaModal>
   </VaCard>
 </template>
+
+<style lang="css" scoped>
+
+</style>
