@@ -1,0 +1,18 @@
+[
+  {
+    "id": 1,
+    "name": "Chirurgia generale"
+  },
+  {
+    "id": 2,
+    "name": "Urologia 1"
+  },
+  {
+    "id": 3,
+    "name": "Endocrinochirurgia"
+  },
+  {
+    "id": 4,
+    "name": "Chirurgia toracica"
+  }
+]

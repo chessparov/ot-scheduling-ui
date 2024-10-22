@@ -3,10 +3,11 @@ import {defineComponent} from 'vue'
 import Optimization from "@/pages/scheduler/cards/Optimization.vue";
 import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Launch from "@/pages/scheduler/cards/Launch.vue";
+import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 
 export default defineComponent({
   name: "NewSchedule",
-  components: {Launch, Montecarlo, Optimization},
+  components: {Constraints, Launch, Montecarlo, Optimization},
   data() {
     return {
 
@@ -22,6 +23,7 @@ export default defineComponent({
       <Montecarlo/>
       <Optimization/>
     </div>
+    <Constraints/>
     <Launch/>
   </div>
 </template>

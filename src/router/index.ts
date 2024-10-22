@@ -44,6 +44,11 @@ const routes: Array<RouteRecordRaw> = [
                 name: 'profile',
                 path: 'profile',
                 component: () => import('../pages/profile/Profile.vue'),
+            },
+            {
+                name: 'constraints',
+                path: 'constraints',
+                component: () => import('../pages/constraints/ModConstraints.vue')
             }
         ]
     },

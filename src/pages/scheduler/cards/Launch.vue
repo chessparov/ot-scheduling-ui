@@ -8,7 +8,7 @@ export default defineComponent ({
   components: {VaCardContent},
   data () {
     return {
-      percent: 80,
+      percent: 60,
       estimatedTime: 10
     }
   }
