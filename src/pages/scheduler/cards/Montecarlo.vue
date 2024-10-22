@@ -1,8 +1,11 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import {VaCardContent} from "vuestic-ui";
+import BindedSlider from "@/components/BindedSlider.vue";
 
 export default defineComponent({
   name: "Montecarlo",
+  components: {BindedSlider, VaCardContent},
   data() {
     return {
       scheduleName: "",
@@ -23,35 +26,23 @@ export default defineComponent({
             label="Nome schedula"
         />
         <VaDateInput
+            label="Data inizio schedulazione"
             v-model="date" />
-        <div id="montecarlo" class="slider-wrapper">
-          <VaSlider
-              label="Montecarlo"
-              v-model="cycles"
-              :min=0
-              :max=10000
-              :readonly="false"
-              style="flex-grow: 1; padding-right: 1%"
-          />
-          <span class="mb-2">
-              {{ cycles }} Cicli
-            </span>
-        </div>
+        <BindedSlider
+            :slider-label="'Montecarlo'"
+            :slider-min="0"
+            :slider-max="10000"
+            :slider-value="cycles"
+            :input-inner-label="'Cicli'"
+        />
         <span>
             Numero di cicli consigliato: 1000
           </span>
-        <VaButton>
-          Ottieni schedula
-        </VaButton>
       </section>
     </VaCardContent>
   </VaCard>
 </template>
 
-<style lang="scss">
-.slider-wrapper {
-  display: flex 1;
-  justify-content: space-between;
-  padding: 1%;
-}
+<style scoped lang="scss">
+
 </style>

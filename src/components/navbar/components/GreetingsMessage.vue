@@ -22,7 +22,6 @@ export default defineComponent({
 <style scoped lang="css">
 
 .greet-message {
-  padding-right: 1.3rem;
   font-size: 1.2rem;
 }
 </style>

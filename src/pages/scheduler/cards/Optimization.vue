@@ -1,11 +1,14 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
+import BindedSlider from "@/components/BindedSlider.vue";
 
 export default defineComponent({
   name: "Optimization",
+  components: {BindedSlider},
   data() {
     return {
       optTime: 60 * 2,
+      optMinutes: (this.optTime / 60).toFixed(1),
       optimization: false,
     }
   }
@@ -20,23 +23,14 @@ export default defineComponent({
             v-model="optimization"
             label="Ottimizzazione"
         />
-        <div class="slider-wrapper">
-          <VaSlider
-              label="Tempo di ottimizzazione"
-              v-model="optTime"
-              :min=0
-              :max=1000
-              :readonly="false"
-              style="flex-grow: 1; padding-right: 1%"
-          />
-          <VaInput
-              v-model="optTime"
-              label="Secondi"
-          />
-          <span class="mb-2">
-                 Secondi ({{ (optTime / 60).toFixed(1) }} minuti)
-          </span>
-        </div>
+        <BindedSlider
+          :slider-label="'Tempo di ottimizzazione'"
+          :slider-min="0"
+          :slider-max="1000"
+          :slider-value="optTime"
+          :input-message="(this.optTime / 60).toFixed(1) + ' minuti'"
+          :input-inner-label="'Secondi'"
+        />
         <span>
           Tempo consigliato: 120 secondi
         </span>
