@@ -83,14 +83,12 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
 
 <template>
   <h1 class="h1">Storico schedule</h1>
-
   <VaCard>
     <VaCardContent>
       <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
         <div class="flex flex-col md:flex-row gap-2 justify-start">
           <VaButtonToggle
               v-model="doShowAsCards"
-              color="background-element"
               border-color="background-element"
               :options="[
               { label: 'Riquadri', value: true },

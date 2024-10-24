@@ -2,9 +2,15 @@
 
 export default {
   name: "DashboardMenu",
+  props: {
+    macroTab: {
+      type: String,
+      default: "DASHBOARD",
+    }
+  },
   data() {
     return {
-      currentTab: "dashboard",
+      currentTab: "DASHBOARD",
       tabs: ['DASHBOARD', 'STATISTICHE'],
     }
   }
@@ -15,16 +21,16 @@ export default {
   <VaCard>
     <VaTabs
         v-model="currentTab"
-        stateful
-        grow
         vertical
-        style="margin-bottom: 2rem; margin-top: 0.5rem"
+        @update:model-value="$emit('changed-tab', currentTab)"
+        style="margin-bottom: 5rem; margin-top: 1rem;"
     >
       <template #tabs>
         <VaTab
             v-for="tab in tabs"
             :key="tab"
             :name="tab"
+            style="padding: 100% 0 100% 0"
         >
           {{ tab }}
         </VaTab>
