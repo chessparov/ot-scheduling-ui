@@ -47,7 +47,8 @@ const routes: Array<RouteRecordRaw> = [
             },
             {
                 name: 'constraints',
-                path: 'constraints',
+                path: 'constraints:constraint?',
+                props: true,
                 component: () => import('../pages/constraints/ModConstraints.vue')
             }
         ]

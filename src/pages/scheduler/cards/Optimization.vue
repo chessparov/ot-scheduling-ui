@@ -1,44 +1,72 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BindedSlider from "@/components/BindedSlider.vue";
+import RadarChart from "@/components/RadarChart.vue";
+
 
 export default defineComponent({
   name: "Optimization",
-  components: {BindedSlider},
+  components: {RadarChart, BindedSlider},
+  props: {
+    optimization: Boolean,
+  },
   data() {
     return {
       optTime: 60 * 2,
-      optMinutes: (this.optTime / 60).toFixed(1),
-      optimization: false,
     }
-  }
+  },
+  methods: {
+    getUpdatedValue(newValue: number) {
+      this.optimization ? this.optTime = newValue : this.optTime = 0;
+      this.tabuTime()
+    },
+    tabuTime() {
+      this.$emit("tabu-time", this.optTime);
+    },
+    timeConversion() {
+      const minutes = Math.floor(this.optTime / 60).toString();
+      const seconds = (this.optTime % 60).toString();
+
+      return minutes + ' min ' + seconds + ' secondi';
+    }
+  },
+  mounted() {
+    if (!this.optimization) {
+      this.optTime = 0;
+    }
+  },
 })
 </script>
 
 <template>
-  <VaCard class="w-full sm:w-[45%]">
+  <VaCard class="w-full sm:w-[45%]" :disabled="!optimization">
     <VaCardContent>
-      <section class="flex flex-col gap-4">
-        <VaSwitch
-            v-model="optimization"
-            label="Ottimizzazione"
-        />
+      <section class="flex flex-col gap-4" >
+        <label class="va-title" style="color: #154EC1; font-size: 16px">
+          Ottimizzazione Tabù Search
+        </label>
         <BindedSlider
-          :slider-label="'Tempo di ottimizzazione'"
-          :slider-min="0"
-          :slider-max="1000"
-          :slider-value="optTime"
-          :input-message="(this.optTime / 60).toFixed(1) + ' minuti'"
-          :input-inner-label="'Secondi'"
+            :disabled="!optimization"
+            :slider-label="'Tempo di ottimizzazione'"
+            :slider-min="0"
+            :slider-max="1000"
+            :slider-value="optTime"
+            :input-message="timeConversion()"
+            :input-inner-label="'Secondi'"
+            @update="getUpdatedValue"
         />
         <span>
           Tempo consigliato: 120 secondi
         </span>
+        <RadarChart/>
       </section>
+
     </VaCardContent>
   </VaCard>
 </template>
 
 <style scoped lang="scss">
+
+
 
 </style>

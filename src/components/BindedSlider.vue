@@ -10,10 +10,33 @@ export default defineComponent({
     sliderValue: Number,
     inputMessage: String | undefined,
     inputInnerLabel: String,
+    disabled: Boolean,
   },
   data() {
     return {
       value: this.sliderValue,
+      inputValue: '',
+    }
+  },
+  methods: {
+    cleanInput(input: String) {
+      input = input.toString();
+      input.replace(/[^0-9]/g, '');
+      input = Number(input);
+      if (!isNaN(input)) {
+        this.value = input;
+      }
+      else {
+        this.value = '';
+      }
+    }
+  },
+  updated() {
+    this.$emit('update', this.value);
+  },
+  watch: {
+    value(newValue: Number) {
+      this.cleanInput(newValue);
     }
   }
 })
@@ -23,6 +46,7 @@ export default defineComponent({
   <div class="slider-wrapper">
     <VaSlider
         :label="sliderLabel"
+        :disabled="disabled"
         v-model="value"
         :min="sliderMin"
         :max="sliderMax"
@@ -31,8 +55,10 @@ export default defineComponent({
     />
     <VaInput
         v-model="value"
+        :disabled="disabled"
         class="w-full sm:w-[20%]"
         :messages="inputMessage"
+        strict-bind-input-value
     >
       <template #appendInner>
         {{ inputInnerLabel }}

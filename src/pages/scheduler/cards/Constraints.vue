@@ -1,12 +1,10 @@
 <script lang="ts">
 
-
-
 export default  {
   data() {
     return {
       collapsed: false,
-      pickedConstraint: "",
+      constraint: "",
       uos: [
         "Chirurgia generale",
         "Urologia 1",
@@ -26,15 +24,15 @@ export default  {
         v-model="collapsed"
         icon="subdirectory_arrow_right"
     >
-      <div class="launcher-wrapper flex flex-col gap-4">
+      <div class="launcher-wrapper flex flex-col gap-2">
         <VaSelect
-            v-model="pickedConstraint"
+            v-model="constraint"
             label="Seleziona vincoli"
+            placeholder="Scegli un vincolo da modificare..."
             :options="uos"
         >
-          Scegli un vincolo da modificare...
         </VaSelect>
-        <VaButton :to="'constraints'">
+        <VaButton :to="{name: 'constraints', params: { constraint: constraint }}">
           Conferma
         </VaButton>
       </div>
