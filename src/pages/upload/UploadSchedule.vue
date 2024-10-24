@@ -13,7 +13,7 @@ export default defineComponent({
     return {
       files: [],
       mcCycles: 1000,
-      tabuTime: 120,
+      tabuTime: 0,
       optimization: false,
       errorMsg: "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx"
     }

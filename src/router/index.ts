@@ -50,6 +50,10 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'constraints:constraint?',
                 props: true,
                 component: () => import('../pages/constraints/ModConstraints.vue')
+            },
+            {
+                path: '',
+                redirect: {name: 'login'},
             }
         ]
     },
