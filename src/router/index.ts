@@ -51,10 +51,6 @@ const routes: Array<RouteRecordRaw> = [
                 props: true,
                 component: () => import('../pages/constraints/ModConstraints.vue')
             },
-            {
-                path: '',
-                redirect: {name: 'login'},
-            }
         ]
     },
     {
@@ -81,12 +77,12 @@ const routes: Array<RouteRecordRaw> = [
                 path: 'recover-password-email',
                 component: () => import('../pages/auth/CheckTheEmail.vue'),
             },
-            {
-                path: '',
-                redirect: { name: 'login' },
-            },
         ]
     },
+    {
+        path: '',
+        redirect: {name: 'login'}
+    }
 
 ]
 

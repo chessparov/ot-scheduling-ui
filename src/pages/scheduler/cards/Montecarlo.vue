@@ -81,7 +81,7 @@ export default defineComponent({
               :hidden="!upload"
               v-model="files"
               file-types="xlsx,xls"
-              uploadButtonText="Upload Lista Attesa"
+              uploadButtonText="Carica Lista Attesa"
               @file-added="allowSingleFile"
           />
       </section>
