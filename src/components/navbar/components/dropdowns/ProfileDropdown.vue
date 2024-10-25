@@ -5,7 +5,7 @@
         <VaButton preset="secondary" color="textPrimary">
           <span class="profile-dropdown__anchor min-w-max">
             <slot />
-            <VaAvatar src="../../../../../public/blank-profile.png" :size="48" color="warning"></VaAvatar>
+            <VaAvatar src="blank-profile.png" :size="48" color="warning"></VaAvatar>
           </span>
         </VaButton>
       </template>
