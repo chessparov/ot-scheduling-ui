@@ -1,11 +1,19 @@
 <template>
   <div class="profile-dropdown-wrapper">
-    <VaDropdown v-model="isShown" :offset="[9, 0]" class="profile-dropdown" stick-to-edges>
+    <VaDropdown
+      v-model="isShown"
+      :offset="[9, 0]"
+      class="profile-dropdown"
+      stick-to-edges
+    >
       <template #anchor>
         <VaButton preset="secondary" color="textPrimary">
           <span class="profile-dropdown__anchor min-w-max">
             <slot />
-            <VaAvatar src="../../../../../public/blank-profile.png" :size="48" color="warning"></VaAvatar>
+            <VaAvatar
+              src="blank-profile.png"
+              :size="48"
+            ></VaAvatar>
           </span>
         </VaButton>
       </template>
@@ -14,7 +22,10 @@
         :style="{ '--hover-color': hoverColor }"
       >
         <VaList v-for="group in options" :key="group.name">
-          <header v-if="group.name" class="uppercase text-[var(--va-secondary)] opacity-80 font-bold text-xs px-4">
+          <header
+            v-if="group.name"
+            class="uppercase text-[var(--va-secondary)] opacity-80 font-bold text-xs px-4"
+          >
             {{ `${group.name}` }}
           </header>
           <VaListItem
@@ -34,78 +45,81 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
-import { useColors } from 'vuestic-ui'
+import { ref, computed } from "vue";
+import { useColors } from "vuestic-ui";
 
-const { colors, setHSLAColor } = useColors()
-const hoverColor = computed(() => setHSLAColor(colors.focus, { a: 0.1 }))
-
+const { colors, setHSLAColor } = useColors();
+const hoverColor = computed(() => setHSLAColor(colors.focus, { a: 0.1 }));
 
 type ProfileListItem = {
-  name: string
-  to?: string
-  href?: string
-  icon: string
-}
+  name: string;
+  to?: string;
+  href?: string;
+  icon: string;
+};
 
 type ProfileOptions = {
-  name: string
-  separator: boolean
-  list: ProfileListItem[]
-}
+  name: string;
+  separator: boolean;
+  list: ProfileListItem[];
+};
 
 withDefaults(
   defineProps<{
-    options?: ProfileOptions[]
+    options?: ProfileOptions[];
   }>(),
   {
     options: () => [
       {
-        name: 'account',
+        name: "account",
         separator: true,
         list: [
           {
-            name: 'Profilo',
-            to: 'profile',
-            icon: 'mso-account_circle',
+            name: "Profilo",
+            to: "profile",
+            icon: "mso-account_circle",
           },
           {
-            name: 'Impostazioni',
-            to: 'settings',
-            icon: 'mso-settings',
+            name: "Impostazioni",
+            to: "settings",
+            icon: "mso-settings",
           },
         ],
       },
       {
-        name: 'explore',
+        name: "explore",
         separator: true,
         list: [
           {
-            name: 'Documentazione',
-            icon: 'mso-error',
+            name: "Documentazione",
+            icon: "mso-error",
           },
         ],
       },
       {
-        name: '',
+        name: "",
         separator: false,
         list: [
           {
-            name: 'Logout',
-            to: 'login',
-            icon: 'mso-logout',
+            name: "Logout",
+            to: "login",
+            icon: "mso-logout",
           },
         ],
       },
     ],
   },
-)
+);
 
-const isShown = ref(false)
+const isShown = ref(false);
 
 const resolveLinkAttribute = (item: ProfileListItem) => {
-  return item.to ? { to: { name: item.to } } : item.href ? { href: item.href, target: '_blank' } : {}
-}
+  return item.to
+    ? { to: { name: item.to } }
+    : item.href
+      ? { href: item.href, target: "_blank" }
+      : {};
+};
 </script>
 
 <style lang="scss">

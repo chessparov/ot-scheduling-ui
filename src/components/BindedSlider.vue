@@ -1,5 +1,5 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import { defineComponent } from "vue";
 
 export default defineComponent({
   name: "BindedSlider",
@@ -15,50 +15,49 @@ export default defineComponent({
   data() {
     return {
       value: this.sliderValue,
-      inputValue: '',
-    }
+      inputValue: "",
+    };
   },
   methods: {
-    cleanInput(input: String) {
+    cleanInput(input: string) {
       input = input.toString();
-      input.replace(/[^0-9]/g, '');
+      input.replace(/[^0-9]/g, "");
       input = Number(input);
       if (!isNaN(input)) {
         this.value = input;
+      } else {
+        this.value = "";
       }
-      else {
-        this.value = '';
-      }
-    }
+    },
   },
   updated() {
-    this.$emit('update', this.value);
+    this.$emit("update", this.value);
   },
   watch: {
-    value(newValue: Number) {
+    value(newValue: number) {
       this.cleanInput(newValue);
-    }
-  }
-})
+    },
+  },
+});
 </script>
 
 <template>
   <div class="slider-wrapper">
     <VaSlider
-        :label="sliderLabel"
-        :disabled="disabled"
-        v-model="value"
-        :min="sliderMin"
-        :max="sliderMax"
-        :readonly="false"
-        class="w-full sm:w-[70%]"
+      :label="sliderLabel"
+      :disabled="disabled"
+      v-model="value"
+      :min="sliderMin"
+      :max="sliderMax"
+      :readonly="false"
+      class="w-full sm:w-[70%]"
     />
     <VaInput
-        v-model="value"
-        :disabled="disabled"
-        class="w-full sm:w-[20%]"
-        :messages="inputMessage"
-        strict-bind-input-value
+      v-model="value"
+      :disabled="disabled"
+      class="w-full sm:w-[20%]"
+      :messages="inputMessage"
+      strict-bind-input-value
     >
       <template #appendInner>
         {{ inputInnerLabel }}

@@ -11,19 +11,35 @@
     <h1 class="va-h5 mb-4">Modifica {{ props.field }}</h1>
     <VaForm ref="form" @submit.prevent="submit">
       <VaInput
-        v-if="props.field === 'Nome'"
-        v-model="Name"
+        v-model="Email"
         class="mb-4"
         :label="props.field"
         :placeholder="props.field"
       />
-      <VaInput
-        v-else
-        v-model="Surname"
-        class="mb-4"
-        :label="props.field"
-        :placeholder="props.field"
-      />
+      <VaValue v-slot="isPasswordVisible" :default-value="false">
+        <VaInput
+          v-model="inputPassword"
+          :type="isPasswordVisible.value ? 'text' : 'password'"
+          class="mb-4"
+          label="Password"
+          placeholder="Inserisci la password per confermare"
+          @clickAppendInner.stop="
+            isPasswordVisible.value = !isPasswordVisible.value
+          "
+        >
+          <template #appendInner>
+            <VaIcon
+              :name="
+                isPasswordVisible.value
+                  ? 'mso-visibility_off'
+                  : 'mso-visibility'
+              "
+              class="cursor-pointer"
+              color="secondary"
+            />
+          </template>
+        </VaInput>
+      </VaValue>
       <div
         class="flex flex-col-reverse md:flex-row md:items-center md:justify-end md:space-x-4"
       >
@@ -51,7 +67,8 @@
 import { ref } from "vue";
 import { useUserStore } from "@/stores/user-store";
 
-import { useToast } from "vuestic-ui";
+import { useToast, VaValue } from "vuestic-ui";
+import { validators } from "@/services/utils";
 
 const store = useUserStore();
 
@@ -65,25 +82,19 @@ const { init } = useToast();
 const emits = defineEmits(["cancel"]);
 const props = defineProps(["field"]);
 
-const Name = ref<string>(store.userName);
-const Surname = ref<string>(store.surname);
 const Email = ref<string>(store.email);
+let inputPassword = "";
 
 const submit = () => {
-  if (props.field === "Nome") {
-    if (!Name.value || Name.value === store.userName) {
-      return emits("cancel");
-    }
-    store.changeUserName(Name.value);
-    init({ message: "Nome aggiornato con successo", color: "success" });
+  if (!Email.value || Email.value === store.email) {
+    return emits("cancel");
+  }
+  if (store.checkPassword(inputPassword)) {
+    store.changeUserEmail(Email.value);
+    init({ message: "Email aggiornata con successo", color: "success" });
     emits("cancel");
   } else {
-    if (!Surname.value || Surname.value === store.surname) {
-      return emits("cancel");
-    }
-    store.changeUserSurname(Surname.value);
-    init({ message: "Cognome aggiornato con successo", color: "success" });
-    emits("cancel");
+    init({ message: "Password invalida", color: "danger" });
   }
 };
 </script>
