@@ -45,8 +45,8 @@
         </div>
       </div>
       <div class="flex flex-col-reverse md:justify-end md:flex-row md:space-x-4">
-        <VaButton :style="buttonStyles" preset="secondary" color="secondary" @click="emits('cancel')"> Annulla</VaButton>
-        <VaButton :style="buttonStyles" class="mb-4 md:mb-0" type="submit" @click="submit"> Conferma</VaButton>
+        <VaButton :style="buttonStyles" preset="secondary" color="secondary" @click="emits('cancel')">Annulla</VaButton>
+        <VaButton :style="buttonStyles" class="mb-4 md:mb-0" type="submit" @click="submit">Conferma</VaButton>
       </div>
     </VaForm>
   </VaModal>
