@@ -12,29 +12,33 @@
           />
         </Transition>
         <RouterLink to="/" aria-label="Visit home page">
-          <img alt="logo" src="../../../public/ot-scheduler-logo-resized.png">
+          <img alt="logo" src="../../../public/ot-scheduler-logo-resized.png" />
         </RouterLink>
       </div>
     </template>
     <template #right>
-      <AppNavbarActions class="app-navbar__actions" :is-mobile="isMobile" :username="username"/>
+      <AppNavbarActions
+        class="app-navbar__actions"
+        :is-mobile="isMobile"
+        :username="username"
+      />
     </template>
   </VaNavbar>
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from 'pinia'
-import { useGlobalStore } from '@/stores/global-store'
-import AppNavbarActions from './components/AppNavbarActions.vue'
+import { storeToRefs } from "pinia";
+import { useGlobalStore } from "@/stores/global-store";
+import AppNavbarActions from "./components/AppNavbarActions.vue";
 
 defineProps({
   isMobile: { type: Boolean, default: false },
   username: String,
-})
+});
 
-const GlobalStore = useGlobalStore()
+const GlobalStore = useGlobalStore();
 
-const { isSidebarMinimized } = storeToRefs(GlobalStore)
+const { isSidebarMinimized } = storeToRefs(GlobalStore);
 </script>
 
 <style lang="scss" scoped>

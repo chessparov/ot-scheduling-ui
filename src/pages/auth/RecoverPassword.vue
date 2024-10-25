@@ -12,22 +12,28 @@
       type="email"
     />
     <VaButton class="w-full mb-2" @click="submit">Invia password</VaButton>
-    <VaButton :to="{ name: 'login' }" class="w-full" preset="secondary" @click="submit">Torna al login</VaButton>
+    <VaButton
+      :to="{ name: 'login' }"
+      class="w-full"
+      preset="secondary"
+      @click="submit"
+      >Torna al login</VaButton
+    >
   </VaForm>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
-import { useForm } from 'vuestic-ui'
-import { useRouter } from 'vue-router'
+import { ref } from "vue";
+import { useForm } from "vuestic-ui";
+import { useRouter } from "vue-router";
 
-const email = ref('')
-const form = useForm('passwordForm')
-const router = useRouter()
+const email = ref("");
+const form = useForm("passwordForm");
+const router = useRouter();
 
 const submit = () => {
   if (form.validate()) {
-    router.push({ name: 'recover-password-email' })
+    router.push({ name: "recover-password-email" });
   }
-}
+};
 </script>
