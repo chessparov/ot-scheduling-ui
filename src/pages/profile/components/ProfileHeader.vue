@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <VaAvatar
     size="large"
-    src="../../../../../public/blank-profile.png"
+    src="blank-profile.png"
   ></VaAvatar>
   <div class="flex flex-col justify-center">
     <h2 class="text-[28px] md:text-[32px] leading-10 font-bold">
