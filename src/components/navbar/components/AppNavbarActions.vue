@@ -1,20 +1,21 @@
 <template>
   <div class="app-navbar-actions">
     <GreetingsMessage v-if="!isMobile" class="app-navbar-actions__item" />
-<!--    <GithubButton v-if="!isMobile" class="app-navbar-actions__item" />-->
-    <ProfileDropdown class="app-navbar-actions__item app-navbar-actions__item--profile mr-1" />
+    <!--    <GithubButton v-if="!isMobile" class="app-navbar-actions__item" />-->
+    <ProfileDropdown
+      class="app-navbar-actions__item app-navbar-actions__item--profile mr-1"
+    />
   </div>
 </template>
 
 <script lang="ts" setup>
-import ProfileDropdown from './dropdowns/ProfileDropdown.vue'
-import GithubButton from './GitHubButton.vue'
+import ProfileDropdown from "./dropdowns/ProfileDropdown.vue";
+import GithubButton from "./GitHubButton.vue";
 import GreetingsMessage from "@/components/navbar/components/GreetingsMessage.vue";
 
 defineProps({
   isMobile: { type: Boolean, default: false },
-})
-
+});
 </script>
 
 <style lang="scss">
