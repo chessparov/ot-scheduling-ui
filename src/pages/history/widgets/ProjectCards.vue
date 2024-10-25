@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { PropType } from "vue";
-import { Project } from "../types";
-import ProjectStatusBadge from "../components/ProjectStatusBadge.vue";
+import { PropType } from 'vue'
+import { Project } from '../types'
+import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
 
 defineProps({
   projects: {
@@ -12,12 +12,13 @@ defineProps({
     type: Boolean,
     required: true,
   },
-});
+})
 
 defineEmits<{
-  (event: "edit", project: Project): void;
-  (event: "delete", project: Project): void;
-}>();
+  (event: 'edit', project: Project): void
+  (event: 'delete', project: Project): void
+}>()
+
 </script>
 
 <template>
@@ -29,19 +30,13 @@ defineEmits<{
     <VaCard
       v-for="project in projects"
       :key="project.project_name"
-      :style="{
-        '--va-card-outlined-border': '1px solid var(--va-background-element)',
-      }"
+      :style="{ '--va-card-outlined-border': '1px solid var(--va-background-element)' }"
       outlined
     >
       <VaCardContent class="flex flex-col h-full">
-        <div class="text-[var(--va-secondary)]">
-          {{ project.creation_date }}
-        </div>
+        <div class="text-[var(--va-secondary)]">{{ project.creation_date }}</div>
         <div class="flex flex-col items-center gap-4 grow">
-          <h4
-            class="va-h4 text-center self-stretch overflow-hidden line-clamp-2 text-ellipsis"
-          >
+          <h4 class="va-h4 text-center self-stretch overflow-hidden line-clamp-2 text-ellipsis">
             {{ project.project_name }}
           </h4>
           <p>
@@ -52,26 +47,11 @@ defineEmits<{
         </div>
         <VaDivider class="my-6" />
         <div class="flex justify-between">
-          <VaButton
-            preset="secondary"
-            icon="mso-edit"
-            color="secondary"
-            @click="$emit('edit', project)"
-          />
-          <VaButton
-            preset="secondary"
-            icon="mso-delete"
-            color="danger"
-            @click="$emit('delete', project)"
-          />
+          <VaButton preset="secondary" icon="mso-edit" color="secondary" @click="$emit('edit', project)" />
+          <VaButton preset="secondary" icon="mso-delete" color="danger" @click="$emit('delete', project)" />
         </div>
       </VaCardContent>
     </VaCard>
   </VaInnerLoading>
-  <div
-    v-else
-    class="p-4 flex justify-center items-center text-[var(--va-secondary)]"
-  >
-    No projects
-  </div>
+  <div v-else class="p-4 flex justify-center items-center text-[var(--va-secondary)]">No projects</div>
 </template>

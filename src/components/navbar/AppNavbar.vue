@@ -12,7 +12,7 @@
           />
         </Transition>
         <RouterLink to="/" aria-label="Visit home page">
-          <img alt="logo" src="../../../public/ot-scheduler-logo-resized.png" />
+          <img alt="logo" src="/ot-scheduler-logo-resized.png" />
         </RouterLink>
       </div>
     </template>

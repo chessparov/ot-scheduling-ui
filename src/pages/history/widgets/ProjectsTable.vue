@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import { PropType, computed } from "vue";
-import { defineVaDataTableColumns } from "vuestic-ui";
-import { Project } from "../types";
-import ProjectStatusBadge from "../components/ProjectStatusBadge.vue";
-import { Pagination, Sorting } from "@/data/pages/projects";
-import { useVModel } from "@vueuse/core";
+import { PropType, computed } from 'vue'
+import { defineVaDataTableColumns } from 'vuestic-ui'
+import { Project } from '../types'
+import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
+import { Pagination, Sorting } from '@/data/pages/projects'
+import { useVModel } from '@vueuse/core'
 
 const columns = defineVaDataTableColumns([
-  { label: "Nome", key: "project_name", sortable: true },
-  { label: "Autore", key: "project_owner", sortable: true },
-  { label: "Stato", key: "status", sortable: true },
-  { label: "Data Creazione", key: "creation_date", sortable: true },
-  { label: " ", key: "actions" },
-]);
+  { label: 'Nome', key: 'project_name', sortable: true },
+  { label: 'Autore', key: 'project_owner', sortable: true },
+  { label: 'Stato', key: 'status', sortable: true },
+  { label: 'Data Creazione', key: 'creation_date', sortable: true },
+  { label: ' ', key: 'actions' },
+])
 
 const props = defineProps({
   projects: {
@@ -24,30 +24,31 @@ const props = defineProps({
     required: true,
   },
   sortBy: {
-    type: Object as PropType<Sorting["sortBy"]>,
+    type: Object as PropType<Sorting['sortBy']>,
     required: true,
   },
   sortingOrder: {
-    type: Object as PropType<Sorting["sortingOrder"]>,
+    type: Object as PropType<Sorting['sortingOrder']>,
     required: true,
   },
   pagination: {
     type: Object as PropType<Pagination>,
     required: true,
   },
-});
+})
 
 const emit = defineEmits<{
-  (event: "edit", project: Project): void;
-  (event: "delete", project: Project): void;
-}>();
+  (event: 'edit', project: Project): void
+  (event: 'delete', project: Project): void
+}>()
 
-const sortByVModel = useVModel(props, "sortBy", emit);
-const sortingOrderVModel = useVModel(props, "sortingOrder", emit);
 
-const totalPages = computed(() =>
-  Math.ceil(props.pagination.total / props.pagination.perPage),
-);
+const sortByVModel = useVModel(props, 'sortBy', emit)
+const sortingOrderVModel = useVModel(props, 'sortingOrder', emit)
+
+const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.perPage))
+
+
 </script>
 
 <template>
@@ -96,17 +97,11 @@ const totalPages = computed(() =>
         </div>
       </template>
     </VaDataTable>
-    <div
-      class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2"
-    >
+    <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-2">
       <div>
         <b>{{ $props.pagination.total }} risultati.</b>
         Risultati per pagina
-        <VaSelect
-          v-model="$props.pagination.perPage"
-          class="!w-20"
-          :options="[10, 50, 100]"
-        />
+        <VaSelect v-model="$props.pagination.perPage" class="!w-20" :options="[10, 50, 100]" />
       </div>
 
       <div v-if="totalPages > 1" class="flex">
