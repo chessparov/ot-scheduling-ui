@@ -11,8 +11,7 @@
     <h1 class="va-h5 mb-4">Modifica {{ props.field }}</h1>
     <VaForm ref="form" @submit.prevent="submit">
       <VaInput v-if="props.field === 'Nome'" v-model="Name" class="mb-4" :label=props.field :placeholder=props.field />
-      <VaInput v-else-if="props.field === 'Cognome'" v-model="Surname" class="mb-4" :label=props.field :placeholder=props.field />
-      <VaInput v-else v-model="Email" class="mb-4" :label=props.field :placeholder=props.field />
+      <VaInput v-else v-model="Surname" class="mb-4" :label=props.field :placeholder=props.field />
       <div class="flex flex-col-reverse md:flex-row md:items-center md:justify-end md:space-x-4">
         <VaButton :style="buttonStyles" preset="secondary" color="secondary" @click="emits('cancel')"> Annulla</VaButton>
         <VaButton :style="buttonStyles" class="mb-4 md:mb-0" type="submit" @click="submit"> Conferma</VaButton>
@@ -52,20 +51,12 @@ const submit = () => {
     init({ message: "Nome aggiornato con successo", color: 'success' })
     emits('cancel')
   }
-  else if (props.field === 'Cognome') {
+  else {
     if (!Surname.value || Surname.value === store.surname) {
       return emits('cancel')
     }
     store.changeUserSurname(Surname.value)
     init({ message: "Cognome aggiornato con successo", color: 'success' })
-    emits('cancel')
-  }
-  else {
-    if (!Email.value || Email.value === store.email) {
-      return emits('cancel')
-    }
-    store.changeUserSurname(Surname.value)
-    init({ message: "Mail di conferma", color: 'warning' })
     emits('cancel')
   }
 }

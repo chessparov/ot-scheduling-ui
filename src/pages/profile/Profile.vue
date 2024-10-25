@@ -5,16 +5,17 @@ import EditNameModal from "@/pages/profile/modals/EditNameModal.vue";
 import Settings from "@/pages/profile/settings/Settings.vue";
 import ResetPasswordModal from "@/pages/profile/modals/ResetPasswordModal.vue";
 import ProfileHeader from "@/pages/profile/components/ProfileHeader.vue";
+import EditEmailModal from "@/pages/profile/modals/EditEmailModal.vue";
 
 export default defineComponent({
   name: "Profile",
-  components: {ProfileHeader, ResetPasswordModal, EditNameModal, Settings},
+  components: {ProfileHeader, ResetPasswordModal, EditEmailModal, EditNameModal, Settings},
   data() {
     return {
       isEditNameModalOpen: ref(false),
       isResetPasswordModalOpen: ref(false),
+      isEmailModalOpen: ref(false),
       fieldToModify: '',
-      fieldToReset: '',
     }
   },
   methods: {
@@ -24,6 +25,9 @@ export default defineComponent({
     },
     openResetPasswordModal() {
       this.isResetPasswordModalOpen = true;
+    },
+    openEmailModal() {
+      this.isEmailModalOpen = true;
     }
   }
 })
@@ -36,12 +40,16 @@ export default defineComponent({
       <ProfileHeader/>
     </div>
     <div class="space-y-4 md:space-y-6">
-      <Settings @openNameModal="openNameModal" @openResetPasswordModal="openResetPasswordModal" />
+      <Settings
+          @openNameModal="openNameModal"
+          @openResetPasswordModal="openResetPasswordModal"
+          @openEmailModal="openEmailModal"
+      />
     </div>
   </div>
   <EditNameModal v-if="isEditNameModalOpen" @cancel="isEditNameModalOpen = false" :field="fieldToModify" />
+  <EditEmailModal v-if="isEmailModalOpen" @cancel="isEmailModalOpen = false" field="Email"/>
   <ResetPasswordModal v-if="isResetPasswordModalOpen" @cancel="isResetPasswordModalOpen = false"/>
-
 </template>
 
 <style scoped lang="scss">

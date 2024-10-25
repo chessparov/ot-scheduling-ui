@@ -5,7 +5,7 @@
         <VaCollapse v-if="route.display">
           <template #header="{ value: isCollapsed }">
             <VaSidebarItem
-              :to="route.children ? undefined : { name: route.name }"
+              :to="route.children ? '' : { name: route.name }"
               :active="routeHasActiveChild(route)"
               :active-color="activeColor"
               :text-color="textColor(route)"
@@ -55,12 +55,13 @@
 import { defineComponent, watch, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 
-import { useColors } from 'vuestic-ui'
+import {useColors, VaSidebarItemContent, VaSidebarItemTitle} from 'vuestic-ui'
 
 import navigationRoutes, { type INavigationRoute } from './NavigationRoutes'
 
 export default defineComponent({
   name: 'Sidebar',
+  components: {VaSidebarItemTitle, VaSidebarItemContent},
   props: {
     visible: { type: Boolean, default: true },
     mobile: { type: Boolean, default: false },
@@ -91,7 +92,7 @@ export default defineComponent({
     const setActiveExpand = () =>
       (value.value = navigationRoutes.routes.map((route: INavigationRoute) => routeHasActiveChild(route)))
 
-    const sidebarWidth = computed(() => (props.mobile ? '100vw' : '280px'))
+    const sidebarWidth = computed(() => (props.mobile ? '100vw' : '15vw'))
     const color = computed(() => getColor('background-secondary'))
     const activeColor = computed(() => colorToRgba(getColor('focus'), 0.1))
 

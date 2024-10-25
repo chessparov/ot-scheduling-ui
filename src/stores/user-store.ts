@@ -7,6 +7,7 @@ export const useUserStore = defineStore('user', {
       surname: 'Albano',
       email: 'mc@gmail.com',
       memberSince: '24/10/2024',
+      password: 'passwordsicura',
     }
   },
 
@@ -16,6 +17,12 @@ export const useUserStore = defineStore('user', {
     },
     changeUserSurname(userSurname: string) {
       this.surname = userSurname
+    },
+    changeUserEmail(userEmail: string) {
+      this.email = userEmail;
+    },
+    checkPassword(inputPassword: string) {
+      return this.password === inputPassword
     }
   },
 })

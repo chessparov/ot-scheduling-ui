@@ -29,8 +29,8 @@
         {{ store.email }}
       </div>
     </div>
-    <VaButton :style="buttonStyles" class="w-fit h-fit" preset="primary" @click="emits('openNameModal', 'Email')">
-      Modifica Email
+    <VaButton :style="buttonStyles" class="w-fit h-fit" preset="primary" @click="emits('openEmailModal', 'Email')">
+      Modifica
     </VaButton>
   </div>
   <VaDivider />
@@ -58,5 +58,6 @@ const store = useUserStore()
 const emits = defineEmits<{
   openNameModal: [field: string]
   openResetPasswordModal: [field: string]
+  openEmailModal: [field: string]
 }>()
 </script>

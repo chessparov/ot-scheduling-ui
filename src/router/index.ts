@@ -31,11 +31,6 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('../pages/upload/UploadSchedule.vue'),
             },
             {
-                name: 'stats',
-                path: 'stats',
-                component: () => import('../pages/stats/Stats.vue'),
-            },
-            {
                 name: 'settings',
                 path: 'settings',
                 component: () => import('../pages/settings/Settings.vue'),
