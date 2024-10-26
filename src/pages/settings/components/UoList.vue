@@ -22,17 +22,18 @@ const { confirm } = useModal();
 
 function onAdd() {
   doShowEditUoModal.value = true
-  uoToEdit = null
+  uoToEdit = ''
 }
 function onModify() {
   doShowEditUoModal.value = true
-  uoToEdit = currentUo
+  uoToEdit = currentUo.value
 }
 
 function modifyUo(newUo: string) {
-  const index = uos.indexOf(currentUo);
+  const index = uos.indexOf(currentUo.value);
   uos.splice(index, 1);
   uos.push(newUo);
+  currentUo.value = newUo;
 }
 function deleteUO(uo: string) {
   const index = uos.indexOf(uo);
@@ -40,6 +41,7 @@ function deleteUO(uo: string) {
 }
 function addUo(newUo: string) {
   uos.push(newUo);
+  currentUo.value = newUo
 }
 
 const onUoDelete = async (uo: string) => {
@@ -54,7 +56,7 @@ const onUoDelete = async (uo: string) => {
 
   if (agreed) {
     const index = uos.indexOf(uo);
-    currentUo = uos[index + 1];
+    currentUo.value = uos[index + 1];
     deleteUO(uo);
   }
 }
@@ -119,13 +121,14 @@ const onUoDelete = async (uo: string) => {
         hide-default-actions
     >
       <h1 class="va-h5">{{ uoToEdit ? 'Modifica unità operativa' : 'Aggiungi unità operativa' }}</h1>
+      <span v-if="uoToEdit" class="text-regularMedium">{{ uoToEdit }}</span>
       <EditUoForm
           ref="editFormRef"
           :uo="uoToEdit"
           :save-button-label="uoToEdit ? 'Salva' : 'Aggiungi'"
           @close="cancel"
           @save="(uo) => {
-                uo ? modifyUo(uo) : addUo
+                (uoToEdit != '') ? modifyUo(uo): addUo(uo)
                 ok()
               }
             "
