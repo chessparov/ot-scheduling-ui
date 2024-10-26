@@ -31,16 +31,11 @@ export type Sorting = {
 }
 
 export type Filters = {
-  isActive: boolean
   search: string
 }
 
 const getSortItem = (obj: any, sortBy: string) => {
-  if (sortBy === 'projects') {
-    return obj.projects.map((project: any) => project.project_name).join(', ')
-  }
-
-  return obj[sortBy]
+  return
 }
 
 export const getUsers = async (filters: Partial<Filters & Pagination & Sorting>) => {
@@ -48,10 +43,9 @@ export const getUsers = async (filters: Partial<Filters & Pagination & Sorting>)
   const { isActive, search, sortBy, sortingOrder } = filters
   let filteredUsers = users
 
-  filteredUsers = filteredUsers.filter((user) => user.active === isActive)
 
   if (search) {
-    filteredUsers = filteredUsers.filter((user) => user.fullname.toLowerCase().includes(search.toLowerCase()))
+    filteredUsers = filteredUsers.filter((user) => user.name.toLowerCase().includes(search.toLowerCase()))
   }
 
   filteredUsers = filteredUsers.map((user) => ({ ...user, projects: getUserProjects(user.id) }))
@@ -83,6 +77,7 @@ export const getUsers = async (filters: Partial<Filters & Pagination & Sorting>)
 
 export const addUser = async (user: User) => {
   await sleep(1000)
+  creation_date: new Date().toLocaleDateString('gb', { day: 'numeric', month: 'short', year: 'numeric' })
   users.unshift(user)
 }
 

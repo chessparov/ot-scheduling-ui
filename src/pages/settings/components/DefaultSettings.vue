@@ -16,8 +16,8 @@ export default defineComponent({
   <div class="flex flex-col p-4 bg-backgroundSecondary rounded-lg">
     <h3 class="h3 mb-6">Modifica parametri default</h3>
     <div class="flex flex-col justify-between overflow-x-hidden gap-4">
-      <div class="flex flex-rew justify-between overflow-x-hidden gap-4 sm:w-[50%]">
-        <span class="text-regularLarge">
+      <div class="flex flex-rew justify-between overflow-x-hidden gap-4">
+        <span class="text-regularMedium">
           Numero cicli Montecarlo
         </span>
         <VaInput class="sm:w-[50%]" v-model="store.montecarloDefault" size="small">
@@ -26,8 +26,8 @@ export default defineComponent({
           </template>
         </VaInput>
       </div>
-      <div class="flex flex-rew justify-between overflow-x-hidden gap-4 sm:w-[50%]">
-        <span class="text-regularLarge">
+      <div class="flex flex-rew justify-between overflow-x-hidden gap-4 ">
+        <span class="text-regularMedium">
           Tempo tabù search
         </span>
         <VaInput class="sm:w-[50%]" v-model="store.tabuTimeDefault" size="small">
@@ -38,17 +38,17 @@ export default defineComponent({
       </div>
     </div>
     <VaDivider class="py-4 group-last:hidden" />
-    <div class="flex flex-row justify-between overflow-x-hidden sm:w-[50%]">
+    <div class="flex flex-row justify-between overflow-x-hidden">
       <div class="flex flex-col justify-between overflow-x-hidden">
-        <span class="text-regularLarge">
+        <span class="text-regularMedium" style="font-weight: bold">
           Vincoli
         </span>
         <span class="text-regularMedium">
           Modifica i vincoli nel database. Le modifiche apportate sono permanenti.
         </span>
       </div>
-      <VaButton :to="'constraints'">
-        Tabella
+      <VaButton :to="'constraints'" style="min-width: 20%">
+        Vai alla tabella
       </VaButton>
     </div>
   </div>

@@ -68,7 +68,7 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
       </template>
       <template #cell(project_owner)="{ rowData }">
         <div class="flex items-center gap-2 ellipsis max-w-[230px]">
-          {{ rowData.project_owner.fullname }}
+          {{ rowData.project_owner.name }}
         </div>
       </template>
 
