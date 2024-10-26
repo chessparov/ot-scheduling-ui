@@ -1,35 +1,36 @@
 <script lang="ts">
+
 export default {
   name: "DashboardMenu",
   props: {
     macroTab: {
       type: String,
       default: "DASHBOARD",
-    },
+    }
   },
   data() {
     return {
       currentTab: "DASHBOARD",
-      tabs: ["DASHBOARD", "STATISTICHE"],
-    };
-  },
-};
+      tabs: ['DASHBOARD', 'STATISTICHE'],
+    }
+  }
+}
 </script>
 
 <template>
   <VaCard>
     <VaTabs
-      v-model="currentTab"
-      vertical
-      @update:model-value="$emit('changed-tab', currentTab)"
-      style="margin-bottom: 5rem; margin-top: 1rem"
+        v-model="currentTab"
+        vertical
+        @update:model-value="$emit('changed-tab', currentTab)"
+        style="margin-bottom: 5rem; margin-top: 1rem;"
     >
       <template #tabs>
         <VaTab
-          v-for="tab in tabs"
-          :key="tab"
-          :name="tab"
-          style="padding: 100% 0 100% 0"
+            v-for="tab in tabs"
+            :key="tab"
+            :name="tab"
+            style="padding: 100% 0 100% 0"
         >
           {{ tab }}
         </VaTab>
@@ -38,4 +39,6 @@ export default {
   </VaCard>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+
+</style>

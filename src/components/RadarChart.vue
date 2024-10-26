@@ -1,11 +1,16 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from 'vue'
 
 export default defineComponent({
   name: "RadarChart",
-});
+
+})
 </script>
 
-<template></template>
+<template>
 
-<style scoped lang="scss"></style>
+</template>
+
+<style scoped lang="scss">
+
+</style>

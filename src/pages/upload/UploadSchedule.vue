@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "vue";
+import {defineComponent} from 'vue'
 import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Optimization from "@/pages/scheduler/cards/Optimization.vue";
@@ -7,7 +7,7 @@ import Launch from "@/pages/scheduler/cards/Launch.vue";
 
 export default defineComponent({
   name: "UploadSchedule",
-  components: { Launch, Optimization, Montecarlo, Constraints },
+  components: {Launch, Optimization, Montecarlo, Constraints},
 
   data() {
     return {
@@ -15,9 +15,8 @@ export default defineComponent({
       mcCycles: 1000,
       tabuTime: 0,
       optimization: false,
-      errorMsg:
-        "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx",
-    };
+      errorMsg: "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx"
+    }
   },
   methods: {
     allowSingleFile() {
@@ -29,7 +28,7 @@ export default defineComponent({
       this.optimization = updatedOptimization;
     },
     getTabuTime(tabu: number) {
-      if (typeof (tabu == !"undefined")) {
+      if (typeof(tabu ==! 'undefined')) {
         if (isNaN(tabu)) {
           this.tabuTime = 0;
         } else {
@@ -38,16 +37,17 @@ export default defineComponent({
       }
     },
     getMcCycles(mc: number) {
-      if (typeof (mc == !"undefined")) {
+      if (typeof(mc ==! 'undefined')) {
         if (isNaN(mc)) {
           this.mcCycles = 0;
-        } else {
+        }
+        else {
           this.mcCycles = mc;
         }
       }
     },
-  },
-});
+  }
+})
 </script>
 
 <template>
@@ -55,27 +55,25 @@ export default defineComponent({
   <div class="flex flex-col md:flex-col gap-2">
     <div class="flex flex-col md:flex-row gap-2">
       <Montecarlo
-        :upload="false"
-        :toggle-optimization="false"
-        @toggle-status="optStatus"
-        @mc-cycles="getMcCycles"
+          :upload="false"
+          :toggle-optimization="false"
+          @toggle-status="optStatus"
+          @mc-cycles="getMcCycles"
       />
       <VaCard class="w-full sm:w-[45%]">
         <VaFileUpload
-          v-model="files"
-          dropzone
-          file-types="xls,xlsx"
-          type="list"
-          color="#ded9d9"
-          :fileIncorrectMessage="errorMsg"
-          style="--va-file-upload-margin: 4rem"
-          id="upload-schedula"
-          @file-added="allowSingleFile"
+            v-model="files"
+            dropzone
+            file-types="xls,xlsx"
+            type="list"
+            color="#ded9d9"
+            :fileIncorrectMessage="errorMsg"
+            style="--va-file-upload-margin: 4rem"
+            id="upload-schedula"
+            @file-added="allowSingleFile"
+
         >
-          <div
-            class="flex flex-col gap-2"
-            style="width: 25vw; margin: auto; padding: 0.5rem"
-          >
+          <div class="flex flex-col gap-2" style="width:25vw; margin: auto; padding: 0.5rem">
             <VaButton class="va-button--ellipsis" style="margin: 0.7rem">
               Carica schedula da analizzare
             </VaButton>
@@ -83,14 +81,19 @@ export default defineComponent({
         </VaFileUpload>
       </VaCard>
     </div>
-    <Launch :mc-cycles="this.mcCycles" :tabu-time="this.tabuTime" />
+    <Launch
+        :mc-cycles="this.mcCycles"
+        :tabu-time="this.tabuTime"
+    />
   </div>
 </template>
 
 <style scoped lang="scss">
+
 #upload-schedula {
   --va-file-upload-margin: 1vw 1vw;
   --va-file-upload-dropzone-field-padding: 1.5rem 20vw;
-  --va-file-upload-list-item-background-color: rgba(200, 196, 196, 0.25);
+  --va-file-upload-list-item-background-color: rgba(200, 196, 196, 0.25)
 }
+
 </style>

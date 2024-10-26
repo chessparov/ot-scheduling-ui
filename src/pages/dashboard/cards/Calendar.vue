@@ -1,72 +1,73 @@
 <script lang="ts">
+
 export default {
   data() {
     return {
       modifiedSchedule: false,
-      currentTab: "SETTIMANA 1",
-      weeks: ["SETTIMANA 1", "SETTIMANA 2", "SETTIMANA 3", "SETTIMANA 4"],
+      currentTab: 'SETTIMANA 1',
+      weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
       items: [
         {
-          day: "LUNEDI",
-          ROBOT_A_MAT: "GINECOLOGIA 1",
-          ROBOT_A_POM: "ENDOCRINOCHIRURGIA",
-          ROBOT_B_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_B_POM: "ENDOCRINOCHIRURGIA",
-          ROBOT_C_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_C_POM: "GINECOLOGIA 1",
-          ROBOT_D_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_D_POM: "ENDOCRINOCHIRURGIA",
+          day: 'LUNEDI',
+          ROBOT_A_MAT: 'GINECOLOGIA 1',
+          ROBOT_A_POM: 'ENDOCRINOCHIRURGIA',
+          ROBOT_B_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_B_POM: 'ENDOCRINOCHIRURGIA',
+          ROBOT_C_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_C_POM: 'GINECOLOGIA 1',
+          ROBOT_D_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_D_POM: 'ENDOCRINOCHIRURGIA',
         },
         {
-          day: "MARTEDI",
-          ROBOT_A_MAT: "GINECOLOGIA 1",
-          ROBOT_A_POM: "GINECOLOGIA 1",
-          ROBOT_B_MAT: "GINECOLOGIA 1",
-          ROBOT_B_POM: "GINECOLOGIA 1",
-          ROBOT_C_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_C_POM: "GINECOLOGIA 1",
-          ROBOT_D_MAT: "GINECOLOGIA 1",
-          ROBOT_D_POM: "GINECOLOGIA 1",
+          day: 'MARTEDI',
+          ROBOT_A_MAT: 'GINECOLOGIA 1',
+          ROBOT_A_POM: 'GINECOLOGIA 1',
+          ROBOT_B_MAT: 'GINECOLOGIA 1',
+          ROBOT_B_POM: 'GINECOLOGIA 1',
+          ROBOT_C_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_C_POM: 'GINECOLOGIA 1',
+          ROBOT_D_MAT: 'GINECOLOGIA 1',
+          ROBOT_D_POM: 'GINECOLOGIA 1',
         },
         {
-          day: "MERCOLEDI",
-          ROBOT_A_MAT: "GINECOLOGIA 1",
-          ROBOT_A_POM: "GINECOLOGIA 1",
-          ROBOT_B_MAT: "GINECOLOGIA 1",
-          ROBOT_B_POM: "ENDOCRINOCHIRURGIA",
-          ROBOT_C_MAT: "GINECOLOGIA 1",
-          ROBOT_C_POM: "GINECOLOGIA 1",
-          ROBOT_D_MAT: "GINECOLOGIA 1",
-          ROBOT_D_POM: "GINECOLOGIA 1",
+          day: 'MERCOLEDI',
+          ROBOT_A_MAT: 'GINECOLOGIA 1',
+          ROBOT_A_POM: 'GINECOLOGIA 1',
+          ROBOT_B_MAT: 'GINECOLOGIA 1',
+          ROBOT_B_POM: 'ENDOCRINOCHIRURGIA',
+          ROBOT_C_MAT: 'GINECOLOGIA 1',
+          ROBOT_C_POM: 'GINECOLOGIA 1',
+          ROBOT_D_MAT: 'GINECOLOGIA 1',
+          ROBOT_D_POM: 'GINECOLOGIA 1',
         },
         {
-          day: "GIOVEDI",
-          ROBOT_A_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_A_POM: "ENDOCRINOCHIRURGIA",
-          ROBOT_B_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_B_POM: "ENDOCRINOCHIRURGIA",
-          ROBOT_C_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_C_POM: "GINECOLOGIA 1",
-          ROBOT_D_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_D_POM: "GINECOLOGIA 1",
+          day: 'GIOVEDI',
+          ROBOT_A_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_A_POM: 'ENDOCRINOCHIRURGIA',
+          ROBOT_B_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_B_POM: 'ENDOCRINOCHIRURGIA',
+          ROBOT_C_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_C_POM: 'GINECOLOGIA 1',
+          ROBOT_D_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_D_POM: 'GINECOLOGIA 1',
         },
         {
-          day: "VENERDI",
-          ROBOT_A_MAT: "GINECOLOGIA 1",
-          ROBOT_A_POM: "GINECOLOGIA 1",
-          ROBOT_B_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_B_POM: "GINECOLOGIA 1",
-          ROBOT_C_MAT: "GINECOLOGIA 1",
-          ROBOT_C_POM: "GINECOLOGIA 1",
-          ROBOT_D_MAT: "ENDOCRINOCHIRURGIA",
-          ROBOT_D_POM: "GINECOLOGIA 1",
+          day: 'VENERDI',
+          ROBOT_A_MAT: 'GINECOLOGIA 1',
+          ROBOT_A_POM: 'GINECOLOGIA 1',
+          ROBOT_B_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_B_POM: 'GINECOLOGIA 1',
+          ROBOT_C_MAT: 'GINECOLOGIA 1',
+          ROBOT_C_POM: 'GINECOLOGIA 1',
+          ROBOT_D_MAT: 'ENDOCRINOCHIRURGIA',
+          ROBOT_D_POM: 'GINECOLOGIA 1',
         },
         {
-          day: "SABATO",
+          day: 'SABATO'
         },
         {
-          day: "DOMENICA",
-        },
+          day: 'DOMENICA'
+        }
       ],
       testItems: [
         {
@@ -111,109 +112,111 @@ export default {
         },
       ],
       days: [
-        "LUNEDI",
-        "MARTEDI",
-        "MERCOLEDI",
-        "GIOVEDI",
-        "VENERDI",
-        "SABATO",
-        "DOMENICA",
+        'LUNEDI',
+        'MARTEDI',
+        'MERCOLEDI',
+        'GIOVEDI',
+        'VENERDI',
+        'SABATO',
+        'DOMENICA'
       ],
-      columns: [
+      columns : [
         {
-          key: "day",
-          label: "",
-          width: "100px",
+          key: 'day',
+          label: '',
+          width: '100px'
         },
         {
-          key: "ROBOT_A_MAT",
-          width: "120px",
+          key: 'ROBOT_A_MAT',
+          width: '120px'
         },
         {
-          key: "ROBOT_A_POM",
-          width: "120px",
+          key: 'ROBOT_A_POM',
+          width: '120px'
         },
         {
-          key: "ROBOT_B_MAT",
-          width: "120px",
+          key: 'ROBOT_B_MAT',
+          width: '120px'
         },
         {
-          key: "ROBOT_B_POM",
-          width: "120px",
+          key: 'ROBOT_B_POM',
+          width: '120px'
         },
         {
-          key: "ROBOT_C_MAT",
-          width: "120px",
+          key: 'ROBOT_C_MAT',
+          width: '120px'
         },
         {
-          key: "ROBOT_C_POM",
-          width: "120px",
+          key: 'ROBOT_C_POM',
+          width: '120px'
         },
         {
-          key: "ROBOT_D_MAT",
-          width: "120px",
+          key: 'ROBOT_D_MAT',
+          width: '120px'
         },
         {
-          key: "ROBOT_D_POM",
-          width: "120px",
-        },
+          key: 'ROBOT_D_POM',
+          width: '120px'
+        }
       ],
-    };
+    }
   },
-};
+}
 </script>
 
 <template>
   <VaCard style="padding: 1rem">
     <div class="flex flex-col gap-4">
       <VaTabs
-        v-model="currentTab"
-        stateful
-        grow
-        style="margin-bottom: 0.75rem; margin-top: 0.5rem"
+          v-model="currentTab"
+          stateful
+          grow
+          style="margin-bottom: 0.75rem; margin-top: 0.5rem"
       >
         <template #tabs>
-          <VaTab v-for="tab in weeks" :key="tab" :name="tab">
+          <VaTab
+              v-for="tab in weeks"
+              :key="tab"
+              :name="tab"
+          >
             {{ tab }}
           </VaTab>
         </template>
       </VaTabs>
-      <label class="va-title" style="color: rgb(8, 9, 14); font-size: 0.75rem">
+      <label class="va-title" style="color: rgb(8,9,14); font-size: 0.75rem;">
         Schedula 20 Ottobre 2024
       </label>
       <VaDataTable
-        class="table-inline"
-        :items="currentTab == 'SETTIMANA 1' ? items : testItems"
-        :columns="columns"
+          class="table-inline"
+          :items="currentTab == 'SETTIMANA 1' ? items : testItems"
+          :columns="columns"
       >
         <template
-          v-for="item in columns"
-          :key="item.key"
-          #[`cell(${item.key})`]="{ value, row }"
+            v-for="item in columns"
+            :key="item.key"
+            #[`cell(${item.key})`]="{ value, row }"
         >
-          <div class="table-inline__cell" style="overflow: hidden">
+          <div class="table-inline__cell" style="overflow: hidden;">
             <VaValue v-slot="doShowInput">
               <VaInput
-                ref="inputBox"
-                v-if="doShowInput.value"
-                :model-value="value"
-                @change="
-                  ($event) => {
-                    row.rowData[item.key] = $event.target.value;
-                    doShowInput.value = false;
-                    this.modifiedSchedule = true;
-                    $emit('modifiedSchedule', row);
-                  }
-                "
-                @blur="doShowInput.value = false"
+                  ref="inputBox"
+                  v-if="doShowInput.value"
+                  :model-value="value"
+                  @change="($event) => {
+                      row.rowData[item.key] = $event.target.value;
+                      doShowInput.value = false;
+                      this.modifiedSchedule = true;
+                      $emit('modifiedSchedule', row);
+                    }"
+                  @blur="doShowInput.value = false"
               />
               <span
-                class="table-inline__item"
-                :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-                @click="item.key == 'day' ? null : (doShowInput.value = true)"
+                  class="table-inline__item"
+                  :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
+                  @click="item.key == 'day' ? null : doShowInput.value = true"
               >
-                {{ value }}
-              </span>
+              {{ value }}
+            </span>
             </VaValue>
           </div>
         </template>
@@ -223,6 +226,7 @@ export default {
 </template>
 
 <style scoped lang="scss">
+
 .table-inline {
   &__cell {
     position: relative;
@@ -234,7 +238,7 @@ export default {
 
   &__item {
     cursor: pointer;
-    font-size: 0.8rem;
+    font-size:0.8rem;
 
     &--hidden {
       z-index: -1;
@@ -248,4 +252,5 @@ export default {
     width: 100%;
   }
 }
+
 </style>
