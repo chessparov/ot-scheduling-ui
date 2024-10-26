@@ -12,7 +12,7 @@ const props = defineProps({
   },
   saveButtonLabel: {
     type: String,
-    default: 'Save',
+    default: 'Salva',
   },
 })
 
@@ -86,38 +86,22 @@ const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
 
 <template>
   <VaForm v-slot="{ isValid }" ref="add-user-form" class="flex-col justify-start items-start gap-4 inline-flex w-full">
-    <VaFileUpload
-      v-model="avatar"
-      type="single"
-      hide-file-list
-      class="self-stretch justify-start items-center gap-4 inline-flex"
-    >
-      <VaButton preset="primary" size="small">Add image</VaButton>
-      <VaButton
-        v-if="avatar"
-        preset="primary"
-        color="danger"
-        size="small"
-        icon="delete"
-        class="z-10"
-        @click.stop="avatar = undefined"
-      />
-    </VaFileUpload>
+
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col sm:flex-row w-full">
         <VaInput
           v-model="newUser.name"
-          label="Full name"
+          label="Nome"
           class="w-full sm:w-1/2"
           :rules="[validators.required]"
-          name="fullname"
+          name="name"
         />
         <VaInput
           v-model="newUser.surname"
-          label="Username"
+          label="Cognome"
           class="w-full sm:w-1/2"
           :rules="[validators.required]"
-          name="username"
+          name="surname"
         />
       </div>
       <div class="flex gap-4 flex-col sm:flex-row w-full">
@@ -128,25 +112,23 @@ const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
           :rules="[validators.required, validators.email]"
           name="email"
         />
-      </div>
-
-      <div class="flex gap-4 w-full">
-        <div class="w-1/2">
-          <VaSelect
+        <VaSelect
             v-model="newUser.privileges"
-            label="Role"
-            class="w-full"
+            label="Privilegi"
+            class="w-full sm:w-1/2"
             :options="roleSelectOptions"
             :rules="[validators.required]"
-            name="role"
+            name="privileges"
             value-by="value"
-          />
-        </div>
+        />
+      </div>
 
+      <div class="flex w-full">
+          <VaDivider />
       </div>
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full sm:flex-row sm:items-center">
-        <VaButton preset="secondary" color="secondary" @click="$emit('close')">Cancel</VaButton>
-        <VaButton :disabled="!isValid" @click="onSave">{{ saveButtonLabel }}</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="$emit('close')">Annulla</VaButton>
+        <VaButton :disabled="!isValid" @click="onSave">Salva</VaButton>
       </div>
     </div>
   </VaForm>

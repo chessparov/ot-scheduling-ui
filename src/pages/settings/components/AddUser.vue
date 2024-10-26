@@ -55,7 +55,7 @@ export default defineComponent({
         />
         <VaCheckbox
             v-model="form.editor"
-            label="Aggiungi privilegi da editor"
+            label="Conferisci privilegi da amministratore"
             style="min-width: 20%; margin: auto"
         />
       </div>

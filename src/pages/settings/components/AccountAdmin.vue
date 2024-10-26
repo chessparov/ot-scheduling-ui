@@ -29,13 +29,13 @@ const onUserSaved = async (user: User) => {
   if (userToEdit.value) {
     await usersApi.update(user)
     notify({
-      message: `${user.name} has been updated`,
+      message: `${user.name} modificato con successo`,
       color: 'success',
     })
   } else {
     usersApi.add(user)
     notify({
-      message: `${user.name} has been created`,
+      message: `${user.name} è stato creato`,
       color: 'success',
     })
   }
@@ -44,7 +44,7 @@ const onUserSaved = async (user: User) => {
 const onUserDelete = async (user: User) => {
   await usersApi.remove(user)
   notify({
-    message: `${user.name} has been deleted`,
+    message: `${user.name} è stato eliminato`,
     color: 'success',
   })
 }
@@ -59,7 +59,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
   if (editFormRef.value.isFormHasUnsavedChanges) {
     const agreed = await confirm({
       maxWidth: '380px',
-      message: 'Form has unsaved changes. Are you sure you want to close it?',
+      message: 'Sono state apportate modifiche non salvate, procedere comunque?',
       size: 'small',
     })
     if (agreed) {
@@ -93,11 +93,11 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
           hide-default-actions
           :before-cancel="beforeEditFormModalClose"
       >
-        <h1 class="va-h5">{{ userToEdit ? 'Edit user' : 'Add user' }}</h1>
+        <h1 class="va-h5">{{ userToEdit ? 'Modifica utente' : 'Aggiungi utente' }}</h1>
         <EditUserForm
             ref="editFormRef"
             :user="userToEdit"
-            :save-button-label="userToEdit ? 'Save' : 'Add'"
+            :save-button-label="userToEdit ? 'Salva' : 'Aggiungi'"
             @close="cancel"
             @save="
               (user) => {
@@ -109,7 +109,6 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
       </VaModal>
     </VaCollapse>
     <VaCollapse header="Aggiungi account">
-
       <AddUser />
     </VaCollapse>
   </div>

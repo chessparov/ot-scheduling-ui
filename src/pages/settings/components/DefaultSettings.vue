@@ -1,9 +1,11 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import {useGlobalStore} from "@/stores/global-store";
+import UoList from "@/pages/settings/components/UoList.vue";
 
 export default defineComponent({
   name: "DefaultSettings",
+  components: {UoList},
   data() {
     return {
       store: useGlobalStore(),
@@ -16,7 +18,7 @@ export default defineComponent({
   <div class="flex flex-col p-4 bg-backgroundSecondary rounded-lg">
     <h3 class="h3 mb-6">Modifica parametri default</h3>
     <div class="flex flex-col justify-between overflow-x-hidden gap-4">
-      <div class="flex flex-rew justify-between overflow-x-hidden gap-4">
+      <div class="flex flex-row justify-between overflow-x-hidden gap-4">
         <span class="text-regularMedium">
           Numero cicli Montecarlo
         </span>
@@ -26,7 +28,7 @@ export default defineComponent({
           </template>
         </VaInput>
       </div>
-      <div class="flex flex-rew justify-between overflow-x-hidden gap-4 ">
+      <div class="flex flex-row justify-between overflow-x-hidden gap-4 ">
         <span class="text-regularMedium">
           Tempo tabù search
         </span>
@@ -39,7 +41,7 @@ export default defineComponent({
     </div>
     <VaDivider class="py-4 group-last:hidden" />
     <div class="flex flex-row justify-between overflow-x-hidden">
-      <div class="flex flex-col justify-between overflow-x-hidden">
+      <div class="flex flex-col">
         <span class="text-regularMedium" style="font-weight: bold">
           Vincoli
         </span>
@@ -51,6 +53,9 @@ export default defineComponent({
         Vai alla tabella
       </VaButton>
     </div>
+    <VaDivider class="py-4 group-last:hidden" />
+    <UoList />
+    <VaDivider class="py-4 group-last:hidden" />
   </div>
 </template>
 
