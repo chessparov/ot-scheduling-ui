@@ -23,12 +23,11 @@ const onSave = () => {
 
 <template>
   <VaForm v-slot="{ isValid }" class="flex-col justify-start items-start gap-4 inline-flex w-full">
-
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col sm:flex-row w-full">
         <VaInput
             v-model="uoToModify"
-            label="Nuova denominazione"
+            :label="uoToModify ? 'Nuova denominazione' : 'Nuova unità operativa'"
             class="w-full"
             name="name"
         />

@@ -3,11 +3,11 @@
 import Calendar from "@/pages/dashboard/cards/Calendar.vue";
 import SaveDownload from "@/pages/dashboard/cards/SaveDownload.vue";
 import DashboardMenu from "@/pages/dashboard/cards/DashboardMenu.vue";
-import Stats from "@/pages/dashboard/cards/Stats.vue";
+import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
 
 export default {
-  components: {VaCard, VaButtonToggle, Stats, DashboardMenu, SaveDownload, Calendar},
+  components: {VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
   data() {
     return {
       modifiedSchedule: false,
@@ -41,7 +41,7 @@ export default {
         <SaveDownload :modified-schedule="this.modifiedSchedule"/>
       </section>
       <section v-else class="flex flex-col gap-4">
-        <Stats/>
+        <StatsReport/>
       </section>
     </div>
   </VaCard>

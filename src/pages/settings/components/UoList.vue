@@ -25,8 +25,10 @@ function onAdd() {
   uoToEdit = ''
 }
 function onModify() {
-  doShowEditUoModal.value = true
-  uoToEdit = currentUo.value
+  if (currentUo.value !== '') {
+    doShowEditUoModal.value = true
+    uoToEdit = currentUo.value
+  }
 }
 
 function modifyUo(newUo: string) {
@@ -121,18 +123,25 @@ const onUoDelete = async (uo: string) => {
         hide-default-actions
     >
       <h1 class="va-h5">{{ uoToEdit ? 'Modifica unità operativa' : 'Aggiungi unità operativa' }}</h1>
-      <span v-if="uoToEdit" class="text-regularMedium">{{ uoToEdit }}</span>
-      <EditUoForm
-          ref="editFormRef"
-          :uo="uoToEdit"
-          :save-button-label="uoToEdit ? 'Salva' : 'Aggiungi'"
-          @close="cancel"
-          @save="(uo) => {
-                (uoToEdit != '') ? modifyUo(uo): addUo(uo)
-                ok()
-              }
-            "
-      />
+      <div style="padding-top: 1rem">
+        <VaInput
+            v-if="uoToEdit"
+            label="Denominazione precedente"
+            disabled
+            :placeholder="uoToEdit"
+        />
+        <EditUoForm
+            ref="editFormRef"
+            :uo="uoToEdit"
+            :save-button-label="uoToEdit ? 'Salva' : 'Aggiungi'"
+            @close="cancel"
+            @save="(uo) => {
+                  (uoToEdit != '') ? modifyUo(uo): addUo(uo)
+                  ok()
+                }
+              "
+        />
+      </div>
     </VaModal>
   </VaCollapse>
 </template>
