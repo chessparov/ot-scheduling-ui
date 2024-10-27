@@ -16,11 +16,11 @@ export type Sorting = {
 
 const getSortItem = (obj: any, sortBy: keyof (typeof projectsDb)[number]) => {
   if (sortBy === 'project_owner') {
-    return obj.project_owner.fullname
+    return obj.project_owner.name
   }
 
   if (sortBy === 'team') {
-    return obj.team.map((user: any) => user.fullname).join(', ')
+    return obj.team.map((user: any) => user.name).join(', ')
   }
 
   if (sortBy === 'creation_date') {

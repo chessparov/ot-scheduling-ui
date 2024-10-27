@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import {computed, ref} from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { useProjects } from './composables/useProjects'
 import ProjectCards from './widgets/ProjectCards.vue'
@@ -20,7 +20,6 @@ const editProject = (project: Project) => {
   projectToEdit.value = project
   doShowProjectFormModal.value = true
 }
-
 
 const { init: notify } = useToast()
 

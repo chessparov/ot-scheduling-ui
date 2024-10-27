@@ -17,8 +17,12 @@ export default defineComponent({
       <h3 class="h3">Modalità</h3>
       <ThemeSwitcher />
     </div>
-    <DefaultSettings />
-    <AccountAdmin />
+    <div class="flex flex-col p-4 space-y-4 bg-backgroundSecondary rounded-lg">
+      <DefaultSettings />
+    </div>
+    <div class="flex flex-col p-2  bg-backgroundSecondary rounded-lg" style="margin-bottom: 2rem;">
+      <AccountAdmin />
+    </div>
   </div>
 </template>
 

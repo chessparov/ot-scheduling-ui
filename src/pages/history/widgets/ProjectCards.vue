@@ -41,7 +41,7 @@ defineEmits<{
           </h4>
           <p>
             <span class="text-[var(--va-secondary)]">Autore: </span>
-            <span>{{ project.project_owner.fullname }}</span>
+            <span>{{ project.project_owner.name }}</span>
           </p>
           <ProjectStatusBadge :status="project.status" />
         </div>
