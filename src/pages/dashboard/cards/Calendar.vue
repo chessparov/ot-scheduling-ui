@@ -112,11 +112,11 @@ export default {
         },
       ],
       days: [
-        'LUNEDI',
-        'MARTEDI',
-        'MERCOLEDI',
-        'GIOVEDI',
-        'VENERDI',
+        'LUNEDì',
+        'MARTEDì',
+        'MERCOLEDì',
+        'GIOVEDì',
+        'VENERDì',
         'SABATO',
         'DOMENICA'
       ],
@@ -165,64 +165,59 @@ export default {
 </script>
 
 <template>
-  <VaCard style="padding: 1rem">
-    <div class="flex flex-col gap-4">
-      <VaTabs
-          v-model="currentTab"
-          stateful
-          grow
-          style="margin-bottom: 0.75rem; margin-top: 0.5rem"
-      >
-        <template #tabs>
-          <VaTab
-              v-for="tab in weeks"
-              :key="tab"
-              :name="tab"
-          >
-            {{ tab }}
-          </VaTab>
-        </template>
-      </VaTabs>
-      <label class="va-title" style="color: rgb(8,9,14); font-size: 0.75rem;">
-        Schedula 20 Ottobre 2024
-      </label>
-      <VaDataTable
-          class="table-inline"
-          :items="currentTab == 'SETTIMANA 1' ? items : testItems"
-          :columns="columns"
-      >
-        <template
-            v-for="item in columns"
-            :key="item.key"
-            #[`cell(${item.key})`]="{ value, row }"
+  <div class="flex flex-col gap-4">
+    <VaTabs
+        v-model="currentTab"
+        stateful
+        grow
+        style="margin-bottom: 0.75rem;"
+    >
+      <template #tabs>
+        <VaTab
+            v-for="tab in weeks"
+            :key="tab"
+            :name="tab"
         >
-          <div class="table-inline__cell" style="overflow: hidden;">
-            <VaValue v-slot="doShowInput">
-              <VaInput
-                  ref="inputBox"
-                  v-if="doShowInput.value"
-                  :model-value="value"
-                  @change="($event) => {
-                      row.rowData[item.key] = $event.target.value;
-                      doShowInput.value = false;
-                      this.modifiedSchedule = true;
-                      $emit('modifiedSchedule', row);
-                    }"
-                  @blur="doShowInput.value = false"
-              />
-              <span
-                  class="table-inline__item"
-                  :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-                  @click="item.key == 'day' ? null : doShowInput.value = true"
-              >
-              {{ value }}
-            </span>
-            </VaValue>
-          </div>
-        </template>
-      </VaDataTable>
-    </div>
-  </VaCard>
+          {{ tab }}
+        </VaTab>
+      </template>
+    </VaTabs>
+    <VaDataTable
+        class="table-inline"
+        :items="currentTab == 'SETTIMANA 1' ? items : testItems"
+        :columns="columns"
+    >
+      <template
+          v-for="item in columns"
+          :key="item.key"
+          #[`cell(${item.key})`]="{ value, row }"
+      >
+        <div class="table-inline__cell" style="overflow: hidden;">
+          <VaValue v-slot="doShowInput">
+            <VaInput
+                ref="inputBox"
+                v-if="doShowInput.value"
+                :model-value="value.toUpperCase()"
+                @change="($event) => {
+                    row.rowData[item.key] = $event.target.value;
+                    doShowInput.value = false;
+                    this.modifiedSchedule = true;
+                    $emit('modifiedSchedule', row);
+                  }"
+                @blur="doShowInput.value = false"
+            />
+            <span
+                class="table-inline__item"
+                :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
+                @click="item.key == 'day' ? null : doShowInput.value = true"
+            >
+            {{ value.toUpperCase() }}
+          </span>
+          </VaValue>
+        </div>
+      </template>
+    </VaDataTable>
+  </div>
 </template>
 
 <style scoped lang="scss">
@@ -239,6 +234,7 @@ export default {
   &__item {
     cursor: pointer;
     font-size:0.8rem;
+    font-weight: bold;
 
     &--hidden {
       z-index: -1;

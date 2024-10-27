@@ -12,12 +12,9 @@ export default defineComponent({
 </script>
 
 <template>
-  <VaCard>
-    <div class="flex flex-col md:flex-row">
-      <VaTextarea/>
-    </div>
-  </VaCard>
-
+  <div class="flex flex-col md:flex-row">
+    <VaTextarea/>
+  </div>
 </template>
 
 <style scoped lang="scss">

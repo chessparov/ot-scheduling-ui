@@ -32,7 +32,7 @@ export default {
             :name="tab"
             style="padding: 100% 0 100% 0"
         >
-          {{ tab }}
+          <span>{{ tab }}</span>
         </VaTab>
       </template>
     </VaTabs>
