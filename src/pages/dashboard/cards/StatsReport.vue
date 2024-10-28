@@ -119,8 +119,13 @@ const optionsRepartiOncologici = {
   chart: {
     id: 'oncologici_reparto',
   },
-  title: { text: 'Media Oncologici in orario per reparto' },
-  colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63'],
+  title: { text: 'Media percentuale oncologici in orario per reparto' },
+  colors: ['#2E93fA', '#66DA26', '#eab149', '#E91E63'],
+  plotOptions: {
+    bar: {
+      distributed: true,
+    }
+  },
   xaxis: {
     categories: ['Urologia 1', 'Ginecologia 2', 'Chirurgia generale', 'Endocrinochirurgia'],
     title: {
@@ -159,7 +164,7 @@ const optionsClsseInterventi = {
   },
   categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
   title: { text: 'Numero interventi per classe' },
-  colors: ['#2E93fA', '#66DA26', '#546E7A', '#E91E63'],
+  colors: ['#2E93fA', '#ec0b0b', '#56ec0b', '#E91E63'],
   xaxis: {
     title: {
       text: 'N° corsa Montecarlo',
@@ -228,7 +233,7 @@ const healthOptions = {
       endAngle: 270,
       hollow: {
         margin: 0,
-        size: '70%',
+        size: '60%',
         background: '#fff',
         image: undefined,
         imageOffsetX: 0,
@@ -244,8 +249,8 @@ const healthOptions = {
       },
       track: {
         background: '#fff',
-        strokeWidth: '67%',
-        margin: 0, // margin is in pixels
+        strokeWidth: '10%',
+        margin: 15, // margin is in pixels
         dropShadow: {
           enabled: true,
           top: -3,
@@ -286,9 +291,10 @@ const oncologici = [{
   name: 'Percentuale interventi oncologici effettuati in orario',
   data: [19, 24, 41, 13, 22, 31, 21, 18, 30, 18]
 }]
-const repartiOncologici = [{
-  name: 'Percentuale interventi oncologici effettuati in orario',
-  data: [60, 13, 27, 45]
+const repartiOncologici = [
+    {
+      name: 'Percentuale interventi oncologici effuttuati in orario per reparto',
+      data: [24, 15, 52, 29]
 }]
 const classiInterventi = [{
     name: 'Classe A',
