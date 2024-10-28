@@ -193,7 +193,7 @@ const optionsClsseInterventi = {
 const healthOptions = {
   chart: {
     id: 'scheduleHealth',
-    height: '100%',
+
   },
   title: {
     text: 'SALUTE SCHEDULA'
@@ -214,6 +214,12 @@ const healthOptions = {
       opacityTo: 1,
       stops: [0, 100],
       colorStops: []
+    }
+  },
+  grid: {
+    show: false,
+    padding: {
+      left: 0, right: 0, top: 50, bottom: 0
     }
   },
   plotOptions: {
@@ -261,7 +267,7 @@ const healthOptions = {
             return parseInt(val) + "%";
           },
           color: '#111',
-          fontSize: '36px',
+          fontSize: '30px',
           show: true,
         }
       }
@@ -297,7 +303,7 @@ const classiInterventi = [{
     data: [2, 1, 8, 0, 4, 7, 2, 11, 1, 5]
   }
 ]
-const healthRadial = [100];
+const healthRadial = [89];
 
 const riepilogoData = [
   {Parametri_: 'Corse Montecarlo', valore: 1000, Dettagli: 'Data esecuzione', valore_: new Date().toDateString()},
@@ -374,15 +380,15 @@ onMounted(() => {addGradientStops()});
 <template>
   <div class="flex flex-col gap-4">
     <div class="flex flex-row gap-4" style="height: 100%; width: 100%; justify-content: space-between">
-      <div class="flex flex-col gap-4 sm:w-[60%]">
+      <div class="flex flex-col gap-4 sm:w-[70%]">
         <h1 class="va-title" style="text-align: left; font-size: 0.85rem">Riepilogo</h1>
         <VaDataTable
             style="--va-data-table-thead-font-size: 0.5rem; --va-data-table-height: 100%; font-size: 0.8rem"
             :items="riepilogoData"
         />
       </div>
-      <div class="sm:w-[40%]">
-        <apexchart class="" type="radialBar" :series="healthRadial" :options="healthOptions"></apexchart>
+      <div class="sm:w-[30%] gap-8">
+        <apexchart height="400px" type="radialBar" :series="healthRadial" :options="healthOptions"></apexchart>
       </div>
     </div>
     <VaCollapse header="Statistiche Montecarlo">
@@ -398,7 +404,7 @@ onMounted(() => {addGradientStops()});
         </div>
       </div>
     </VaCollapse>
-    <VaCollapse header="Statistche globali">
+    <VaCollapse header="Statistiche globali">
     <div class="flex flex-row gap-4 overflow-hidden" style="justify-content: space-between">
       <div class="sm:w-[48%]" style="min-height: 300px">
         <apexchart height="100%" width="100%" type="bar" :options="optionsRepartiOncologici" :series=repartiOncologici></apexchart>
