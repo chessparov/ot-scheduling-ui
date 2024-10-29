@@ -8,11 +8,14 @@ import VueApexCharts from "vue3-apexcharts";
 import vuesticGlobalConfig from "./services/vuestic-ui/global-config";
 import stores from "./stores";
 import router from "./router";
+import axios from "axios";
+
+axios.defaults.baseURL = "http://localhost:8000";
 
 const app = createApp(App);
 
 app.use(stores);
-app.use(router);
+app.use(router, axios);
 app.use(VueApexCharts);
 app.use(createVuestic({ config: vuesticGlobalConfig }));
 
