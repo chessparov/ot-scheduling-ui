@@ -40,12 +40,12 @@ export default defineComponent({
       </div>
     </div>
     <VaDivider class="py-4 group-last:hidden" />
-    <div class="flex flex-row justify-between overflow-x-hidden">
+    <div class="flex flex-col md:flex-row justify-between overflow-x-hidden">
       <div class="flex flex-col">
         <span class="text-regularMedium" style="font-weight: bold">
           Vincoli
         </span>
-        <span class="text-regularMedium">
+        <span class="text-regularMedium py-2">
           Modifica i vincoli nel database. Le modifiche apportate sono permanenti.
         </span>
       </div>

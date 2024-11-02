@@ -23,7 +23,7 @@ export default defineComponent({
 <template ref="formRef">
   <VaForm>
     <div class="flex flex-col gap-4">
-      <div class="flex flex-col md:flex-row gap-6">
+      <div class="flex flex-col md:flex-row gap-4">
         <VaInput
             v-model="form.name"
             label="Nome"
@@ -40,7 +40,7 @@ export default defineComponent({
             placeholder="Inserisci email"
        />
       </div>
-      <div class="flex flex-col md:flex-row gap-6 ">
+      <div class="flex flex-col md:flex-row gap-4">
         <VaInput
             v-model="form.password"
             label="Password"
@@ -59,7 +59,7 @@ export default defineComponent({
             style="min-width: 20%; margin: auto"
         />
       </div>
-      <VaButton style="max-width: 20%" type="submit">
+      <VaButton type="submit">
         Aggiungi
       </VaButton>
     </div>

@@ -20,7 +20,7 @@ export default defineComponent({
     <div class="flex flex-col p-4 space-y-4 bg-backgroundSecondary rounded-lg">
       <DefaultSettings />
     </div>
-    <div class="flex flex-col p-2  bg-backgroundSecondary rounded-lg" style="margin-bottom: 2rem;">
+    <div class="flex flex-col p-2 bg-backgroundSecondary rounded-lg" style="margin-bottom: 2rem;">
       <AccountAdmin />
     </div>
   </div>
