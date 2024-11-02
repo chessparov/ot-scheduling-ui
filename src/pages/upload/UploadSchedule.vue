@@ -56,7 +56,7 @@ export default defineComponent({
   <h1 class="h1">Analizza schedula</h1>
   <div class="flex flex-col md:flex-col gap-2">
     <div class="flex flex-col md:flex-row gap-2">
-      <VaCard class="w-full sm:w-[45%]" style="padding: 1rem">
+      <VaCard class="w-full md:w-[45%]" style="padding: 1rem">
         <div class="flex flex-col gap-4">
           <span class="va-title" style="padding: 1rem 0 0 0; font-size: 0.85rem">Esegui simulazione Montecarlo</span>
           <span class="text-regular-medium" style="padding: 0 0 1rem 1rem">
@@ -104,6 +104,7 @@ export default defineComponent({
         </div>
       </VaCard>
       <Montecarlo
+          class="w-full md:w-[55%]"
           :upload="false"
           :toggle-optimization="false"
           @toggle-status="optStatus"

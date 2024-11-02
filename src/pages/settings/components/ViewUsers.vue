@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import ProjectStatusBadge from "@/pages/history/components/ProjectStatusBadge.vue";
 import {PropType, computed, toRef} from 'vue'
 import {defineVaDataTableColumns, useModal} from 'vuestic-ui'
 import { Pagination, Sorting } from '@/data/pages/projects'
@@ -30,6 +29,7 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: 'edit-user', user: User): void
   (event: 'delete-user', user: User): void
+  (event: 'reset-password', user: User): void
   (event: 'update:sortBy', sortBy: Sorting['sortBy']): void
   (event: 'update:sortingOrder', sortingOrder: Sorting['sortingOrder']): void
 }>()
@@ -101,6 +101,14 @@ const onUserDelete = async (user: User) => {
               icon="mso-edit"
               aria-label="Edit project"
               @click="$emit('edit-user', user as User)"
+          />
+          <VaButton
+              preset="primary"
+              size="small"
+              color="warning"
+              icon="vpn_key"
+              aria-label="Reset Password"
+              @click="$emit('reset-password', user as User)"
           />
           <VaButton
               preset="primary"

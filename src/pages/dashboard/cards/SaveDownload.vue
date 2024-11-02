@@ -18,24 +18,26 @@ export default {
 <template>
   <VaCard>
     <div class="flex flex-col md:flex-row gap-2" style="justify-content: space-between">
-      <div class="flex flex-col md:flex-row gap-2 button-wrapper-left">
+      <div class="flex flex-col md:flex-row gap-2">
         <VaButton
             :disabled="!modifiedSchedule"
             icon="check"
+            class="calendar-button"
         >
           Salva Modifiche
         </VaButton>
         <VaButton
             icon="delete"
             color="danger"
-            style="justify-content: right"
+            class="calendar-button"
         >
           Elimina
         </VaButton>
       </div>
-      <div class="flex flex-col md:flex-row gap-2 button-wrapper-right">
+      <div class="flex flex-col md:flex-row gap-2">
         <VaButton
             icon="download"
+            class="calendar-button"
         >
           Download
         </VaButton>
@@ -47,15 +49,8 @@ export default {
 
 <style scoped lang="scss">
 
-.button-wrapper-left {
-  justify-content: left;
-  padding: 1rem;
+.calendar-button {
+  min-width: 10rem;
 }
-.button-wrapper-right {
-  justify-content: right;
-  padding: 1rem;
-}
-
-
 
 </style>

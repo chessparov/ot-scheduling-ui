@@ -43,7 +43,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="slider-wrapper">
+  <div class="flex-col md:flex-row justify-space-between slider-wrapper gap-4">
     <VaSlider
         :label="sliderLabel"
         :disabled="disabled"
@@ -51,14 +51,14 @@ export default defineComponent({
         :min="sliderMin"
         :max="sliderMax"
         :readonly="false"
-        class="w-full sm:w-[70%]"
+        class="min-w-[50%]"
     />
     <VaInput
         v-model="value"
         :disabled="disabled"
-        class="w-full sm:w-[20%]"
         :messages="inputMessage"
         strict-bind-input-value
+        style="width: 40%"
     >
       <template #appendInner>
         {{ inputInnerLabel }}

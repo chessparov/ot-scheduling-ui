@@ -1,21 +1,28 @@
 <script setup lang="ts">
-import {defineComponent, ref} from 'vue'
+import { ref } from 'vue'
 import AddUser from "@/pages/settings/components/AddUser.vue";
 import ViewUsers from "@/pages/settings/components/ViewUsers.vue";
 import EditUserForm from './EditUserForm.vue'
 import {useUsers} from "@/pages/settings/composables/useUsers";
 import {User} from "@/pages/settings/types";
 import {useModal, useToast} from "vuestic-ui";
+import ResetPassword from "@/pages/settings/components/ResetPassword.vue";
 
 
 const { users, isLoading, filters, sorting, pagination, ...usersApi } = useUsers()
 const userToEdit = ref<User | null>(null)
 
 const doShowEditUserModal = ref(false)
+const doShowResetPasswordModal = ref(false)
 
 const showEditUserModal = (user: User) => {
   userToEdit.value = user
   doShowEditUserModal.value = true
+}
+
+const showResetPasswordModal = (user: User) => {
+  userToEdit.value = user
+  doShowResetPasswordModal.value = true
 }
 
 const showAddUserModal = () => {
@@ -48,7 +55,21 @@ const onUserDelete = async (user: User) => {
     color: 'success',
   })
 }
-
+const passwordReset = async (user: User) => {
+  if (userToEdit.value) {
+    await usersApi.update(user)
+    notify({
+      message: `Password dell'utente "${user.name}" ripristinata con successo`,
+      color: 'success',
+    })
+  } else {
+    usersApi.add(user)
+    notify({
+      message: `${user.name} è stato creato`,
+      color: 'success',
+    })
+  }
+}
 
 
 const editFormRef = ref()
@@ -83,6 +104,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
           :pagination="pagination"
           @editUser="showEditUserModal"
           @deleteUser="onUserDelete"
+          @resetPassword="showResetPasswordModal"
       />
       <VaModal
           v-slot="{ cancel, ok }"
@@ -102,6 +124,29 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
             @save="
               (user) => {
                 onUserSaved(user)
+                ok()
+              }
+            "
+        />
+      </VaModal>
+      <VaModal
+          v-slot="{ cancel, ok }"
+          v-model="doShowResetPasswordModal"
+          size="small"
+          mobile-fullscreen
+          close-button
+          hide-default-actions
+          :before-cancel="beforeEditFormModalClose"
+      >
+        <h1 class="va-h5">Ripristina Password</h1>
+        <ResetPassword
+            ref="editFormRef"
+            :user="userToEdit"
+            :save-button-label="Conferma"
+            @close="cancel"
+            @save="
+              (user) => {
+                passwordReset(user)
                 ok()
               }
             "

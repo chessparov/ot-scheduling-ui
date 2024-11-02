@@ -39,7 +39,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <VaCard class="w-full sm:w-[55%]">
+  <VaCard>
     <VaCardContent>
       <section class="flex flex-col gap-4">
         <VaInput

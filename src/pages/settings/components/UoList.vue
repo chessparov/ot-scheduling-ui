@@ -91,7 +91,7 @@ const onUoDelete = async (uo: string) => {
           placeholder="Seleziona un'unità operativa"
           :options="uos"
       />
-      <div class="flex flex-row gap-2">
+      <div class="flex flex-col sm:flex-row gap-2">
         <VaButton
             icon="add"
             @click="onAdd"

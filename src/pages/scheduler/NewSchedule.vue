@@ -47,12 +47,14 @@ export default defineComponent({
   <div class="flex flex-col md:flex-col gap-2">
     <div class="flex flex-col md:flex-row gap-2">
       <Montecarlo
+          class="w-full md:w-[55%]"
           :upload="true"
           :toggle-optimization="true"
           @toggle-status="optStatus"
           @mc-cycles="getMcCycles"
       />
       <Optimization
+          class="w-full md:w-[45%]"
           @tabu-time="getTabuTime"
           :optimization="this.optimization"
       />
