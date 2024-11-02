@@ -11,9 +11,9 @@
         aria-label="Visit homepage"
       >
         <div class="aoup-wrapper">
-          <h1 id="ot-scheduler" class="va-h2">OT SCHEDULER</h1>
+          <h1 id="ot-scheduler" class="va-h3" style="text-align: center">OT SCHEDULER</h1>
           <br />
-          <h1 class="va-h6" style="color: rgba(255, 255, 255, 0.86)">
+          <h1 class="va-h6" style="font-size: 1.25rem; text-align: center; color: rgba(255, 255, 255, 0.86)">
             U.O. Innovazione Sviluppo e Analisi dei Processi
           </h1>
         </div>
@@ -57,6 +57,7 @@ const breakpoint = useBreakpoint();
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 2rem;
 }
 
 #ot-scheduler {
