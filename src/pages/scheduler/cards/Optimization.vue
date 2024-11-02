@@ -39,7 +39,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <VaCard class="w-full sm:w-[45%]" :disabled="!optimization">
+  <VaCard :disabled="!optimization">
     <VaCardContent>
       <section class="flex flex-col gap-4" >
         <label class="va-title" style="color: #154EC1; font-size: 16px">
