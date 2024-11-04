@@ -381,11 +381,12 @@ function addGradientStops() {
 }
 onMounted(() => {addGradientStops()});
 
+let firstCollapse = true;
 </script>
 
 <template>
   <div class="flex flex-col gap-4">
-    <VaCollapse header="Riepilogo">
+    <VaCollapse header="Riepilogo" v-model="firstCollapse">
 
       <div class="flex flex-col md:flex-row gap-4">
           <VaDataTable
