@@ -18,21 +18,21 @@ export default defineComponent({
   <div class="flex flex-col p-4 bg-backgroundSecondary rounded-lg">
     <h3 class="h3 mb-6">Modifica parametri default</h3>
     <div class="flex flex-col justify-between overflow-x-hidden gap-4">
-      <div class="flex flex-row justify-between overflow-x-hidden gap-4">
+      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4">
         <span class="text-regularMedium">
           Numero cicli Montecarlo
         </span>
-        <VaInput class="sm:w-[50%]" v-model="store.montecarloDefault" size="small">
+        <VaInput class="md:w-[50%]" v-model="store.montecarloDefault" size="small">
           <template #appendInner>
             <span>Cicli</span>
           </template>
         </VaInput>
       </div>
-      <div class="flex flex-row justify-between overflow-x-hidden gap-4 ">
+      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
         <span class="text-regularMedium">
           Tempo tabù search
         </span>
-        <VaInput class="sm:w-[50%]" v-model="store.tabuTimeDefault" size="small">
+        <VaInput class="md:w-[50%]" v-model="store.tabuTimeDefault" size="small">
           <template #appendInner>
             <span>Secondi</span>
           </template>

@@ -95,8 +95,8 @@ export default defineComponent({
               id="upload-schedula"
               @file-added="allowSingleFile"
           >
-            <div class="flex flex-col gap-2" style="width:25vw; margin: auto; padding: 0.5rem">
-              <VaButton class="va-button--ellipsis" style="margin: 0.7rem">
+            <div class="flex flex-col gap-2" style="margin: auto; padding: 2rem">
+              <VaButton class="va-button--ellipsis" style="margin: auto; min-width: 300px">
                 Carica schedula da analizzare
               </VaButton>
             </div>
