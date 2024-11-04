@@ -24,8 +24,8 @@ export default {
   <h1 class="h1">Dashboard</h1>
   <VaCard>
     <div class="flex flex-col gap-4 " style="padding: 1.5rem">
-      <div class="flex flex-row gap-4 justify-between" style="padding-bottom: 1.25rem">
-        <label class="va-title" style="font-size: 1.1rem; padding: 0.25rem">
+      <div class="flex flex-col sm:flex-row gap-4 justify-between" style="padding-bottom: 1.25rem">
+        <label class="va-title" style="font-size: 1rem; padding: 0.25rem">
           Schedula 20 Ottobre 2024
         </label>
         <VaButtonToggle

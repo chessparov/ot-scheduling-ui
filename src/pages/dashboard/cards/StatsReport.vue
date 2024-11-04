@@ -385,37 +385,45 @@ onMounted(() => {addGradientStops()});
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex flex-row gap-4" style="height: 100%; width: 100%; justify-content: space-between">
-      <div class="flex flex-col gap-4 sm:w-[70%]">
-        <h1 class="va-title" style="text-align: left; font-size: 0.85rem">Riepilogo</h1>
-        <VaDataTable
-            style="--va-data-table-thead-font-size: 0.5rem; --va-data-table-height: 100%; font-size: 0.8rem"
-            :items="riepilogoData"
-        />
+    <VaCollapse header="Riepilogo">
+
+      <div class="flex flex-col md:flex-row gap-4">
+          <VaDataTable
+              style="--va-data-table-thead-font-size: 0.5rem; --va-data-table-height: 100%; font-size: 0.8rem"
+              :items="riepilogoData"
+              class="w-1 md:w-2/3"
+          />
+          <apexchart
+              style="min-width: 300px; margin: auto"
+              height="300px"
+              class="w-1 md:w-1/3 hidden md:hidden"
+              type="radialBar"
+              :series="healthRadial"
+              :options="healthOptions"
+          >
+
+          </apexchart>
       </div>
-      <div class="sm:w-[30%] gap-8">
-        <apexchart height="400px" type="radialBar" :series="healthRadial" :options="healthOptions"></apexchart>
-      </div>
-    </div>
+    </VaCollapse>
     <VaCollapse header="Statistiche Montecarlo">
-      <div class="flex flex-row overflow-hidden" style="justify-content: space-between">
-        <div class="sm:w-[30%]" style="min-height: 300px">
+      <div class="flex flex-col md:flex-row overflow-hidden" style="justify-content: space-between">
+        <div class="w-full md:w-1/3" style="min-height: 300px">
           <apexchart height="100%" width="100%" type="bar" :options="optionsInterventi" :series="interventi"></apexchart>
         </div>
-        <div class="sm:w-[30%]" style="min-height: 300px">
+        <div class="w-full md:w-1/3" style="min-height: 300px">
           <apexchart height="100%" width="100%" type="bar" :options="optionsRitardi" :series="ritardi"></apexchart>
         </div>
-        <div class="sm:w-[30%]" style="min-height: 300px">
+        <div class="w-full md:w-1/3" style="min-height: 300px">
           <apexchart height="100%" width="100%" type="bar" :options="optionsOncologici" :series="oncologici"></apexchart>
         </div>
       </div>
     </VaCollapse>
     <VaCollapse header="Statistiche globali">
-    <div class="flex flex-row gap-4 overflow-hidden" style="justify-content: space-between">
-      <div class="sm:w-[48%]" style="min-height: 300px">
+    <div class="flex flex-col md:flex-row gap-4 overflow-hidden" style="justify-content: space-between">
+      <div class="w-full md:w-1/2" style="min-height: 300px">
         <apexchart height="100%" width="100%" type="bar" :options="optionsRepartiOncologici" :series=repartiOncologici></apexchart>
       </div>
-      <div class="sm:w-[48%]" style="min-height: 300px">
+      <div class="w-full md:w-1/2" style="min-height: 300px">
         <apexchart height="100%" width="100%" type="bar" :options="optionsClsseInterventi" :series=classiInterventi></apexchart>
       </div>
     </div>
