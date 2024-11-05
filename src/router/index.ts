@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import AuthLayout from '../layouts/AuthLayout.vue';
-import AppLayout from "@/layouts/AppLayout.vue";
+import AppLayout from "../layouts/AppLayout.vue";
 
 const routes: Array<RouteRecordRaw> = [
     {

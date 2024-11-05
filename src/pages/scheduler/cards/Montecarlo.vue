@@ -1,41 +1,48 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import {VaCardContent, VaFileUploadList, VaFileUploadListItem} from "vuestic-ui";
-import BindedSlider from "@/components/BindedSlider.vue";
+<script setup lang="ts">
 
-export default defineComponent({
-  name: "Montecarlo",
-  components: {VaFileUploadListItem, VaFileUploadList, BindedSlider, VaCardContent},
-  props: {
-    upload: Boolean,
-    toggleOptimization: Boolean,
-  },
-  data() {
-    return {
-      scheduleName: "",
-      cycles: 1000,
-      date: new Date(),
-      files: [],
-      optimization: false,
-      visibility: this.toggleOptimization ? 'visible' : 'hidden',
-      display: this.toggleOptimization ? 'flex' : 'none',
-    }
-  },
-  methods: {
-    optimizationStatus() {
-      this.$emit("toggle-status", this.optimization);
-    },
-    cyclesNumber(newValue: number) {
-      this.cycles = newValue;
-      this.$emit("mc-cycles", this.cycles);
-    },
-    allowSingleFile() {
-      if (this.files.length > 1) {
-        this.files = this.files.pop();
-      }
-    },
-  },
+import { ref } from 'vue'
+import BindedSlider from "@/components/BindedSlider.vue";
+import {useToast, VaFile, VaFileUpload, VaSwitch} from "vuestic-ui";
+
+const props = defineProps({
+  upload: Boolean,
 })
+
+const { init: notify } = useToast()
+
+const emit = defineEmits<{
+  (e: 'toggle-status', value: boolean): void
+  (e: 'mc-cycles', value: number): void
+}>()
+
+const name = defineModel('name')
+const startDate = defineModel('startDate')
+const optimization = defineModel('optimization')
+const [files, modifiers] = defineModel('files',
+    {
+  set(value) {
+    if (modifiers.allowSingleFile) {
+      if (value.length >= 2) {
+        value.pop();
+        notify({
+          message: 'Non è possibile caricare più di un file',
+          color: 'warning',
+        })
+      }
+      return value
+    }
+  }
+})
+
+let cycles = 1000;
+let visibility = optimization ? 'visible' : 'hidden';
+let display = optimization ? 'flex' : 'none';
+
+
+function cyclesNumber(newValue: number) {
+  cycles = newValue;
+  emit("mc-cycles", cycles);
+}
 </script>
 
 <template>
@@ -43,13 +50,13 @@ export default defineComponent({
     <VaCardContent>
       <section class="flex flex-col gap-4">
         <VaInput
-            v-model="scheduleName"
+            v-model="name"
             placeholder="Inserisci il nome della schedula"
             label="Nome schedula"
         />
         <VaDateInput
             label="Data inizio schedulazione"
-            v-model="date" />
+            v-model="startDate" />
         <div class="flex flex-col gap-2" >
           <BindedSlider
               :slider-label="'Montecarlo'"
@@ -68,7 +75,6 @@ export default defineComponent({
             class="mt-4"
             v-model="optimization"
             style="font-size: 1rem; visibility: v-bind(visibility);"
-            @input="optimizationStatus"
             left-label
             size="small"
           >
@@ -82,7 +88,6 @@ export default defineComponent({
               v-model="files"
               file-types="xlsx,xls"
               uploadButtonText="Carica Lista Attesa"
-              @file-added="allowSingleFile"
           />
       </section>
     </VaCardContent>

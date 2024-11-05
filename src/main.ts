@@ -15,7 +15,7 @@ axios.defaults.baseURL = "http://localhost:8000";
 const app = createApp(App);
 
 app.use(stores);
-app.use(router, axios);
+app.use(router);
 app.use(VueApexCharts);
 app.use(createVuestic({ config: vuesticGlobalConfig }));
 

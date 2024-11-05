@@ -4,6 +4,7 @@ import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Optimization from "@/pages/scheduler/cards/Optimization.vue";
 import Launch from "@/pages/scheduler/cards/Launch.vue";
+import axios from "axios";
 
 export default defineComponent({
   name: "UploadSchedule",
@@ -18,6 +19,7 @@ export default defineComponent({
       errorMsg: "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx",
       selectedSchedule: '',
       scheduleSource: 'archive',
+      info: null,
     }
   },
   methods: {

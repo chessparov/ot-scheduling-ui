@@ -1,24 +1,25 @@
 <script lang="ts">
-import {defineComponent} from 'vue'
+import {defineComponent, ref} from 'vue'
 import Optimization from "@/pages/scheduler/cards/Optimization.vue";
 import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Launch from "@/pages/scheduler/cards/Launch.vue";
 import Constraints from "@/pages/scheduler/cards/Constraints.vue";
+import {VaFile} from "vuestic-ui";
 
 export default defineComponent({
   name: "NewSchedule",
   components: {Constraints, Launch, Montecarlo, Optimization},
   data() {
     return {
+      name: '',
+      startDate: new Date(),
       optimization: false,
       mcCycles: 1000,
       tabuTime: 120,
+      files: [] as VaFile[],
     }
   },
   methods: {
-    optStatus(updatedOptimization: boolean) {
-      this.optimization = updatedOptimization;
-    },
     getTabuTime(tabu: number) {
       if (typeof(tabu ==! 'undefined')) {
         if (isNaN(tabu)) {
@@ -48,21 +49,27 @@ export default defineComponent({
     <div class="flex flex-col md:flex-row gap-2">
       <Montecarlo
           class="w-full md:w-[55%]"
+          v-model:name="name"
+          v-model:start-date="startDate"
+          v-model:files.allowSingleFile="files"
+          v-model:optimization="optimization"
           :upload="true"
-          :toggle-optimization="true"
-          @toggle-status="optStatus"
           @mc-cycles="getMcCycles"
       />
       <Optimization
           class="w-full md:w-[45%]"
           @tabu-time="getTabuTime"
-          :optimization="this.optimization"
+          :optimization="optimization"
       />
     </div>
     <Constraints/>
     <Launch
-        :mc-cycles="this.mcCycles"
-        :tabu-time="this.tabuTime"
+        :name="name"
+        :start-date="startDate"
+        :optimization="optimization"
+        :mc-cycles="mcCycles"
+        :tabu-time="tabuTime"
+        :file="files"
     />
   </div>
 </template>
