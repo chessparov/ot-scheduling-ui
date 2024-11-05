@@ -35,7 +35,7 @@ const [files, modifiers] = defineModel('files',
 })
 
 let cycles = 1000;
-let visibility = optimization ? 'visible' : 'hidden';
+let visibility = props.upload ? 'visible' : 'hidden';
 let display = optimization ? 'flex' : 'none';
 
 

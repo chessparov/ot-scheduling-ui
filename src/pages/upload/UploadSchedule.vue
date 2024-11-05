@@ -16,6 +16,7 @@ export default defineComponent({
       mcCycles: 1000,
       tabuTime: 0,
       optimization: false,
+      startDate: new Date(),
       errorMsg: "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx",
       selectedSchedule: '',
       scheduleSource: 'archive',
@@ -27,9 +28,6 @@ export default defineComponent({
       if (this.files.length > 1) {
         this.files = this.files.pop();
       }
-    },
-    optStatus(updatedOptimization: boolean) {
-      this.optimization = updatedOptimization;
     },
     getTabuTime(tabu: number) {
       if (typeof(tabu ==! 'undefined')) {
@@ -108,8 +106,7 @@ export default defineComponent({
       <Montecarlo
           class="w-full md:w-[55%]"
           :upload="false"
-          :toggle-optimization="false"
-          @toggle-status="optStatus"
+          v-model:start-date="startDate"
           @mc-cycles="getMcCycles"
       />
     </div>
