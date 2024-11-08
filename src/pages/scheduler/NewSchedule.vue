@@ -69,7 +69,7 @@ export default defineComponent({
         :optimization="optimization"
         :mc-cycles="mcCycles"
         :tabu-time="tabuTime"
-        :file="files"
+        :files="files"
     />
   </div>
 </template>

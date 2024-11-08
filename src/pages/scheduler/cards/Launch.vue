@@ -18,9 +18,10 @@ export default defineComponent ({
   components: {VaCardContent},
   data () {
     return {
-      percent: 60,
+      percent: 0,
       estimatedTime: this.mcCycles + this.tabuTime,
-
+      compTime: 0,
+      currentTime: 0,
     }
   },
   methods: {
@@ -33,21 +34,47 @@ export default defineComponent ({
           : Number(minutes) >= 1 ? minutes + ' min ' + seconds + ' secondi'
           : seconds + ' secondi';
     },
-    requetMsc() {
-      axios
-          .get('http://localhost:8000/api/scheduler', {params: {
-              name: this.name,
-              startDate: this.startDate,
-              optimization: this.optimization,
-              mcCycles: this.mcCycles,
-              tabuTime: this.tabuTime,
-              files: this.files,
-            }})
-          .then(response => {
-            console.log(response);
-            router.push({name: 'dashboard'});
-          })
-          .catch(error => {console.log(error)})
+    setProgressBar() {
+      if (this.currentTime < this.compTime) {
+        this.percent = Math.round(((this.currentTime) / this.compTime) * 100);
+        this.currentTime++;
+
+      }
+      else if (this.currentTime == this.compTime) {
+        this.percent = 95;
+      }
+    },
+    requestMsc() {
+      this.compTime = this.estimatedTime;
+
+      let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
+
+      if (this.files.length == 1) {
+
+        let formData = new FormData();
+        formData.append('file', this.files[0], 'lista.xlsx');
+        formData.append('name', this.name);
+        formData.append('startDate', this.startDate?.toUTCString());
+        formData.append('optimization', this.optimization);
+        formData.append('mcCycles', this.mcCycles);
+        formData.append('tabuTime', this.tabuTime);
+
+        axios
+            .post('http://localhost:8000/api/scheduler/new-schedule',
+                formData,
+                {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                })
+            .then(response => {
+              clearTimeout(progressBarTimeOut);
+              router.push({name: 'dashboard'});
+            })
+            .catch(error => {
+              console.log(error)
+            })
+      }
     }
   },
   updated() {
@@ -72,7 +99,7 @@ export default defineComponent ({
               content-inside
               show-percent
           />
-          <VaButton @click="requetMsc">
+          <VaButton @click="requestMsc()">
             Ottieni schedula
           </VaButton>
         </div>

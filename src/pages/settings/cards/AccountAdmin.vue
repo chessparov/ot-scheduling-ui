@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import AddUser from "@/pages/settings/components/AddUser.vue";
 import ViewUsers from "@/pages/settings/components/ViewUsers.vue";
-import EditUserForm from './EditUserForm.vue'
+import EditUserForm from '../components/EditUserForm.vue'
 import {useUsers} from "@/pages/settings/composables/useUsers";
 import {User} from "@/pages/settings/types";
 import {useModal, useToast} from "vuestic-ui";
