@@ -1,10 +1,25 @@
-import { sleep } from '../../services/utils'
-import { User } from './../../pages/users/types'
+import {sleep} from '../../services/utils'
+import {User} from './../../pages/users/types'
 import usersDb from './users-db.json'
 import projectsDb from './projects-db.json'
-import { Project } from '../../pages/projects/types'
+import {Project} from '../../pages/projects/types'
+import axios from "axios";
 
-export const users = usersDb as User[]
+export const requestUsers = async (): Promise<User[]> => {
+  let response;
+
+  try {
+    response = await axios.get('http://localhost:8000/api/scheduler/users');
+    console.log(response.data);
+  } catch (error) {
+    console.error(error);
+  }
+  return response?.data as User[] ? response?.data : null;
+}
+
+
+
+const users = usersDb as User[]
 
 const getUserProjects = (userId: number | string) => {
   return projectsDb
@@ -35,12 +50,11 @@ export type Filters = {
 }
 
 const getSortItem = (obj: any, sortBy: string) => {
-  return
+  return obj[sortBy]
 }
 
 export const getUsers = async (filters: Partial<Filters & Pagination & Sorting>) => {
-  await sleep(1000)
-  const { isActive, search, sortBy, sortingOrder } = filters
+  const {  search, sortBy, sortingOrder } = filters
   let filteredUsers = users
 
 
@@ -77,7 +91,7 @@ export const getUsers = async (filters: Partial<Filters & Pagination & Sorting>)
 
 export const addUser = async (user: User) => {
   await sleep(1000)
-  creation_date: new Date().toLocaleDateString('gb', { day: 'numeric', month: 'short', year: 'numeric' })
+  new Date().toLocaleDateString('gb', { day: 'numeric', month: 'short', year: 'numeric' })
   users.unshift(user)
 }
 
