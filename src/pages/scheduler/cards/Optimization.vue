@@ -27,7 +27,7 @@ export default defineComponent({
       const minutes = Math.floor(this.optTime / 60).toString();
       const seconds = (this.optTime % 60).toString();
 
-      return minutes + ' min ' + seconds + ' secondi';
+      return minutes !== '0' ? minutes + ' min ' + seconds + ' secondi' : seconds + ' secondi';
     }
   },
   mounted() {
@@ -48,7 +48,7 @@ export default defineComponent({
         <BindedSlider
             :disabled="!optimization"
             :slider-label="'Tempo di ottimizzazione'"
-            :slider-min="0"
+            :slider-min="1"
             :slider-max="1000"
             :slider-value="optTime"
             :input-message="timeConversion()"
