@@ -4,6 +4,8 @@ import {defineComponent} from "vue";
 import {VaCardContent} from "vuestic-ui";
 import axios from "axios";
 import router from "@/router";
+import {useUserStore} from "@/stores/user-store";
+import {scheduleStore} from "@/stores/global-store";
 
 export default defineComponent ({
   name: "Launch",
@@ -53,7 +55,8 @@ export default defineComponent ({
 
         let formData = new FormData();
         formData.append('file', this.files[0], 'lista.xlsx');
-        formData.append('name', this.name);
+        formData.append('title', this.name);
+        formData.append('author', useUserStore().email);
         formData.append('startDate', this.startDate?.toUTCString());
         formData.append('optimization', this.optimization);
         formData.append('mcCycles', this.mcCycles);
@@ -68,6 +71,7 @@ export default defineComponent ({
                   }
                 })
             .then(response => {
+              scheduleStore().updateSchedule(response.data);
               clearTimeout(progressBarTimeOut);
               router.push({name: 'dashboard'});
             })

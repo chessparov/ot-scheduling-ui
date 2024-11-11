@@ -1,9 +1,39 @@
 <script lang="ts">
 import {defineComponent, reactive} from 'vue'
-import {useForm} from "vuestic-ui";
+import {useForm, useToast} from "vuestic-ui";
+import {addUser} from "@/data/pages/users";
+import axios from "axios";
 
 export default defineComponent({
   name: "AddUser",
+  methods: {
+    addUser () {
+      const { init: notify } = useToast();
+
+      axios
+          .post('http://localhost:8000/api/scheduler/add-user',
+              this.form,
+              {
+                headers: {
+                  'Content-Type': 'multipart/form-data'
+                }
+              }
+          )
+          .then(response => {
+            notify({
+              message: `L'account di ${this.form.email} è stato creato`,
+              color: 'success',
+            });
+            this.useForm.reset();
+          })
+          .catch(error => {
+            notify({
+              message: `${error.response.data.message}`,
+              color: 'danger',
+            })
+          })
+    }
+  },
   data() {
     return {
       form: reactive({
@@ -11,17 +41,17 @@ export default defineComponent({
         surname: '',
         email: '',
         password: '',
-        repeatPassword: '',
+        confirm: '',
         editor: false
       }),
-      useForm: useForm('formRef')
+      useForm: useForm('formRef'),
     }
   },
 })
 </script>
 
-<template ref="formRef">
-  <VaForm>
+<template >
+  <VaForm ref="formRef">
     <div class="flex flex-col gap-4">
       <div class="flex flex-col md:flex-row gap-4">
         <VaInput
@@ -48,7 +78,7 @@ export default defineComponent({
             placeholder="Inserisci password"
         />
         <VaInput
-            v-model="form.repeatPassword"
+            v-model="form.confirm"
             label="Conferma Password"
             type="password"
             placeholder="Conferma Password"
@@ -59,7 +89,7 @@ export default defineComponent({
             style="min-width: 20%; margin: auto"
         />
       </div>
-      <VaButton type="submit">
+      <VaButton type="submit" @click="addUser()">
         Aggiungi
       </VaButton>
     </div>
