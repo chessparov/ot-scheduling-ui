@@ -1,8 +1,8 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
-import ThemeSwitcher from "@/pages/settings/components/ThemeSwitcher.vue";
-import DefaultSettings from "@/pages/settings/components/DefaultSettings.vue";
-import AccountAdmin from "@/pages/settings/components/AccountAdmin.vue";
+import ThemeSwitcher from "@/pages/settings/cards/ThemeSwitcher.vue";
+import DefaultSettings from "@/pages/settings/cards/DefaultSettings.vue";
+import AccountAdmin from "@/pages/settings/cards/AccountAdmin.vue";
 
 export default defineComponent({
   name: "Settings",
