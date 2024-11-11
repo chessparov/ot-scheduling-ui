@@ -7,7 +7,7 @@ import {useUsers} from "@/pages/settings/composables/useUsers";
 import {User} from "@/pages/settings/types";
 import {useModal, useToast} from "vuestic-ui";
 import ResetPassword from "@/pages/settings/components/ResetPassword.vue";
-
+import axios from "axios";
 
 const { users, isLoading, filters, sorting, pagination, ...usersApi } = useUsers()
 const userToEdit = ref<User | null>(null)
@@ -40,7 +40,7 @@ const onUserSaved = async (user: User) => {
       color: 'success',
     })
   } else {
-    usersApi.add(user)
+    await usersApi.add(user)
     notify({
       message: `${user.name} è stato creato`,
       color: 'success',
@@ -90,6 +90,8 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
     hide()
   }
 }
+
+
 </script>
 
 <template>

@@ -6,7 +6,7 @@ export type User = {
     surname: string
     email: string
     privileges: UserRole
-    avatar: string
     creation_date: Date
 }
+
 
