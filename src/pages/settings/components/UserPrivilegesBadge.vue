@@ -15,11 +15,12 @@ const badgeColorMap: Record<User['privileges'], string> = {
   admin: 'warning',
 }
 function translateStatus(status: string) {
-  const dictStatus = {
-    'viewer': 'Visualizzatore',
-    'admin': 'Admin',
+  if (status === 'viewer') {
+    return 'Visualizzatore'
   }
-  return dictStatus[status]
+  else if (status === 'admin') {
+    return 'Admin'
+  }
 }
 </script>
 
