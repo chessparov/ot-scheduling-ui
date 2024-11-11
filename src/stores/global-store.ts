@@ -21,3 +21,16 @@ export const useGlobalStore = defineStore('global', {
     }
   },
 })
+
+export const scheduleStore = defineStore('scheduleStore', {
+  state: () => {
+    return {
+      scheduleData: JSON,
+    }
+  },
+  actions: {
+    updateSchedule(newSchedule: JSON) {
+      this.scheduleData = newSchedule;
+    }
+  }
+})
