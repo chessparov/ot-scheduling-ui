@@ -25,11 +25,13 @@ export const useGlobalStore = defineStore('global', {
 export const scheduleStore = defineStore('scheduleStore', {
   state: () => {
     return {
+      scheduleName: '',
       scheduleData: JSON,
     }
   },
   actions: {
-    updateSchedule(newSchedule: JSON) {
+    updateSchedule(newSchedule: JSON, newName: string) {
+      this.scheduleName = newName;
       this.scheduleData = newSchedule;
     }
   }

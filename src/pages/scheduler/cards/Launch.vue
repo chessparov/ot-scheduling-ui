@@ -71,7 +71,7 @@ export default defineComponent ({
                   }
                 })
             .then(response => {
-              scheduleStore().updateSchedule(response.data);
+              scheduleStore().updateSchedule(response.data, this.name);
               clearTimeout(progressBarTimeOut);
               router.push({name: 'dashboard'});
             })

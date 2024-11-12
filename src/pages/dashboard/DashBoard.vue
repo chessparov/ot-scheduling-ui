@@ -5,6 +5,7 @@ import SaveDownload from "@/pages/dashboard/cards/SaveDownload.vue";
 import DashboardMenu from "@/pages/dashboard/cards/DashboardMenu.vue";
 import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
+import {scheduleStore} from "@/stores/global-store";
 
 export default {
   components: {VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
@@ -15,6 +16,7 @@ export default {
       menuTabs: ['SCHEDULA', 'STATISTICHE'],
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
+      scheduleTitle: scheduleStore().scheduleName,
     }
   },
 }
@@ -26,7 +28,7 @@ export default {
     <div class="flex flex-col gap-4 " style="padding: 1.5rem">
       <div class="flex flex-col sm:flex-row gap-4 justify-between" style="padding-bottom: 1.25rem">
         <label class="va-title" style="font-size: 1rem; padding: 0.25rem">
-          Schedula 20 Ottobre 2024
+          {{ scheduleTitle }}
         </label>
         <VaButtonToggle
             v-model="menuCurrentTab"
