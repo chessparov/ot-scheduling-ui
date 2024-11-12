@@ -6,6 +6,9 @@ export const useGlobalStore = defineStore('global', {
       isSidebarMinimized: false,
       montecarloDefault: 1000,
       tabuTimeDefault: 120,
+      weeksNumberDefault: 4,
+      daysNumberDefault: 5,
+      roomsNumberDefault: 4,
     }
   },
 
@@ -18,6 +21,26 @@ export const useGlobalStore = defineStore('global', {
     },
     updateTabuDefault(tabuTime: number) {
       this.tabuTimeDefault = tabuTime;
+    },
+    updateWeeksDefault(weeksNumber: number) {
+      this.weeksNumberDefault = weeksNumber;
+    },
+    updateDaysDefault(daysNumber: number) {
+      this.daysNumberDefault = daysNumber;
+    },
+    updateRoomsDefault(roomsNumber: number) {
+      this.roomsNumberDefault = roomsNumber;
+    },
+    updateGlobal(mc: number,
+                 tabuTime: number,
+                 weeksNumber: number,
+                 daysNumber: number,
+                 roomsNumber: number) {
+      this.montecarloDefault = mc;
+      this.tabuTimeDefault = tabuTime;
+      this.weeksNumberDefault = weeksNumber;
+      this.daysNumberDefault = daysNumber;
+      this.roomsNumberDefault = roomsNumber;
     }
   },
 })

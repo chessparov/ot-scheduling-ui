@@ -38,6 +38,39 @@ export default defineComponent({
           </template>
         </VaInput>
       </div>
+      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
+        <span class="text-regularMedium">
+          Numero di settimane
+        </span>
+        <VaInput class="md:w-[50%]" v-model="store.weeksNumberDefault" size="small">
+          <template #appendInner>
+            <span>N°</span>
+          </template>
+        </VaInput>
+      </div>
+      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
+        <span class="text-regularMedium">
+          Numero di giorni
+        </span>
+        <VaInput class="md:w-[50%]" v-model="store.daysNumberDefault" size="small">
+          <template #appendInner>
+            <span>N°</span>
+          </template>
+        </VaInput>
+      </div>
+      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
+        <span class="text-regularMedium">
+          Numero di sale
+        </span>
+        <VaInput class="md:w-[50%]" v-model="store.roomsNumberDefault" size="small">
+          <template #appendInner>
+            <span>N°</span>
+          </template>
+        </VaInput>
+      </div>
+      <VaButton style="max-width: 20%; margin: auto 0 auto auto">
+        Conferma modifiche
+      </VaButton>
     </div>
     <VaDivider class="py-4 group-last:hidden" />
     <div class="flex flex-col md:flex-row justify-between overflow-x-hidden">
