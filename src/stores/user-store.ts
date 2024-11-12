@@ -1,19 +1,21 @@
 import { defineStore } from "pinia";
+import axios from "axios";
 
 export const useUserStore = defineStore("user", {
   state: () => {
     return {
-      userName: "Mimmo",
-      surname: "Albano",
-      email: "mc@gmail.com",
-      memberSince: "24/10/2024",
-      password: "passwordsicura",
+      name: "",
+      surname: "",
+      email: "",
+      memberSince: "",
+      password: "",
+      admin: false
     };
   },
 
   actions: {
     changeUserName(userName: string) {
-      this.userName = userName;
+      this.name = userName;
     },
     changeUserSurname(userSurname: string) {
       this.surname = userSurname;
@@ -24,5 +26,7 @@ export const useUserStore = defineStore("user", {
     checkPassword(inputPassword: string) {
       return this.password === inputPassword;
     },
+    async fetchData() {
+    }
   },
 });

@@ -14,37 +14,58 @@ const routes: Array<RouteRecordRaw> = [
                 name:'dashboard',
                 path: 'dashboard',
                 component: () => import('../pages/dashboard/DashBoard.vue'),
+                meta: {
+                    requiresAuth: true,
+                }
             },
             {
                 name: 'history',
                 path: 'history',
                 component: () => import('../pages/history/History.vue'),
+                meta: {
+                    requiresAuth: true,
+                }
             },
             {
                 name: 'schedule',
                 path: 'schedule',
-                component: () => import('../pages/scheduler/NewSchedule.vue')
+                component: () => import('../pages/scheduler/NewSchedule.vue'),
+                meta: {
+                    requiresAuth: true,
+                }
             },
             {
                 name: 'upload',
                 path: 'upload',
                 component: () => import('../pages/upload/UploadSchedule.vue'),
+                meta: {
+                    requiresAuth: true,
+                }
             },
             {
                 name: 'settings',
                 path: 'settings',
                 component: () => import('../pages/settings/Settings.vue'),
+                meta: {
+                    requiresAuth: true,
+                }
             },
             {
                 name: 'profile',
                 path: 'profile',
                 component: () => import('../pages/profile/Profile.vue'),
+                meta: {
+                    requiresAuth: true,
+                }
             },
             {
                 name: 'constraints',
                 path: 'constraints:constraint?',
                 props: true,
-                component: () => import('../pages/constraints/ModConstraints.vue')
+                component: () => import('../pages/constraints/ModConstraints.vue'),
+                meta: {
+                    requiresAuth: true,
+                }
             },
         ]
     },

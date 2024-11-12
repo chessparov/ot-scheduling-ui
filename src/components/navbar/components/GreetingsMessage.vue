@@ -15,7 +15,7 @@ export default defineComponent({
 
 <template>
   <span class="greet-message">
-    Ciao, {{ user.userName }}
+    Ciao, {{ user.name }}
   </span>
 </template>
 

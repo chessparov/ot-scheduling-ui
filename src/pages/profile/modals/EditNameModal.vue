@@ -65,13 +65,13 @@ const { init } = useToast();
 const emits = defineEmits(["cancel"]);
 const props = defineProps(["field"]);
 
-const Name = ref<string>(store.userName);
+const Name = ref<string>(store.name);
 const Surname = ref<string>(store.surname);
 const Email = ref<string>(store.email);
 
 const submit = () => {
   if (props.field === "Nome") {
-    if (!Name.value || Name.value === store.userName) {
+    if (!Name.value || Name.value === store.name) {
       return emits("cancel");
     }
     store.changeUserName(Name.value);
