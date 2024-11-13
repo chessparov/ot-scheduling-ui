@@ -8,7 +8,6 @@ export const useUserStore = defineStore("user", {
       surname: "",
       email: "",
       memberSince: "",
-      password: "",
       admin: false
     };
   },
@@ -22,9 +21,6 @@ export const useUserStore = defineStore("user", {
     },
     changeUserEmail(userEmail: string) {
       this.email = userEmail;
-    },
-    checkPassword(inputPassword: string) {
-      return this.password === inputPassword;
     },
     async fetchData() {
     }

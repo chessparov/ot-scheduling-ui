@@ -69,6 +69,7 @@ import { useUserStore } from "@/stores/user-store";
 
 import { useToast, VaValue } from "vuestic-ui";
 import { validators } from "@/services/utils";
+import axios from "axios";
 
 const store = useUserStore();
 
@@ -83,19 +84,37 @@ const emits = defineEmits(["cancel"]);
 const props = defineProps(["field"]);
 
 const Email = ref<string>(store.email);
-let inputPassword = "";
+const inputPassword = ref('');
 
 const submit = () => {
   if (!Email.value || Email.value === store.email) {
     return emits("cancel");
   }
-  if (store.checkPassword(inputPassword)) {
-    store.changeUserEmail(Email.value);
-    init({ message: "Email aggiornata con successo", color: "success" });
-    emits("cancel");
-  } else {
-    init({ message: "Password invalida", color: "danger" });
-  }
+  let formData = new FormData();
+  formData.append("newEmail", Email.value);
+  formData.append("password", inputPassword.value);
+  formData.append("admin", store.admin)
+  axios
+      .put('http://localhost:8000/api/scheduler/mod-email/' + store.email.toString(),
+          {
+            newEmail: Email.value,
+            password: inputPassword.value,
+            admin: store.admin,
+          },
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+      )
+      .then((res) => {
+        store.changeUserEmail(Email.value);
+        init({ message: "Email aggiornata con successo", color: "success" });
+        emits("cancel");
+      })
+      .catch((error) => {
+        init({ message: "Password invalida", color: "danger" });
+      })
 };
 </script>
 
