@@ -113,7 +113,13 @@ const submit = () => {
         emits("cancel");
       })
       .catch((error) => {
-        init({ message: "Password invalida", color: "danger" });
+        if (error.response.status === 401) {
+          init({ message: "Password invalida", color: "danger" });
+        }
+        else {
+          init({ message: "Errore lato server", color: "danger" });
+        }
+
       })
 };
 </script>

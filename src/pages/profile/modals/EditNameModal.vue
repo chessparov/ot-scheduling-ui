@@ -52,6 +52,7 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user-store";
 
 import { useToast } from "vuestic-ui";
+import axios from "axios";
 
 const store = useUserStore();
 
@@ -74,16 +75,59 @@ const submit = () => {
     if (!Name.value || Name.value === store.name) {
       return emits("cancel");
     }
-    store.changeUserName(Name.value);
-    init({ message: "Nome aggiornato con successo", color: "success" });
-    emits("cancel");
+    let formData = new FormData();
+    formData.append("name", Name.value);
+    formData.append("admin", store.admin);
+    axios
+        .put('http://localhost:8000/api/scheduler/mod-name/' + store.email.toString(),
+            {
+              name: Name.value,
+              admin: store.admin,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+        )
+        .then((res) => {
+          store.changeUserName(Name.value);
+          init({ message: "Nome aggiornato con successo", color: "success" });
+          emits("cancel");
+        })
+        .catch((error) => {
+            init({message: "Errore lato server", color: "danger"});
+            console.log(error.response.data.message);
+        })
+
   } else {
     if (!Surname.value || Surname.value === store.surname) {
       return emits("cancel");
     }
-    store.changeUserSurname(Surname.value);
-    init({ message: "Cognome aggiornato con successo", color: "success" });
-    emits("cancel");
+    let formData = new FormData();
+    formData.append("name", Name.value);
+    formData.append("admin", store.admin);
+    axios
+        .put('http://localhost:8000/api/scheduler/mod-surname/' + store.email.toString(),
+            {
+              surname: Surname.value,
+              admin: store.admin,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+        )
+        .then((res) => {
+          store.changeUserSurname(Surname.value);
+          init({ message: "Cognome aggiornato con successo", color: "success" });
+          emits("cancel");
+        })
+        .catch((error) => {
+            init({message: "Errore lato server", color: "danger"});
+            console.log(error.response.data.message);
+        })
   }
 };
 </script>
