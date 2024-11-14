@@ -1,7 +1,7 @@
 <script lang="ts">
 
 import {defineComponent} from "vue";
-import {VaCardContent} from "vuestic-ui";
+import {useToast, VaCardContent} from "vuestic-ui";
 import axios from "axios";
 import router from "@/router";
 import {useUserStore} from "@/stores/user-store";
@@ -15,7 +15,9 @@ export default defineComponent ({
     optimization: Boolean,
     mcCycles: Number,
     tabuTime: Number,
-    files: Array,
+    filesWaitingList: Array,
+    filesSchedule: Array,
+    analyzer: Boolean,
   },
   components: {VaCardContent},
   data () {
@@ -24,6 +26,8 @@ export default defineComponent ({
       estimatedTime: this.mcCycles + this.tabuTime,
       compTime: 0,
       currentTime: 0,
+      toast: useToast(),
+
     }
   },
   methods: {
@@ -49,12 +53,15 @@ export default defineComponent ({
     requestMsc() {
       this.compTime = this.estimatedTime;
 
-      let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
+      if (!this.filesWaitingList) {
+        return;
+      }
+      if (this.filesWaitingList.length == 1) {
 
-      if (this.files.length == 1) {
+        let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
 
         let formData = new FormData();
-        formData.append('file', this.files[0], 'lista.xlsx');
+        formData.append('file', this.filesWaitingList[0], 'lista.xlsx');
         formData.append('title', this.name);
         formData.append('author', useUserStore().email);
         formData.append('startDate', this.startDate?.toUTCString());
@@ -62,22 +69,63 @@ export default defineComponent ({
         formData.append('mcCycles', this.mcCycles);
         formData.append('tabuTime', this.tabuTime);
 
-        axios
-            .post('http://localhost:8000/api/scheduler/new-schedule',
-                formData,
-                {
-                  headers: {
-                    'Content-Type': 'multipart/form-data'
-                  }
-                })
-            .then(response => {
-              useScheduleStore().updateSchedule(response.data, this.name);
-              clearTimeout(progressBarTimeOut);
-              router.push({name: 'dashboard'});
-            })
-            .catch(error => {
-              console.log(error)
-            })
+        if (!this.analyzer) {
+          axios
+              .post('http://localhost:8000/api/scheduler/new-schedule',
+                  formData,
+                  {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  })
+              .then(response => {
+                useScheduleStore().updateSchedule(response.data, this.name);
+                this.currentTime = 0;
+                clearInterval(progressBarTimeOut);
+                router.push({name: 'dashboard'});
+              })
+              .catch(error => {
+                if (error.response.status === 400) {
+                  this.toast.init({ message: "File non valido", color: "danger" })
+                }
+                this.currentTime = 0;
+                clearInterval(progressBarTimeOut);
+              })
+        }
+        else {
+          if (!this.filesSchedule) {
+            return;
+          }
+          formData.append('schedule', this.filesSchedule[0])
+          axios
+              .post('http://localhost:8000/api/scheduler/analyze',
+                  formData,
+                  {
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                  })
+              .then(response => {
+                useScheduleStore().updateSchedule(response.data, this.name);
+                this.currentTime = 0;
+                clearInterval(progressBarTimeOut);
+                router.push({name: 'dashboard'});
+              })
+              .catch(error => {
+                if (error.response.status === 400) {
+                  this.toast.init({ message: "File non valido", color: "danger" })
+                }
+                else {
+                  this.toast.init({ message: "Errore lato server", color: "danger" })
+                }
+                this.currentTime = 0;
+                clearInterval(progressBarTimeOut);
+              })
+        }
+
+      }
+      else {
+        this.toast.init({ message: "Non è possibile caricare più di un file!", color: "danger" })
       }
     }
   },

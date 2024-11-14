@@ -95,7 +95,10 @@ const submit = () => {
         })
         .catch(error => {
           if (error.response.status === 403) {
-            init({ message: "Permesso negato", color: 'danger' })
+            init({ message: "Le password non corrispondono", color: 'danger' })
+          }
+          else if (error.response.status === 401) {
+            init({ message: "Password invalida", color: 'danger' })
           }
         })
 

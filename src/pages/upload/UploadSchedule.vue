@@ -5,6 +5,7 @@ import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Optimization from "@/pages/scheduler/cards/Optimization.vue";
 import Launch from "@/pages/scheduler/cards/Launch.vue";
 import axios from "axios";
+import {VaFile} from "vuestic-ui";
 
 export default defineComponent({
   name: "UploadSchedule",
@@ -12,7 +13,9 @@ export default defineComponent({
 
   data() {
     return {
-      files: [],
+      name: '',
+      filesSchedule: [] as VaFile[],
+      filesWaitingList: [] as VaFile[],
       mcCycles: 1000,
       tabuTime: 0,
       optimization: false,
@@ -25,8 +28,11 @@ export default defineComponent({
   },
   methods: {
     allowSingleFile() {
-      if (this.files.length > 1) {
-        this.files = this.files.pop();
+      if (this.filesSchedule.length > 1) {
+        this.filesSchedule = this.filesSchedule.pop();
+      }
+      if (this.filesWaitingList.length > 1) {
+        this.filesWaitingList = this.filesWaitingList.pop();
       }
     },
     getTabuTime(tabu: number) {
@@ -86,7 +92,7 @@ export default defineComponent({
           </div>
           <VaFileUpload
               v-if="scheduleSource === 'upload'"
-              v-model="files"
+              v-model="filesSchedule"
               dropzone
               file-types="xls,xlsx"
               type="list"
@@ -105,7 +111,10 @@ export default defineComponent({
       </VaCard>
       <Montecarlo
           class="w-full md:w-[55%]"
-          :upload="false"
+          :upload="true"
+          v-model:name="name"
+          v-model:files.allowSingleFile="filesWaitingList"
+          v-model:optimization="optimization"
           v-model:start-date="startDate"
           @mc-cycles="getMcCycles"
       />
@@ -113,6 +122,12 @@ export default defineComponent({
     <Launch
         :mc-cycles="this.mcCycles"
         :tabu-time="this.tabuTime"
+        :name="name"
+        :start-date="startDate"
+        :optimization="false"
+        :files-waiting-list="filesWaitingList"
+        :files-schedule="filesSchedule"
+        :analyzer="true"
     />
   </div>
 </template>

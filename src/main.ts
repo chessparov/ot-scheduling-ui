@@ -5,6 +5,7 @@ import App from "./App.vue";
 import { createVuestic } from "vuestic-ui";
 import VueApexCharts from "vue3-apexcharts";
 
+
 import vuesticGlobalConfig from "./services/vuestic-ui/global-config";
 import stores from "./stores";
 import router from "./router";

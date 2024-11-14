@@ -3,6 +3,7 @@ import {defineComponent, reactive} from 'vue'
 import {useForm, useToast} from "vuestic-ui";
 import axios from "axios";
 
+
 export default defineComponent({
   name: "AddUser",
   methods: {
@@ -82,6 +83,7 @@ export default defineComponent({
             v-model="form.password"
             label="Password"
             type="password"
+            autocomplete="new-password"
             placeholder="Inserisci password"
         />
         <VaInput
