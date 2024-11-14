@@ -60,7 +60,6 @@ import { useRouter } from "vue-router";
 import { useForm, useToast } from "vuestic-ui";
 import { validators } from "@/services/utils";
 import axios from "axios";
-import {useUserStore} from "@/stores/user-store";
 
 const { validate } = useForm("form");
 const { push } = useRouter();
@@ -83,15 +82,6 @@ const submit = () => {
               }
             })
         .then(response => {
-          const userStore = useUserStore()
-          userStore.admin = response.data.admin;
-          userStore.email = response.data.email;
-          userStore.name = response.data.first_name;
-          userStore.surname = response.data.last_name;
-          let dateJoined = response.data.date_joined;
-          dateJoined = dateJoined.toString().split('T')[0].split('-');
-          userStore.memberSince = dateJoined[2] + '/' + dateJoined[1] + '/' + dateJoined[0];
-
           init({message: "Login effettuato con successo", color: "success"});
           push({
             name: "dashboard",

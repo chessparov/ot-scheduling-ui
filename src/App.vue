@@ -1,4 +1,11 @@
-<script setup></script>
+<script setup>
+
+import {useUserStore} from "@/stores/user-store";
+
+const userStore = useUserStore()
+userStore.fetchData()
+
+</script>
 
 <template>
   <RouterView />

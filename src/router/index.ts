@@ -2,6 +2,8 @@ import { createRouter, createWebHistory, RouteRecordRaw } from 'vue-router';
 
 import AuthLayout from '../layouts/AuthLayout.vue';
 import AppLayout from "../layouts/AppLayout.vue";
+import axios from "axios";
+import {useUserStore} from "../stores/user-store";
 
 const routes: Array<RouteRecordRaw> = [
     {
@@ -32,6 +34,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('../pages/scheduler/NewSchedule.vue'),
                 meta: {
                     requiresAuth: true,
+                    requiresAdminPrivileges: true
                 }
             },
             {
@@ -40,6 +43,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('../pages/upload/UploadSchedule.vue'),
                 meta: {
                     requiresAuth: true,
+                    requiresAdminPrivileges: true
                 }
             },
             {
@@ -48,6 +52,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('../pages/settings/Settings.vue'),
                 meta: {
                     requiresAuth: true,
+                    requiresAdminPrivileges: true,
                 }
             },
             {
@@ -65,6 +70,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('../pages/constraints/ModConstraints.vue'),
                 meta: {
                     requiresAuth: true,
+                    requiresAdminPrivileges: true
                 }
             },
         ]
@@ -102,6 +108,7 @@ const routes: Array<RouteRecordRaw> = [
 
 ]
 
+
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     scrollBehavior(to, from, savedPosition) {
@@ -116,6 +123,42 @@ const router = createRouter({
         }
     },
     routes,
+})
+
+router.beforeEach((to, from, next) => {
+    const userStore = useUserStore();
+
+    if (to.name == 'login' || to.name == 'signup' || to.name == 'recover-password' || to.name == 'recover-password-email') {
+        axios
+            .get('http://localhost:8000/api/scheduler/logout');
+        userStore.loggedIn = false;
+    }
+    if (to.matched.some(record => record.meta.requiresAuth)) {
+        // let all_cookies = document.cookie.split('; ');
+        // let isAuthenticated = '';
+        // for (const cookie of all_cookies) {
+        //     const splitCookie = cookie.split('=');
+        //     if (splitCookie[0] == 'authenticated') {
+        //         isAuthenticated = splitCookie[1];
+        //         break
+        //     }
+        // }
+        // if (isAuthenticated !== 'true') {
+        //     next({
+        //         name: 'login',
+        //     })
+        // }
+        if (!userStore.loggedIn) {
+            next({
+                name: 'login',
+            })
+        }
+        else {
+            next()
+        }
+    } else {
+        next()
+    }
 })
 
 export default router

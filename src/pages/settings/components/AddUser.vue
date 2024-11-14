@@ -1,7 +1,6 @@
 <script lang="ts">
 import {defineComponent, reactive} from 'vue'
 import {useForm, useToast} from "vuestic-ui";
-import {addUser} from "@/data/pages/users";
 import axios from "axios";
 
 export default defineComponent({
@@ -21,16 +20,24 @@ export default defineComponent({
           )
           .then(response => {
             notify({
-              message: `L'account di ${this.form.email} è stato creato`,
+              message: `L'account di ${this.form.email} è stato creato con successo!`,
               color: 'success',
             });
             this.useForm.reset();
           })
           .catch(error => {
-            notify({
-              message: `${error.response.data.message}`,
-              color: 'danger',
-            })
+            if (error.response.status === 401) {
+              notify({
+                message: 'Permesso negato: ' + `${error.response.data.message}`,
+                color: 'danger',
+              })
+            }
+            else {
+              notify({
+                message: 'Errore server interno: ' + `${error.response.data.message}`,
+                color: 'danger',
+              })
+            }
           })
     }
   },
