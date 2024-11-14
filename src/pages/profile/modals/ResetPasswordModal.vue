@@ -89,10 +89,16 @@ const submit = () => {
                 'Content-Type': 'application/json'
               }
             })
-        .then(response => {})
-        .catch(error => {})
-    init({ message: "Password modificata con successo", color: 'success' })
-    emits('cancel')
+        .then(response => {
+          init({ message: "Password modificata con successo", color: 'success' })
+          emits('cancel')
+        })
+        .catch(error => {
+          if (error.response.status === 403) {
+            init({ message: "Permesso negato", color: 'danger' })
+          }
+        })
+
   }
 }
 
