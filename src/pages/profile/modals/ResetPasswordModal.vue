@@ -11,7 +11,7 @@
     <VaForm ref="form" class="space-y-6" @submit.prevent="submit">
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
         <VaInput
-          v-model="oldPassowrd"
+          v-model="formData.oldPassword"
           :rules="oldPasswordRules"
           label="Password precedente"
           placeholder="Password precedente"
@@ -20,7 +20,7 @@
         />
         <div class="hidden md:block" />
         <VaInput
-          v-model="newPassword"
+          v-model="formData.newPassword"
           :rules="newPasswordRules"
           label="Nuova password"
           placeholder="Nuova password"
@@ -28,7 +28,7 @@
           type="password"
         />
         <VaInput
-          v-model="repeatNewPassword"
+          v-model="formData.repeatNewPassword"
           :rules="repeatNewPasswordRules"
           label="Ripeti la nuova password"
           placeholder="Ripeti la nuova password"
@@ -39,38 +39,58 @@
       <div class="flex flex-col space-y-2">
         <div class="flex space-x-2 items-center">
           <div>
-            <VaIcon :name="newPassword?.length! >= 8 ? 'mso-check' : 'mso-close'" color="secondary" size="20px" />
+            <VaIcon :name="formData.newPassword?.length! >= 8 ? 'mso-check' : 'mso-close'" color="secondary" size="20px" />
           </div>
           <p>Lunghezza minima 8 caratteri</p>
         </div>
       </div>
       <div class="flex flex-col-reverse md:justify-end md:flex-row md:space-x-4">
-        <VaButton :style="buttonStyles" preset="secondary" color="secondary" @click="emits('cancel')">Annulla</VaButton>
-        <VaButton :style="buttonStyles" class="mb-4 md:mb-0" type="submit" @click="submit">Conferma</VaButton>
+        <VaButton :style="buttonStyles" preset="secondary" type="button" color="secondary" @click="emits('cancel')">Annulla</VaButton>
+        <VaButton :style="buttonStyles" class="mb-4 md:mb-0" type="button" @click="submit">Conferma</VaButton>
       </div>
     </VaForm>
   </VaModal>
 </template>
 <script lang="ts" setup>
-import { ref } from 'vue'
+import {reactive, ref} from 'vue'
 import { useForm, useToast } from 'vuestic-ui'
+import axios from "axios";
+import {useUserStore} from "@/stores/user-store";
 
 const buttonStyles = {
   '--va-button-font-size': '14px',
   '--va-button-line-height': '20px',
 }
-const oldPassowrd = ref<string>()
-const newPassword = ref<string>()
-const repeatNewPassword = ref<string>()
-
 const { validate } = useForm('form')
+
+const formData = reactive({
+  oldPassword: '',
+  newPassword: '',
+  repeatNewPassword: '',
+});
+
 const { init } = useToast()
 
 const emits = defineEmits(['cancel'])
 const props = defineProps(['field'])
+const userStore = useUserStore()
 
 const submit = () => {
   if (validate()) {
+    axios
+        .put('http://localhost:8000/api/scheduler/mod-password/' + userStore.email.toString(),
+            {
+              oldPassword: formData.oldPassword,
+              newPassword: formData.newPassword,
+              repeatNewPassword: formData.repeatNewPassword,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            })
+        .then(response => {})
+        .catch(error => {})
     init({ message: "Password modificata con successo", color: 'success' })
     emits('cancel')
   }
@@ -81,12 +101,12 @@ const oldPasswordRules = [(v: string) => !!v || 'Campo obbligatorio']
 const newPasswordRules = [
   (v: string) => !!v || 'Campo obbligatorio',
   (v: string) => v?.length >= 8 || 'La password deve essere lunga almeno 8 caratteri',
-  (v: string) => v !== oldPassowrd.value || 'Password già utilizzata in precedenza',
+  (v: string) => v !== formData.oldPassword || 'Password già utilizzata in precedenza',
 ]
 
 const repeatNewPasswordRules = [
   (v: string) => !!v || 'Campo obbligatorio',
-  (v: string) => v === newPassword.value || 'Le password non corrispondono',
+  (v: string) => v === formData.newPassword || 'Le password non corrispondono',
 ]
 </script>
 

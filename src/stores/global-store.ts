@@ -65,6 +65,11 @@ export const useScheduleStore = defineStore('scheduleStore', {
             this.scheduleName = res.data.title;
             this.scheduleData = res.data.data;
           })
+          .catch((error) => {
+            if (error.response.status === 404) {
+
+            }
+          })
     }
   }
 })
