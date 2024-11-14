@@ -5,7 +5,7 @@ import {VaCardContent} from "vuestic-ui";
 import axios from "axios";
 import router from "@/router";
 import {useUserStore} from "@/stores/user-store";
-import {scheduleStore} from "@/stores/global-store";
+import {useScheduleStore} from "@/stores/global-store";
 
 export default defineComponent ({
   name: "Launch",
@@ -71,7 +71,7 @@ export default defineComponent ({
                   }
                 })
             .then(response => {
-              scheduleStore().updateSchedule(response.data, this.name);
+              useScheduleStore().updateSchedule(response.data, this.name);
               clearTimeout(progressBarTimeOut);
               router.push({name: 'dashboard'});
             })

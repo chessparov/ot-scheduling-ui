@@ -70,7 +70,7 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('../pages/constraints/ModConstraints.vue'),
                 meta: {
                     requiresAuth: true,
-                    requiresAdminPrivileges: true
+                    requiresAdminPrivileges: true,
                 }
             },
         ]

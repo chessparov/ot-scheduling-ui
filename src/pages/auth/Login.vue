@@ -60,6 +60,7 @@ import { useRouter } from "vue-router";
 import { useForm, useToast } from "vuestic-ui";
 import { validators } from "@/services/utils";
 import axios from "axios";
+import {useUserStore} from "@/stores/user-store";
 
 const { validate } = useForm("form");
 const { push } = useRouter();
@@ -72,6 +73,7 @@ const formData = reactive({
 });
 
 const submit = () => {
+  const userStore = useUserStore();
   if (validate()) {
     axios
         .post('http://localhost:8000/api/scheduler/login',
@@ -81,7 +83,17 @@ const submit = () => {
                 'Content-Type': 'multipart/form-data'
               }
             })
-        .then(response => {
+        .then(res => {
+          userStore.name = res.data.first_name;
+          userStore.surname = res.data.last_name;
+          userStore.email = res.data.email;
+          userStore.admin = res.data.is_admin;
+          userStore.loggedIn = true;
+
+          let dateJoined = res.data.date_joined;
+          dateJoined = dateJoined.toString().split('T')[0].split('-');
+          userStore.memberSince = dateJoined[2] + '/' + dateJoined[1] + '/' + dateJoined[0];
+
           init({message: "Login effettuato con successo", color: "success"});
           push({
             name: "dashboard",

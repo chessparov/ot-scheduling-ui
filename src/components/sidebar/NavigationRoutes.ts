@@ -4,6 +4,7 @@ export interface INavigationRoute {
   meta: { icon: string }
   display: boolean
   children?: INavigationRoute[]
+  requiresAdminPrivileges: boolean
 }
 
 export default {
@@ -19,6 +20,7 @@ export default {
         icon: 'vuestic-iconset-dashboard',
       },
       display: true,
+      requiresAdminPrivileges: false,
     },
     {
       name: 'history',
@@ -27,6 +29,7 @@ export default {
         icon: 'folder_shared',
       },
       display: true,
+      requiresAdminPrivileges: false,
     },
     {
       name: 'schedule',
@@ -35,6 +38,7 @@ export default {
         icon: 'group',
       },
       display: true,
+      requiresAdminPrivileges: true
     },
     {
       name: 'upload',
@@ -43,18 +47,21 @@ export default {
         icon: 'upload',
       },
       display: true,
+      requiresAdminPrivileges: true
     },
     {
       name: 'settings',
       displayName: 'Impostazioni',
       meta: {},
       display: false,
+      requiresAdminPrivileges: true,
     },
     {
       name: 'profile',
       displayName: 'Profilo',
       meta: {},
       display: false,
+      requiresAdminPrivileges: false,
     }
   ] as INavigationRoute[],
 }

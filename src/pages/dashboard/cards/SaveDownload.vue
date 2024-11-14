@@ -1,5 +1,7 @@
 <script lang="ts">
 
+import {useUserStore} from "@/stores/user-store";
+
 export default {
   props: {
     modifiedSchedule: {
@@ -10,6 +12,7 @@ export default {
   data() {
     return {
       saveBtnStatus: false,
+      userStore: useUserStore(),
     }
   }
 }
@@ -18,7 +21,7 @@ export default {
 <template>
   <VaCard>
     <div class="flex flex-col md:flex-row gap-2" style="justify-content: space-between">
-      <div class="flex flex-col md:flex-row gap-2">
+      <div class="flex flex-col md:flex-row gap-2" v-if="userStore.admin">
         <VaButton
             :disabled="!modifiedSchedule"
             icon="check"

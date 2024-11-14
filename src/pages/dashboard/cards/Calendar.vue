@@ -1,6 +1,6 @@
 <script lang="ts">
 
-import {scheduleStore} from "@/stores/global-store";
+import {useScheduleStore} from "@/stores/global-store";
 
 export default {
   data() {
@@ -8,7 +8,7 @@ export default {
       modifiedSchedule: false,
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
-      items: scheduleStore().scheduleData,
+      items: useScheduleStore().scheduleData,
       days: [
         'LUNEDì',
         'MARTEDì',

@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import axios from "axios";
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
@@ -45,7 +46,7 @@ export const useGlobalStore = defineStore('global', {
   },
 })
 
-export const scheduleStore = defineStore('scheduleStore', {
+export const useScheduleStore = defineStore('scheduleStore', {
   state: () => {
     return {
       scheduleName: '',
@@ -56,6 +57,14 @@ export const scheduleStore = defineStore('scheduleStore', {
     updateSchedule(newSchedule: JSON, newName: string) {
       this.scheduleName = newName;
       this.scheduleData = newSchedule;
+    },
+    async fetchData() {
+      await axios
+          .get('http://localhost:8000/api/scheduler/new-schedule', )
+          .then((res) => {
+            this.scheduleName = res.data.title;
+            this.scheduleData = res.data.data;
+          })
     }
   }
 })

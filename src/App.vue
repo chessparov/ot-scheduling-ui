@@ -1,9 +1,15 @@
 <script setup>
 
 import {useUserStore} from "@/stores/user-store";
+import {useGlobalStore} from "@/stores/global-store";
+import {useScheduleStore} from "@/stores/global-store";
 
 const userStore = useUserStore()
+const globalStore = useGlobalStore()
+const scheduleStore = useScheduleStore()
+
 userStore.fetchData()
+scheduleStore.fetchData()
 
 </script>
 

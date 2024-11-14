@@ -5,6 +5,7 @@ import { Project } from '../types'
 import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
 import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
+import Stores from "@/stores";
 
 const columns = defineVaDataTableColumns([
   { label: 'Nome', key: 'project_name', sortable: true },
@@ -15,6 +16,7 @@ const columns = defineVaDataTableColumns([
 ])
 
 const props = defineProps({
+  userStore: Stores,
   projects: {
     type: Array as PropType<Project[]>,
     required: true,
@@ -76,7 +78,7 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
         <ProjectStatusBadge :status="project.status" />
       </template>
 
-      <template #cell(actions)="{ rowData: project }">
+      <template #cell(actions)="{ rowData: project }" v-if="userStore.admin">
         <div class="flex gap-2 justify-end">
           <VaButton
             preset="primary"

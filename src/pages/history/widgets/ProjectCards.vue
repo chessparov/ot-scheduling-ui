@@ -2,8 +2,10 @@
 import { PropType } from 'vue'
 import { Project } from '../types'
 import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
+import Stores from "@/stores";
 
 defineProps({
+  userStore: Stores,
   projects: {
     type: Array as PropType<Project[]>,
     required: true,
@@ -18,6 +20,7 @@ defineEmits<{
   (event: 'edit', project: Project): void
   (event: 'delete', project: Project): void
 }>()
+
 
 </script>
 
@@ -46,7 +49,7 @@ defineEmits<{
           <ProjectStatusBadge :status="project.status" />
         </div>
         <VaDivider class="my-6" />
-        <div class="flex justify-between">
+        <div class="flex justify-between" v-if="userStore.admin">
           <VaButton preset="secondary" icon="mso-edit" color="secondary" @click="$emit('edit', project)" />
           <VaButton preset="secondary" icon="mso-delete" color="danger" @click="$emit('delete', project)" />
         </div>

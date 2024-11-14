@@ -8,6 +8,7 @@ import EditProjectForm from './widgets/EditProjectForm.vue'
 import { Project } from './types'
 import {useModal, useToast} from 'vuestic-ui'
 import router from "@/router";
+import {useUserStore} from "@/stores/user-store";
 
 const doShowAsCards = useLocalStorage('projects-view', true)
 
@@ -63,6 +64,7 @@ const onProjectDeleted = async (project: Project) => {
 }
 
 const editFormRef = ref()
+const userStore = useUserStore()
 
 const beforeEditFormModalClose = async (hide: () => unknown) => {
   if (editFormRef.value.isFormHasUnsavedChanges) {
@@ -101,11 +103,12 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
           </VaInput>
 <!--          <VaSelectOptionList -->
         </div>
-        <VaButton icon="add" @click="router.push({ name: 'schedule'})">Schedula</VaButton>
+        <VaButton v-if="userStore.admin" icon="add" @click="router.push({ name: 'schedule'})">Schedula</VaButton>
       </div>
 
       <ProjectCards
           v-if="doShowAsCards"
+          :user-store="userStore"
           :projects="projects"
           :loading="isLoading"
           @edit="editProject"
@@ -116,6 +119,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
           v-model:sort-by="sorting.sortBy"
           v-model:sorting-order="sorting.sortingOrder"
           v-model:pagination="pagination"
+          :user-store="userStore"
           :projects="projects"
           :loading="isLoading"
           @edit="editProject"

@@ -5,7 +5,7 @@ import SaveDownload from "@/pages/dashboard/cards/SaveDownload.vue";
 import DashboardMenu from "@/pages/dashboard/cards/DashboardMenu.vue";
 import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
-import {scheduleStore} from "@/stores/global-store";
+import {useScheduleStore} from "@/stores/global-store";
 
 export default {
   components: {VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
@@ -16,7 +16,7 @@ export default {
       menuTabs: ['SCHEDULA', 'STATISTICHE'],
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
-      scheduleTitle: scheduleStore().scheduleName,
+      scheduleTitle: useScheduleStore().scheduleName,
     }
   },
 }
