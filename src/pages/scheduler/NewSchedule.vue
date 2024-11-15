@@ -5,6 +5,7 @@ import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Launch from "@/pages/scheduler/cards/Launch.vue";
 import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 import {VaFile} from "vuestic-ui";
+import {useGlobalStore} from "@/stores/global-store";
 
 export default defineComponent({
   name: "NewSchedule",
@@ -14,9 +15,10 @@ export default defineComponent({
       name: '',
       startDate: new Date(),
       optimization: false,
-      mcCycles: 1000,
-      tabuTime: 120,
       files: [] as VaFile[],
+      globalStore: useGlobalStore(),
+      mcCycles: useGlobalStore().montecarloDefault as number,
+      tabuTime: useGlobalStore().tabuTimeDefault as number,
     }
   },
   methods: {
@@ -54,12 +56,14 @@ export default defineComponent({
           v-model:files.allowSingleFile="files"
           v-model:optimization="optimization"
           :upload="true"
+          :cycles="mcCycles"
           @mc-cycles="getMcCycles"
       />
       <Optimization
           class="w-full md:w-[45%]"
           @tabu-time="getTabuTime"
           :optimization="optimization"
+          :tb-time="tabuTime"
       />
     </div>
     <Constraints/>
@@ -67,10 +71,10 @@ export default defineComponent({
         :name="name"
         :start-date="startDate"
         :optimization="optimization"
-        :mc-cycles="mcCycles"
-        :tabu-time="tabuTime"
         :files-waiting-list="files"
         :analyzer="false"
+        :mc-cycles="this.mcCycles"
+        :tabu-time="this.tabuTime"
     />
   </div>
 </template>

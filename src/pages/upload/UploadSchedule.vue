@@ -4,8 +4,8 @@ import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Optimization from "@/pages/scheduler/cards/Optimization.vue";
 import Launch from "@/pages/scheduler/cards/Launch.vue";
-import axios from "axios";
 import {VaFile} from "vuestic-ui";
+import {useGlobalStore} from "@/stores/global-store";
 
 export default defineComponent({
   name: "UploadSchedule",
@@ -16,14 +16,14 @@ export default defineComponent({
       name: '',
       filesSchedule: [] as VaFile[],
       filesWaitingList: [] as VaFile[],
-      mcCycles: 1000,
-      tabuTime: 0,
       optimization: false,
       startDate: new Date(),
       errorMsg: "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx",
       selectedSchedule: '',
       scheduleSource: 'archive',
       info: null,
+      mcCycles: useGlobalStore().montecarloDefault,
+      tabuTime: useGlobalStore().tabuTimeDefault,
     }
   },
   methods: {
@@ -112,6 +112,7 @@ export default defineComponent({
       <Montecarlo
           class="w-full md:w-[55%]"
           :upload="true"
+          :cycles="mcCycles"
           v-model:name="name"
           v-model:files.allowSingleFile="filesWaitingList"
           v-model:optimization="optimization"

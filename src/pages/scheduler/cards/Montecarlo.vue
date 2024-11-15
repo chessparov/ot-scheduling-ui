@@ -6,6 +6,7 @@ import {useToast, VaFile, VaFileUpload, VaSwitch} from "vuestic-ui";
 
 const props = defineProps({
   upload: Boolean,
+  cycles: Number,
 })
 
 const { init: notify } = useToast()
@@ -33,8 +34,7 @@ const [files, modifiers] = defineModel('files',
     }
   }
 })
-
-let cycles = 1000;
+let cycles = props.cycles
 let visibility = props.upload ? 'visible' : 'hidden';
 let display = optimization ? 'flex' : 'none';
 

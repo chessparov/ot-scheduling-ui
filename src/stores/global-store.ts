@@ -1,15 +1,19 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
+import {json} from "node:stream/consumers";
+import {types} from "sass";
+import Number = types.Number;
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
     return {
       isSidebarMinimized: false,
-      montecarloDefault: 1000,
-      tabuTimeDefault: 120,
-      weeksNumberDefault: 4,
-      daysNumberDefault: 5,
-      roomsNumberDefault: 4,
+      montecarloDefault: 0,
+      tabuTimeDefault: 0,
+      weeksNumberDefault: 0,
+      daysNumberDefault: 0,
+      roomsNumberDefault: 0,
+      slotDurationDefault: 0,
     }
   },
 
@@ -36,12 +40,27 @@ export const useGlobalStore = defineStore('global', {
                  tabuTime: number,
                  weeksNumber: number,
                  daysNumber: number,
-                 roomsNumber: number) {
+                 roomsNumber: number,
+                 slotDuration: number,) {
       this.montecarloDefault = mc;
       this.tabuTimeDefault = tabuTime;
       this.weeksNumberDefault = weeksNumber;
       this.daysNumberDefault = daysNumber;
       this.roomsNumberDefault = roomsNumber;
+      this.slotDurationDefault = slotDuration;
+    },
+    async fetchData() {
+      await axios
+          .get('http://localhost:8000/api/scheduler/mod-simparams')
+          .then((res) => {
+            this.updateGlobal(
+                res.data.mc_cycles,
+                res.data.tabu_time,
+                res.data.n_weeks,
+                res.data.n_days,
+                res.data.n_rooms,
+                res.data.slot_duration);
+          })
     }
   },
 })

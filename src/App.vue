@@ -10,6 +10,7 @@ const scheduleStore = useScheduleStore()
 
 userStore.fetchData()
 scheduleStore.fetchData()
+globalStore.fetchData()
 
 </script>
 

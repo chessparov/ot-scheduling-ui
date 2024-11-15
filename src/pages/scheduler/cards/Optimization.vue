@@ -9,10 +9,11 @@ export default defineComponent({
   components: {RadarChart, BindedSlider},
   props: {
     optimization: Boolean,
+    tbTime: Number,
   },
   data() {
     return {
-      optTime: 60 * 2,
+      optTime: this.tbTime,
     }
   },
   methods: {
