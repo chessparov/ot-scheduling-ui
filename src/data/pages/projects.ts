@@ -1,6 +1,9 @@
 import { sleep } from '../../services/utils'
 import projectsDb from './projects-db.json'
 import usersDb from './users-db.json'
+import {useDataStore} from "../../stores/data-store";
+import {Project} from "../../pages/history/types";
+import {users} from "./users";
 
 // Simulate API calls
 export type Pagination = {
@@ -10,17 +13,15 @@ export type Pagination = {
 }
 
 export type Sorting = {
-  sortBy: keyof (typeof projectsDb)[number] | undefined
+  sortBy: keyof (typeof fetchedProjects)[number] | undefined
   sortingOrder: 'asc' | 'desc' | null
 }
 
-const getSortItem = (obj: any, sortBy: keyof (typeof projectsDb)[number]) => {
-  if (sortBy === 'project_owner') {
-    return obj.project_owner.name
-  }
+export const fetchedProjects: Project[] = useDataStore().projects
 
-  if (sortBy === 'team') {
-    return obj.team.map((user: any) => user.name).join(', ')
+const getSortItem = (obj: any, sortBy: keyof (typeof fetchedProjects)[number]) => {
+  if (sortBy === 'author') {
+    return obj.author.first_name
   }
 
   if (sortBy === 'creation_date') {
@@ -31,12 +32,10 @@ const getSortItem = (obj: any, sortBy: keyof (typeof projectsDb)[number]) => {
 }
 
 export const getProjects = async (options: Sorting & Pagination) => {
-  await sleep(1000)
 
-  const projects = projectsDb.map((project) => ({
+  const projects = fetchedProjects.map((project) => ({
     ...project,
-    project_owner: usersDb.find((user) => user.id === project.project_owner)! as (typeof usersDb)[number],
-    team: usersDb.filter((user) => project.team.includes(user.id)) as (typeof usersDb)[number][],
+    author: users.find((user) => user.id === project.author.id)! as (typeof users)[number],
   }))
 
   if (options.sortBy && options.sortingOrder) {
@@ -53,50 +52,46 @@ export const getProjects = async (options: Sorting & Pagination) => {
     })
   }
 
-  const normalizedProjects = projects.slice((options.page - 1) * options.perPage, options.page * options.perPage)
+  const normalizedProjects: Project[] = projects.slice((options.page - 1) * options.perPage, options.page * options.perPage)
 
   return {
     data: normalizedProjects,
     pagination: {
       page: options.page,
       perPage: options.perPage,
-      total: projectsDb.length,
+      total: fetchedProjects.length,
     },
   }
 }
 
-export const addProject = async (project: Omit<(typeof projectsDb)[number], 'id' | 'creation_date'>) => {
-  await sleep(1000)
+export const addProject = async (project: Omit<(typeof fetchedProjects)[number], 'id' | 'creation_date'>) => {
 
   const newProject = {
     ...project,
-    id: projectsDb.length + 1,
+    id: fetchedProjects.length + 1,
     creation_date: new Date().toLocaleDateString('gb', { day: 'numeric', month: 'short', year: 'numeric' }),
   }
 
-  projectsDb.push(newProject)
+  fetchedProjects.push(newProject)
 
   return {
     ...newProject,
-    project_owner: usersDb.find((user) => user.id === project.project_owner)! as (typeof usersDb)[number],
-    team: usersDb.filter((user) => project.team.includes(user.id)) as (typeof usersDb)[number][],
+    author: users.find((user) => user.id === project.author.id)! as (typeof users)[number],
   }
 }
 
-export const updateProject = async (project: (typeof projectsDb)[number]) => {
-  await sleep(1000)
+export const updateProject = async (project: (typeof fetchedProjects)[number]) => {
 
-  const index = projectsDb.findIndex((p) => p.id === project.id)
-  projectsDb[index] = project
+  const index = fetchedProjects.findIndex((p) => p.id === project.id)
+  fetchedProjects[index] = project
 
   return project
 }
 
-export const removeProject = async (project: (typeof projectsDb)[number]) => {
-  await sleep(1000)
+export const removeProject = async (project: (typeof fetchedProjects)[number]) => {
 
-  const index = projectsDb.findIndex((p) => p.id === project.id)
-  projectsDb.splice(index, 1)
+  const index = fetchedProjects.findIndex((p) => p.id === project.id)
+  fetchedProjects.splice(index, 1)
 
   return project
 }

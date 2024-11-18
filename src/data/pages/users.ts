@@ -1,30 +1,21 @@
-import {sleep} from '../../services/utils'
-import {User} from './../../pages/users/types'
-import usersDb from './users-db.json'
+import {User} from '../../pages/settings/types'
 import projectsDb from './projects-db.json'
-import {Project} from '../../pages/projects/types'
+import {Project} from '../../pages/history/types'
 import {useDataStore} from "../../stores/data-store";
 import axios from "axios";
 import {resetPasswordForm} from "../../pages/settings/components/ResetPassword.vue";
 import {useToast} from "vuestic-ui";
+import {fetchedProjects} from "./projects";
 
-// const users = usersDb as User[]
-export let users = useDataStore().users as User[]
-
-export let usersUpdated = false;
-export const updateUsers = () => {
-  usersUpdated = !usersUpdated;
-}
+export const users = useDataStore().users as User[]
 
 const { init: notify } = useToast()
 
 const getUserProjects = (userId: number | string) => {
-  return projectsDb
-    .filter((project) => project.team.includes(Number(userId)))
+  return fetchedProjects
     .map((project) => ({
       ...project,
-      project_owner: users.find((user) => user.id === project.project_owner)!,
-      team: project.team.map((userId) => users.find((user) => user.id === userId)!),
+      project_owner: users.find((user) => user.id === project.author.id)!,
       status: project.status as Project['status'],
     }))
 }
@@ -144,9 +135,7 @@ export const resetPassword = async (formData: resetPasswordForm) => {
 
 export const removeUser = async (user: User) => {
   await axios
-      .delete('http://localhost:8000/api/scheduler/delete-user/' + user.email,
-          user,
-      )
+      .delete('http://localhost:8000/api/scheduler/delete-user/' + user.email)
       .then((res) => {
         notify({
           message: `${user.first_name} ${user.last_name} è stato eliminato`,

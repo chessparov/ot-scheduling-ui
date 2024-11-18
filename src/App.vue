@@ -14,6 +14,7 @@ userStore.fetchData()
 scheduleStore.fetchData()
 globalStore.fetchData()
 dataStore.fetchUsers()
+dataStore.fetchProjects()
 
 </script>
 

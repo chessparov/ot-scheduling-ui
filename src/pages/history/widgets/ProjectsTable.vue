@@ -8,8 +8,8 @@ import { useVModel } from '@vueuse/core'
 import Stores from "@/stores";
 
 const columns = defineVaDataTableColumns([
-  { label: 'Nome', key: 'project_name', sortable: true },
-  { label: 'Autore', key: 'project_owner', sortable: true },
+  { label: 'Nome', key: 'title', sortable: true },
+  { label: 'Autore', key: 'author', sortable: true },
   { label: 'Stato', key: 'status', sortable: true },
   { label: 'Data Creazione', key: 'creation_date', sortable: true },
   { label: ' ', key: 'actions' },
@@ -63,14 +63,14 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
       :columns="columns"
       :loading="loading"
     >
-      <template #cell(project_name)="{ rowData }">
+      <template #cell(title)="{ rowData }">
         <div class="ellipsis max-w-[230px] lg:max-w-[450px]">
-          {{ rowData.project_name }}
+          {{ rowData.title }}
         </div>
       </template>
-      <template #cell(project_owner)="{ rowData }">
+      <template #cell(author)="{ rowData }">
         <div class="flex items-center gap-2 ellipsis max-w-[230px]">
-          {{ rowData.project_owner.name }}
+          {{ rowData.author }}
         </div>
       </template>
 

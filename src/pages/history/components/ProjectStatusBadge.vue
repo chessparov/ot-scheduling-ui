@@ -13,7 +13,6 @@ const badgeColorMap: Record<Project['status'], string> = {
   'in progress': 'primary',
   archived: 'secondary',
   completed: 'success',
-  important: 'warning',
 }
 function translateStatus(status: string) {
   const dictStatus = {

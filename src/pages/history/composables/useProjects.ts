@@ -49,8 +49,7 @@ export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref
       isLoading.value = true
       await addProject({
         ...project,
-        project_owner: project.project_owner.id,
-        team: project.team.map((user) => user.id),
+        author: project.author,
       })
       await fetch()
       isLoading.value = false
@@ -60,8 +59,7 @@ export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref
       isLoading.value = true
       await updateProject({
         ...project,
-        project_owner: project.project_owner.id,
-        team: project.team.map((user) => user.id),
+        author: project.author,
       })
       await fetch()
       isLoading.value = false
@@ -71,8 +69,7 @@ export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref
       isLoading.value = true
       await removeProject({
         ...project,
-        project_owner: project.project_owner.id,
-        team: project.team.map((user) => user.id),
+        author: project.author,
       })
       await fetch()
       isLoading.value = false

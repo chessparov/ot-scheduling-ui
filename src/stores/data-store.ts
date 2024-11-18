@@ -24,9 +24,9 @@ export const useDataStore = defineStore('data', {
         },
         async fetchProjects() {
             await axios
-                .get('http://localhost:8000/api/scheduler/login')
+                .get('http://localhost:8000/api/scheduler/projects')
                 .then((res) => {
-                    this.projects = res.data.projects;
+                    this.projects = res.data;
                 })
                 .catch((error) => {
                     console.log(error);

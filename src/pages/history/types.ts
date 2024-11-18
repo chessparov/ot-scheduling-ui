@@ -1,15 +1,16 @@
-import { User } from '../users/types'
+import { User } from '../settings/types'
+import {users} from "../../data/pages/users";
 
 export type Project = {
   id: number
-  project_name: string
-  project_owner: Omit<User, 'projects'>
-  team: Omit<User, 'projects'>[]
+  title: string
+  author: (typeof users)[number]
   status: 'completed' | 'archived' | 'in progress'
   creation_date: string
+  schedule_data: JSON
 }
 
-export type EmptyProject = Omit<Project, 'id' | 'project_owner' | 'creation_date' | 'status'> & {
-  project_owner: Project['project_owner'] | undefined
+export type EmptyProject = Omit<Project, 'id' | 'author' | 'creation_date' | 'status'> & {
+  author: Project['author'] | undefined
   status: Project['status'] | undefined
 }

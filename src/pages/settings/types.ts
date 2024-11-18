@@ -1,3 +1,5 @@
+import {Project} from "../history/types";
+
 export type UserRole = 'admin' | 'viewer'
 
 export type User = {
@@ -8,7 +10,7 @@ export type User = {
     is_admin: boolean
     date_joined: Date
     last_login: Date
-
+    projects: Project[]
 }
 
 
