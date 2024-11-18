@@ -5,12 +5,12 @@ import { User } from '../types'
 
 defineProps({
   privileges: {
-    type: String as PropType<User['privileges']>,
+    type: String,
     required: true,
   },
 })
 
-const badgeColorMap: Record<User['privileges'], string> = {
+const badgeColorMap = {
   viewer: 'primary',
   admin: 'warning',
 }

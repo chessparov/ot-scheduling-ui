@@ -7,8 +7,8 @@ import { validators } from '@/services/utils'
 
 const props = defineProps({
   user: {
-    type: Object as PropType<User | null>,
-    default: null,
+    type: Object as PropType<User>,
+    required: true
   },
   saveButtonLabel: {
     type: String,
@@ -18,23 +18,21 @@ const props = defineProps({
 
 const defaultNewUser: User = {
   id: -1,
-  avatar: '',
-  name: '',
-  privileges: 'viewer',
-  surname: '',
+  first_name: '',
+  is_admin: false,
+  last_name: '',
   email: '',
-  creation_date: ''
+  date_joined: new Date(),
+  last_login: new Date()
 }
 
 const newUser = ref<User>({ ...defaultNewUser })
 
 const isFormHasUnsavedChanges = computed(() => {
   return Object.keys(newUser.value).some((key) => {
-    if (key === 'avatar' || key === 'projects') {
-      return false
+    if (key !== 'id')  {
+      return newUser.value[key as keyof Omit<User, 'id'>] !== props.user?.[key as keyof Omit<User, 'id'>]
     }
-
-    return newUser.value[key as keyof User] !== (props.user ?? defaultNewUser)?.[key as keyof User]
   })
 })
 
@@ -42,30 +40,20 @@ defineExpose({
   isFormHasUnsavedChanges,
 })
 
+
 watch(
-  () => props.user,
-  () => {
-    if (!props.user) {
-      return
-    }
+    () => props.user,
+    () => {
+      if (!props.user) {
+        return
+      }
 
-    newUser.value = {
-      ...props.user,
-      avatar: props.user.avatar || '',
-    }
-  },
-  { immediate: true },
+      newUser.value = {
+        ...props.user,
+      }
+    },
+    { immediate: true },
 )
-
-const avatar = ref<File>()
-
-const makeAvatarBlobUrl = (avatar: File) => {
-  return URL.createObjectURL(avatar)
-}
-
-watch(avatar, (newAvatar) => {
-  newUser.value.avatar = newAvatar ? makeAvatarBlobUrl(newAvatar) : ''
-})
 
 const form = useForm('add-user-form')
 
@@ -77,9 +65,9 @@ const onSave = () => {
   }
 }
 
-const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
-  { text: 'Admin', value: 'admin' },
-  { text: 'Visualizzatore', value: 'viewer' },
+const roleSelectOptions = [
+  { text: 'Admin', value: true },
+  { text: 'Visualizzatore', value: false },
 ]
 
 </script>
@@ -90,14 +78,14 @@ const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
     <div class="self-stretch flex-col justify-start items-start gap-4 flex">
       <div class="flex gap-4 flex-col sm:flex-row w-full">
         <VaInput
-          v-model="newUser.name"
+          v-model="newUser.first_name"
           label="Nome"
           class="w-full sm:w-1/2"
           :rules="[validators.required]"
           name="name"
         />
         <VaInput
-          v-model="newUser.surname"
+          v-model="newUser.last_name"
           label="Cognome"
           class="w-full sm:w-1/2"
           :rules="[validators.required]"
@@ -113,7 +101,7 @@ const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
           name="email"
         />
         <VaSelect
-            v-model="newUser.privileges"
+            v-model="newUser.is_admin"
             label="Privilegi"
             class="w-full sm:w-1/2"
             :options="roleSelectOptions"
@@ -127,7 +115,7 @@ const roleSelectOptions: { text: Capitalize<UserRole>; value: UserRole }[] = [
           <VaDivider />
       </div>
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full sm:flex-row sm:items-center">
-        <VaButton preset="secondary" color="secondary" @click="$emit('close')">Annulla</VaButton>
+        <VaButton preset="secondary" color="secondary" @click="$emit('close');">Annulla</VaButton>
         <VaButton :disabled="!isValid" @click="onSave">Salva</VaButton>
       </div>
     </div>

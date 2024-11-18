@@ -1,7 +1,17 @@
 import { Ref, ref, unref, watch } from 'vue'
-import { getUsers, updateUser, addUser, removeUser, type Filters, Pagination, Sorting } from '../../../data/pages/users'
+import {
+  getUsers,
+  updateUser,
+  addUser,
+  removeUser,
+  type Filters,
+  Pagination,
+  Sorting,
+  resetPassword
+} from '../../../data/pages/users'
 import { User } from '../types'
 import { watchIgnorable } from '@vueuse/core'
+import {resetPasswordForm} from "../components/ResetPassword.vue";
 
 const makePaginationRef = () => ref<Pagination>({ page: 1, perPage: 10, total: 0 })
 const makeSortingRef = () => ref<Sorting>({ sortBy: 'name', sortingOrder: null })
@@ -29,7 +39,6 @@ export const useUsers = (options?: {
     ignoreUpdates(() => {
       pagination.value = newPagination
     })
-
     isLoading.value = false
   }
 
@@ -68,6 +77,12 @@ export const useUsers = (options?: {
     async update(user: User) {
       isLoading.value = true
       await updateUser(user)
+      await fetchUsers()
+      isLoading.value = false
+    },
+    async resetPassword(formData: resetPasswordForm) {
+      isLoading.value = true
+      await resetPassword(formData)
       await fetchUsers()
       isLoading.value = false
     },

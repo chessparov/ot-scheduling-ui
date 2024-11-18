@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {PropType, computed, toRef} from 'vue'
+import {PropType, computed, toRef, onUpdated} from 'vue'
 import {defineVaDataTableColumns, useModal} from 'vuestic-ui'
 import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
@@ -11,7 +11,7 @@ const columns = defineVaDataTableColumns([
   { label: 'Cognome', key: 'surname', sortable: true },
   { label: 'Email', key: 'email', sortable: true },
   { label: 'Privilegi', key: 'privileges', sortable: true },
-  { label: 'Data Creazione', key: 'creation_date', sortable: true },
+  { label: 'Data Creazione', key: 'date_joined', sortable: true },
   { label: ' ', key: 'actions' },
 ])
 
@@ -50,7 +50,7 @@ const { confirm } = useModal()
 const onUserDelete = async (user: User) => {
   const agreed = await confirm({
     title: 'Elimina utente',
-    message: `Eliminare in modo definitivo l'utente \"${user.name} ${user.surname}\"?`,
+    message: `Eliminare in modo definitivo l'utente \"${user.first_name} ${user.last_name}\"?`,
     okText: 'Elimina',
     cancelText: 'Annulla',
     size: 'small',
@@ -74,12 +74,12 @@ const onUserDelete = async (user: User) => {
     >
       <template #cell(name)="{ rowData }">
         <div class="ellipsis max-w-[230px] lg:max-w-[450px]">
-          {{ rowData.name }}
+          {{ rowData.first_name }}
         </div>
       </template>
       <template #cell(surname)="{ rowData }">
         <div class="flex items-center gap-2 ellipsis max-w-[230px]">
-          {{ rowData.surname }}
+          {{ rowData.last_name }}
         </div>
       </template>
       <template #cell(email)="{ rowData }">
@@ -87,9 +87,14 @@ const onUserDelete = async (user: User) => {
           {{ rowData.email }}
         </div>
       </template>
+      <template #cell(date_joined)="{ rowData }">
+        <div class="flex items-center gap-2 ellipsis max-w-[230px]">
+          {{ rowData.date_joined.toString().split('T')[0].split('-').reverse().join('-') }}
+        </div>
+      </template>
 
       <template #cell(privileges)="{ rowData: user }">
-        <UserPrivilegesBadge :privileges="user.privileges" />
+        <UserPrivilegesBadge :privileges="user.is_admin ? 'admin' : 'viewer'" />
       </template>
 
       <template #cell(actions)="{ rowData: user }">
