@@ -1,10 +1,8 @@
 <script setup lang="ts">
-import {defineComponent, PropType, reactive} from 'vue'
+import {PropType, reactive} from 'vue'
 import {useForm, useToast} from "vuestic-ui";
 import axios from "axios";
 import {useDataStore} from "@/stores/data-store";
-import {updateUsers, users} from "@/data/pages/users";
-import {useUsers} from "@/pages/settings/composables/useUsers";
 import {User} from "@/pages/settings/types";
 import {Pagination, Sorting} from "@/data/pages/projects";
 
@@ -45,13 +43,13 @@ const addUser = async () => {
           message: `L'account di ${formData.email} è stato creato con successo!`,
           color: 'success',
         });
-        updateUsers();
         newUser = response.data as User
         form.reset()
         useDataStore().fetchUsers();
         emit('save', newUser)
       })
       .catch(error => {
+        console.log(error.response.status)
         if (error.response.status === 401) {
           notify({
             message: 'Permesso negato: ' + `${error.response.data.message}`,
