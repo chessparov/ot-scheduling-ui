@@ -4,7 +4,7 @@ import {users} from "../../data/pages/users";
 export type Project = {
   id: number
   title: string
-  author: (typeof users)[number]
+  author: string
   status: 'completed' | 'archived' | 'in progress'
   creation_date: string
   schedule_data: JSON
