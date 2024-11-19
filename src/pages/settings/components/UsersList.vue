@@ -5,6 +5,7 @@ import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
 import {User, UserRole} from "@/pages/settings/types";
 import UserPrivilegesBadge from "@/pages/settings/components/UserPrivilegesBadge.vue";
+import {dateParser} from "../../../services/utils";
 
 const columns = defineVaDataTableColumns([
   { label: 'Nome', key: 'name', sortable: true },
@@ -89,7 +90,7 @@ const onUserDelete = async (user: User) => {
       </template>
       <template #cell(date_joined)="{ rowData }">
         <div class="flex items-center gap-2 ellipsis max-w-[230px]">
-          {{ rowData.date_joined.toString().split('T')[0].split('-').reverse().join('-') }}
+          {{ dateParser(rowData.date_joined) }}
         </div>
       </template>
 

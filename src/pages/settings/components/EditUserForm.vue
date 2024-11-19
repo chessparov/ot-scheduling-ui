@@ -3,7 +3,7 @@ import { PropType, computed, ref, watch } from 'vue'
 import { useForm } from 'vuestic-ui'
 
 import { User, UserRole } from '../types'
-import { validators } from '@/services/utils'
+import { validators } from '../../../services/utils'
 
 const props = defineProps({
   user: {
@@ -23,7 +23,8 @@ const defaultNewUser: User = {
   last_name: '',
   email: '',
   date_joined: new Date(),
-  last_login: new Date()
+  last_login: new Date(),
+  projects: []
 }
 
 const newUser = ref<User>({ ...defaultNewUser })

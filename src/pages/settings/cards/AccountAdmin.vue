@@ -6,9 +6,7 @@ import {useUsers} from "@/pages/settings/composables/useUsers";
 import {User} from "@/pages/settings/types";
 import {useModal, useToast, VaCollapse} from "vuestic-ui";
 import ResetPassword, {resetPasswordForm} from "@/pages/settings/components/ResetPassword.vue";
-import {useDataStore} from "@/stores/data-store";
 import UsersList from "@/pages/settings/components/UsersList.vue";
-import {usersUpdated} from "@/data/pages/users";
 
 
 let { users, isLoading, filters, sorting, pagination, ...usersApi } = useUsers()
@@ -139,7 +137,6 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
       @save="(user: User) => {
         onAddUser(user)
       }"
-      @render="forceRender()"
       />
     </VaCollapse>
   </div>

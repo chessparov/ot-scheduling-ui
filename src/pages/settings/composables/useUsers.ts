@@ -14,7 +14,7 @@ import { watchIgnorable } from '@vueuse/core'
 import {resetPasswordForm} from "../components/ResetPassword.vue";
 
 const makePaginationRef = () => ref<Pagination>({ page: 1, perPage: 10, total: 0 })
-const makeSortingRef = () => ref<Sorting>({ sortBy: 'name', sortingOrder: null })
+const makeSortingRef = () => ref<Sorting>({ sortBy: 'first_name', sortingOrder: null })
 const makeFiltersRef = () => ref<Partial<Filters>>({ search: '' })
 
 export const useUsers = (options?: {

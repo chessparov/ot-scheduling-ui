@@ -2,7 +2,9 @@
 import { PropType } from 'vue'
 import { Project } from '../types'
 import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
-import Stores from "@/stores";
+import Stores from "../../../stores";
+import {VaCard, VaCardContent, VaInnerLoading} from "vuestic-ui";
+import {dateParser} from "../../../services/utils";
 
 defineProps({
   userStore: Stores,
@@ -28,23 +30,23 @@ defineEmits<{
   <VaInnerLoading
     v-if="projects.length > 0 || loading"
     :loading="loading"
-    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 min-h-[4rem]"
+    class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 min-h-[4rem]"
   >
     <VaCard
       v-for="project in projects"
-      :key="project.project_name"
+      :key="project.title"
       :style="{ '--va-card-outlined-border': '1px solid var(--va-background-element)' }"
       outlined
     >
       <VaCardContent class="flex flex-col h-full">
-        <div class="text-[var(--va-secondary)]">{{ project.creation_date }}</div>
+        <div class="text-[var(--va-secondary)]">{{ dateParser(project.creation_date) }}</div>
         <div class="flex flex-col items-center gap-4 grow">
           <h4 class="va-h4 text-center self-stretch overflow-hidden line-clamp-2 text-ellipsis">
-            {{ project.project_name }}
+            {{ project.title }}
           </h4>
           <p>
             <span class="text-[var(--va-secondary)]">Autore: </span>
-            <span>{{ project.project_owner.name }}</span>
+            <span>{{ project.author }}</span>
           </p>
           <ProjectStatusBadge :status="project.status" />
         </div>

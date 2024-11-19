@@ -6,6 +6,7 @@ import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
 import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
 import Stores from "@/stores";
+import {dateParser} from "../../../services/utils";
 
 const columns = defineVaDataTableColumns([
   { label: 'Nome', key: 'title', sortable: true },
@@ -37,6 +38,10 @@ const props = defineProps({
     type: Object as PropType<Pagination>,
     required: true,
   },
+  input: {
+    type: String,
+    required: true,
+  }
 })
 
 const emit = defineEmits<{
@@ -62,6 +67,7 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
       :items="projects"
       :columns="columns"
       :loading="loading"
+      :filter="props.input"
     >
       <template #cell(title)="{ rowData }">
         <div class="ellipsis max-w-[230px] lg:max-w-[450px]">
@@ -76,6 +82,12 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
 
       <template #cell(status)="{ rowData: project }">
         <ProjectStatusBadge :status="project.status" />
+      </template>
+
+      <template #cell(creation_date)="{ rowData }">
+        <div class="flex items-center gap-2 ellipsis max-w-[230px]">
+          {{ dateParser(rowData.creation_date) }}
+        </div>
       </template>
 
       <template #cell(actions)="{ rowData: project }" v-if="userStore.admin">

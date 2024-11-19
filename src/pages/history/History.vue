@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from 'vue'
+import {computed, ref, setDevtoolsHook} from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { useProjects } from './composables/useProjects'
 import ProjectCards from './widgets/ProjectCards.vue'
@@ -26,19 +26,7 @@ const { init: notify } = useToast()
 
 const onProjectSaved = async (project: Project) => {
   doShowProjectFormModal.value = false
-  if ('id' in project) {
-    await update(project as Project)
-    notify({
-      message: 'Schedula modificata',
-      color: 'success',
-    })
-  } else {
-    await add(project as Project)
-    notify({
-      message: 'Schedula creata',
-      color: 'success',
-    })
-  }
+  await update(project as Project)
 }
 
 const { confirm } = useModal()
@@ -46,7 +34,7 @@ const { confirm } = useModal()
 const onProjectDeleted = async (project: Project) => {
   const response = await confirm({
     title: 'Elimina schedula',
-    message: `Sei sicuro di voler eliminare la schedula "${project.project_name}"?`,
+    message: `Sei sicuro di voler eliminare la schedula "${project.title}"?`,
     okText: 'Elimina',
     size: 'small',
     maxWidth: '380px',
@@ -57,11 +45,9 @@ const onProjectDeleted = async (project: Project) => {
   }
 
   await remove(project)
-  notify({
-    message: 'Schedula eliminata',
-    color: 'success',
-  })
 }
+
+const input = ref('')
 
 const editFormRef = ref()
 const userStore = useUserStore()
@@ -86,7 +72,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
   <h1 class="h1">Storico schedule</h1>
   <VaCard>
     <VaCardContent>
-      <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
+      <div class="flex flex-col md:flex-row gap-6 mb-6 justify-between">
         <div class="flex flex-col md:flex-row gap-2 justify-start">
           <VaButtonToggle
               v-model="doShowAsCards"
@@ -96,7 +82,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
               { label: 'Elenco', value: false },
             ]"
           />
-          <VaInput placeholder="Search">
+          <VaInput v-if="!doShowAsCards" v-model="input" placeholder="Cerca...">
             <template #prependInner>
               <VaIcon name="manage_search" color="secondary" size="small" />
             </template>
@@ -122,6 +108,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
           :user-store="userStore"
           :projects="projects"
           :loading="isLoading"
+          :input="input"
           @edit="editProject"
           @delete="onProjectDeleted"
       />

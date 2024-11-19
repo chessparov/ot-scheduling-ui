@@ -15,20 +15,16 @@ defineEmits<{
 }>()
 
 const defaultNewProject: EmptyProject = {
-  project_name: '',
-  project_owner: undefined,
-  team: [],
+  title: '',
+  author: undefined,
   status: undefined,
+  schedule_data: JSON,
 }
 
 const newProject = ref({ ...defaultNewProject })
 
 const isFormHasUnsavedChanges = computed(() => {
   return Object.keys(newProject.value).some((key) => {
-    if (key === 'team') {
-      return false
-    }
-
     return (
       newProject.value[key as keyof EmptyProject] !== (props.project ?? defaultNewProject)?.[key as keyof EmptyProject]
     )
@@ -48,7 +44,7 @@ watch(
 
     newProject.value = {
       ...props.project,
-      project_owner: props.project.project_owner,
+      author: props.project.author,
     }
   },
   { immediate: true },
@@ -60,7 +56,7 @@ const required = (v: string | SelectOption) => !!v || 'This field is required'
 
 <template>
   <VaForm v-slot="{ validate }" class="flex flex-col gap-2">
-    <VaInput v-model="newProject.project_name" label="Nome" :rules="[required]" />
+    <VaInput v-model="newProject.title" label="Nome" :rules="[required]" />
     <VaSelect
       v-model="newProject.status"
       label="Stato"
@@ -68,9 +64,9 @@ const required = (v: string | SelectOption) => !!v || 'This field is required'
       track-by="value"
       value-by="value"
       :options="[
-        { text: 'in corso', value: 'in progress' },
+        { text: 'Testing', value: 'in progress' },
         { text: 'Archiviato', value: 'archived' },
-        { text: 'Completato', value: 'completed' },
+        { text: 'In Produzione', value: 'completed' },
       ]"
     >
       <template #content="{ value }">

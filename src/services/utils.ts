@@ -10,3 +10,22 @@ export const validators = {
   },
   required: (v: any) => !!v || "Campo obbligatorio",
 };
+
+export const dateParser = (dateFromPython: string) => {
+  const monthDictionary: string[] = [
+    'Gennaio',
+    'Febbraio',
+    'Marzo',
+    'Aprile',
+    'Maggio',
+    'Giugno',
+    'Luglio',
+    'Agosto',
+    'Settembre',
+    'Ottobre',
+    'Novembre',
+    'Dicembre',
+  ]
+  let preParsedDate = dateFromPython.toString().split('T')[0].split('-').reverse()
+  return preParsedDate[0] + ' ' + monthDictionary[Number(preParsedDate[1])] + ' ' + preParsedDate[2]
+}

@@ -11,11 +11,11 @@ export const users = useDataStore().users as User[]
 
 const { init: notify } = useToast()
 
-const getUserProjects = (userId: number | string) => {
+const getUserProjects = (userEmail: string) => {
   return fetchedProjects
     .map((project) => ({
       ...project,
-      project_owner: users.find((user) => user.id === project.author.id)!,
+      author: users.find((user) => user.email === project.author)?.email! as string,
       status: project.status as Project['status'],
     }))
 }
@@ -48,7 +48,7 @@ export const getUsers = async (filters: Partial<Filters & Pagination & Sorting>)
     filteredUsers = filteredUsers.filter((user) => user.first_name.toLowerCase().includes(search.toLowerCase()))
   }
 
-  filteredUsers = filteredUsers.map((user) => ({ ...user, projects: getUserProjects(user.id) }))
+  filteredUsers = filteredUsers.map((user) => ({ ...user, projects: getUserProjects(user.email) }))
 
   if (sortBy && sortingOrder) {
     filteredUsers = filteredUsers.sort((a, b) => {
@@ -96,6 +96,14 @@ export const updateUser = async (user: User) => {
           color: 'success',
         })
         useDataStore().fetchUsers();
+      })
+      .catch((err) => {
+          if (err.response.status === 400) {
+              notify({message: 'L\' utente non esiste', color: 'danger'});
+          }
+          else {
+              notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
+          }
       })
   const index = users.findIndex((u) => u.id === user.id)
   users[index] = user
