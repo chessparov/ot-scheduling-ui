@@ -13,4 +13,10 @@ export type User = {
     projects: Project[]
 }
 
+export type Uo = {
+    id: number,
+    title: string,
+    creation_date: Date,
+    fixed_schedule: boolean,
+}
 

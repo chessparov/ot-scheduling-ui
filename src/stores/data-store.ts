@@ -1,6 +1,6 @@
 import {defineStore} from "pinia";
 import axios from "axios";
-import {User} from "../pages/settings/types";
+import {Uo, User} from "../pages/settings/types";
 import {Project} from "../pages/history/types";
 
 
@@ -9,6 +9,7 @@ export const useDataStore = defineStore('data', {
         return {
             users: [] as User[],
             projects: [] as Project[],
+            uos: [] as Uo[],
         }
     },
     actions: {
@@ -27,6 +28,16 @@ export const useDataStore = defineStore('data', {
                 .get('http://localhost:8000/api/scheduler/projects')
                 .then((res) => {
                     this.projects = res.data;
+                })
+                .catch((error) => {
+                    console.log(error);
+                })
+        },
+        async fetchUos() {
+            await axios
+                .get('http://localhost:8000/api/scheduler/uos')
+                .then((res) => {
+                    this.uos = res.data;
                 })
                 .catch((error) => {
                     console.log(error);

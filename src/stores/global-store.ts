@@ -1,8 +1,5 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
-import {json} from "node:stream/consumers";
-import {types} from "sass";
-import Number = types.Number;
 
 export const useGlobalStore = defineStore('global', {
   state: () => {

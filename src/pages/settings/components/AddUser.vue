@@ -4,15 +4,6 @@ import {useForm, useToast} from "vuestic-ui";
 import axios from "axios";
 import {useDataStore} from "@/stores/data-store";
 import {User} from "@/pages/settings/types";
-import {Pagination, Sorting} from "@/data/pages/projects";
-
-const props = defineProps({
-  users: {
-    type: Array as PropType<User[]>,
-    required: true,
-  },
-  pagination: { type: Object as PropType<Pagination>, required: true },
-})
 
 const emit = defineEmits(['render', 'save'])
 const form = useForm('formRef');

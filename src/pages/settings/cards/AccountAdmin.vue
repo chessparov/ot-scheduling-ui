@@ -131,8 +131,6 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
     </VaCollapse>
     <VaCollapse header="Aggiungi account">
       <AddUser
-      :users="users"
-      :pagination="pagination"
       ref="editFormRef"
       @save="(user: User) => {
         onAddUser(user)
