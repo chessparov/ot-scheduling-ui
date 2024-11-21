@@ -1,45 +1,100 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
+<script  setup="ts">
+import {defineComponent, onUpdated, ref} from 'vue'
+import {createRegexMask, useInputMask} from "vuestic-ui";
 
-export default defineComponent({
-  name: "BindedSlider",
-  props: {
-    sliderLabel: String,
+// export default defineComponent({
+//   name: "BindedSlider",
+//   emits: ['update'],
+//   props: {
+//     sliderLabel: String,
+//     sliderMin: Number,
+//     sliderMax: Number,
+//     sliderValue: {
+//       type: Number,
+//       required: true,
+//     },
+//     inputInnerLabel: String,
+//     disabled: Boolean,
+//     inputMessage: {
+//       type: String,
+//       required: false,
+//     },
+//   },
+//   data() {
+//     return {
+//       passedValue: this.$props.sliderValue,
+//       inputValue: ref(this.$props.sliderValue.toString()),
+//       inputMask: ref(),
+//     }
+//   },
+//   methods: {
+//     cleanInput(input: string) {
+//       input.replace(/[^0-9]/g, '1');
+//       const cleanedInput = Number(input);
+//       if (!isNaN(cleanedInput)) {
+//         this.passedValue = cleanedInput;
+//       }
+//       else {
+//         this.passedValue = 1;
+//       }
+//     },
+//   },
+//   mounted() {
+//     useInputMask(createRegexMask(/[^0-9]/g), this.inputMask)
+//   },
+  // updated() {
+  //   this.$emit('update', this.passedValue);
+  // },
+  // watch: {
+  //   inputValue(newValue: string, oldValue: string) {
+  //     if (newValue != oldValue) {
+  //       this.cleanInput(newValue);
+  //     }
+  //   },
+  //   passedValue(newValue: number, oldValue: number) {
+  //     if (newValue != oldValue) {
+  //       this.inputValue = newValue.toString();
+  //     }
+  //   }
+  // }
+// })
+
+const props = defineProps({
+  sliderLabel: String,
     sliderMin: Number,
     sliderMax: Number,
-    sliderValue: Number,
-    inputMessage: String | undefined,
+    sliderValue: {
+      type: Number,
+      required: true,
+    },
     inputInnerLabel: String,
     disabled: Boolean,
-  },
-  data() {
-    return {
-      value: this.sliderValue,
-      inputValue: '',
-    }
-  },
-  methods: {
-    cleanInput(input: String) {
-      input = input.toString();
-      input.replace(/[^0-9]/g, '');
-      input = Number(input);
-      if (!isNaN(input)) {
-        this.value = input;
-      }
-      else {
-        this.value = '';
-      }
-    }
-  },
-  updated() {
-    this.$emit('update', this.value);
-  },
-  watch: {
-    value(newValue: Number) {
-      this.cleanInput(newValue);
-    }
-  }
+    inputMessage: {
+      type: String,
+      required: false,
+    },
 })
+
+const emits = defineEmits(['update'])
+const passedValue = ref(props.sliderValue)
+const inputMask = ref()
+
+useInputMask(createRegexMask(/^[0-9]*$/), inputMask)
+
+onUpdated(
+    () => {
+      if (typeof passedValue.value === "string") {
+        if (props.sliderLabel === 'Montecarlo') {
+          passedValue.value = 1;
+        }
+        else {
+          passedValue.value = 0;
+        }
+      }
+      emits('update', passedValue.value)
+    }
+)
+
 </script>
 
 <template>
@@ -47,14 +102,15 @@ export default defineComponent({
     <VaSlider
         :label="sliderLabel"
         :disabled="disabled"
-        v-model="value"
+        v-model="passedValue"
         :min="sliderMin"
         :max="sliderMax"
         :readonly="false"
         class="min-w-[50%]"
     />
     <VaInput
-        v-model="value"
+        ref="inputMask"
+        v-model.number="passedValue"
         :disabled="disabled"
         :messages="inputMessage"
         strict-bind-input-value

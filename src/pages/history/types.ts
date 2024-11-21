@@ -1,5 +1,4 @@
-import { User } from '../settings/types'
-import {users} from "../../data/pages/users";
+
 
 export type Project = {
   id: number

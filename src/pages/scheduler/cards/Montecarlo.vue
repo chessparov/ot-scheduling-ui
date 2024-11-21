@@ -1,12 +1,21 @@
 <script setup lang="ts">
-
-import { ref } from 'vue'
 import BindedSlider from "@/components/BindedSlider.vue";
-import {useToast, VaFile, VaFileUpload, VaSwitch} from "vuestic-ui";
+import {useToast, VaCard, VaCardContent, VaDateInput, VaFile, VaFileUpload, VaInput, VaSwitch} from "vuestic-ui";
+import {ref} from "vue";
 
 const props = defineProps({
-  upload: Boolean,
-  cycles: Number,
+  upload: {
+    type: Boolean,
+    required: true,
+  },
+  cycles: {
+    type: Number,
+    required: true,
+  },
+  showToggle: {
+    type: Boolean,
+    default: false,
+  }
 })
 
 const { init: notify } = useToast()
@@ -18,10 +27,10 @@ const emit = defineEmits<{
 
 const name = defineModel('name')
 const startDate = defineModel('startDate')
-const optimization = defineModel('optimization')
+const optimization: boolean = defineModel('optimization')
 const [files, modifiers] = defineModel('files',
     {
-  set(value) {
+  set(value: VaFile[]) {
     if (modifiers.allowSingleFile) {
       if (value.length >= 2) {
         value.pop();
@@ -34,9 +43,10 @@ const [files, modifiers] = defineModel('files',
     }
   }
 })
-let cycles = props.cycles
+
+let cycles = ref(props.cycles)
 let visibility = props.upload ? 'visible' : 'hidden';
-let display = optimization ? 'flex' : 'none';
+let display = props.showToggle ? 'flex' : 'none';
 
 
 function cyclesNumber(newValue: number) {
@@ -50,13 +60,13 @@ function cyclesNumber(newValue: number) {
     <VaCardContent>
       <section class="flex flex-col gap-4">
         <VaInput
-            v-model="name"
+            v-model="name as string"
             placeholder="Inserisci il nome della schedula"
             label="Nome schedula"
         />
         <VaDateInput
             label="Data inizio schedulazione"
-            v-model="startDate" />
+            v-model="startDate as Date" />
         <div class="flex flex-col gap-2" >
           <BindedSlider
               :slider-label="'Montecarlo'"
@@ -85,7 +95,7 @@ function cyclesNumber(newValue: number) {
         </div>
           <VaFileUpload
               :hidden="!upload"
-              v-model="files"
+              v-model="files as VaFile[]"
               file-types="xlsx,xls"
               uploadButtonText="Carica Lista Attesa"
           />

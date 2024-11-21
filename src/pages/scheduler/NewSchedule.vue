@@ -34,7 +34,7 @@ export default defineComponent({
     getMcCycles(mc: number) {
       if (typeof(mc ==! 'undefined')) {
         if (isNaN(mc)) {
-          this.mcCycles = 0;
+          this.mcCycles = 1;
         }
         else {
           this.mcCycles = mc;

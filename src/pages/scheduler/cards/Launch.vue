@@ -1,11 +1,12 @@
 <script lang="ts">
 
 import {defineComponent} from "vue";
-import {useToast, VaCardContent} from "vuestic-ui";
+import {useToast, VaCardContent, VaFile} from "vuestic-ui";
 import axios from "axios";
 import router from "@/router";
 import {useUserStore} from "@/stores/user-store";
 import {useScheduleStore} from "@/stores/global-store";
+
 
 export default defineComponent ({
   name: "Launch",
@@ -50,26 +51,30 @@ export default defineComponent ({
         this.percent = 95;
       }
     },
+
     requestMsc() {
       this.compTime = this.estimatedTime;
 
-      if (!this.filesWaitingList) {
-        return;
-      }
-      if (this.filesWaitingList.length == 1) {
+      let formData = new FormData();
+      let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
 
-        let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
+      formData.append('title', this.name);
+      formData.append('author', useUserStore().email);
+      formData.append('startDate', this.startDate?.toUTCString());
+      formData.append('optimization', this.optimization);
+      formData.append('mcCycles', this.mcCycles);
+      formData.append('tabuTime', this.tabuTime);
 
-        let formData = new FormData();
-        formData.append('file', this.filesWaitingList[0], 'lista.xlsx');
-        formData.append('title', this.name);
-        formData.append('author', useUserStore().email);
-        formData.append('startDate', this.startDate?.toUTCString());
-        formData.append('optimization', this.optimization);
-        formData.append('mcCycles', this.mcCycles);
-        formData.append('tabuTime', this.tabuTime);
+      if (!this.analyzer) {
 
-        if (!this.analyzer) {
+        if (!this.filesWaitingList) {
+          return;
+        }
+
+        else if (this.filesWaitingList.length == 1) {
+
+          formData.append('file', this.filesWaitingList[0], 'lista.xlsx');
+
           axios
               .post('http://localhost:8000/api/scheduler/new-schedule',
                   formData,
@@ -93,9 +98,16 @@ export default defineComponent ({
               })
         }
         else {
-          if (!this.filesSchedule) {
-            return;
+          this.toast.init({ message: "Non è possibile caricare più di un file!", color: "danger" })
+        }
+      }
+      else {
+
+        if (!this.filesSchedule) {
+          return;
           }
+
+        else if (this.filesSchedule.length == 1) {
           formData.append('schedule', this.filesSchedule[0])
           axios
               .post('http://localhost:8000/api/scheduler/analyze',
@@ -113,19 +125,17 @@ export default defineComponent ({
               })
               .catch(error => {
                 if (error.response.status === 400) {
-                  this.toast.init({ message: "File non valido", color: "danger" })
-                }
-                else {
-                  this.toast.init({ message: "Errore lato server", color: "danger" })
+                  this.toast.init({message: "File non valido", color: "danger"})
+                } else {
+                  this.toast.init({message: "Errore lato server", color: "danger"})
                 }
                 this.currentTime = 0;
                 clearInterval(progressBarTimeOut);
               })
         }
-
-      }
-      else {
-        this.toast.init({ message: "Non è possibile caricare più di un file!", color: "danger" })
+        else {
+          this.toast.init({message: "Non è possibile caricare più di un file!", color: "danger"})
+        }
       }
     }
   },
