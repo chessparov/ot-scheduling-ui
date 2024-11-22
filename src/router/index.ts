@@ -5,6 +5,7 @@ import AppLayout from "../layouts/AppLayout.vue";
 import axios from "axios";
 import {useUserStore} from "../stores/user-store";
 
+
 const routes: Array<RouteRecordRaw> = [
     {
         name:'home',
@@ -110,6 +111,7 @@ const routes: Array<RouteRecordRaw> = [
 
 
 const router = createRouter({
+
     history: createWebHistory(import.meta.env.BASE_URL),
     scrollBehavior(to, from, savedPosition) {
         if (savedPosition) {
@@ -134,20 +136,6 @@ router.beforeEach((to, from, next) => {
         userStore.loggedIn = false;
     }
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        // let all_cookies = document.cookie.split('; ');
-        // let isAuthenticated = '';
-        // for (const cookie of all_cookies) {
-        //     const splitCookie = cookie.split('=');
-        //     if (splitCookie[0] == 'authenticated') {
-        //         isAuthenticated = splitCookie[1];
-        //         break
-        //     }
-        // }
-        // if (isAuthenticated !== 'true') {
-        //     next({
-        //         name: 'login',
-        //     })
-        // }
         if (!userStore.loggedIn) {
             next({
                 name: 'login',

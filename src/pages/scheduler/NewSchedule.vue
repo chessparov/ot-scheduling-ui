@@ -55,6 +55,7 @@ export default defineComponent({
           v-model:start-date="startDate"
           v-model:files.allowSingleFile="files"
           v-model:optimization="optimization"
+          :show-toggle="true"
           :upload="true"
           :cycles="mcCycles"
           @mc-cycles="getMcCycles"

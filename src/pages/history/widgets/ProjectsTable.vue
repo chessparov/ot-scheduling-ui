@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { PropType, computed } from 'vue'
-import { defineVaDataTableColumns } from 'vuestic-ui'
+import {defineVaDataTableColumns, useToast} from 'vuestic-ui'
 import { Project } from '../types'
 import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
 import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
 import Stores from "@/stores";
 import {dateParser} from "../../../services/utils";
+import router from "@/router";
+import {useDataStore} from "@/stores/data-store";
+import {useScheduleStore} from "@/stores/global-store";
+import axios from "axios";
 
 const columns = defineVaDataTableColumns([
   { label: 'Nome', key: 'title', sortable: true },
@@ -47,14 +51,13 @@ const props = defineProps({
 const emit = defineEmits<{
   (event: 'edit', project: Project): void
   (event: 'delete', project: Project): void
+  (event: 'view', projectId: number): void
 }>()
-
 
 const sortByVModel = useVModel(props, 'sortBy', emit)
 const sortingOrderVModel = useVModel(props, 'sortingOrder', emit)
 
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.perPage))
-
 
 </script>
 
@@ -70,12 +73,12 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
       :filter="props.input"
     >
       <template #cell(title)="{ rowData }">
-        <div class="ellipsis max-w-[230px] lg:max-w-[450px]">
+        <div class="ellipsis max-w-[230px] lg:max-w-[450px]" @click="$emit('view', rowData.id)">
           {{ rowData.title }}
         </div>
       </template>
       <template #cell(author)="{ rowData }">
-        <div class="flex items-center gap-2 ellipsis max-w-[230px]">
+        <div class="flex items-center gap-2 ellipsis max-w-[230px]" @click="$emit('view', rowData.id)">
           {{ rowData.author }}
         </div>
       </template>
@@ -93,9 +96,17 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
       <template #cell(actions)="{ rowData: project }" v-if="userStore.admin">
         <div class="flex gap-2 justify-end">
           <VaButton
+              preset="primary"
+              size="small"
+              color="primary"
+              icon="mso-visibility"
+              aria-label="View project"
+              @click="$emit('view', project.id as number)"
+          />
+          <VaButton
             preset="primary"
             size="small"
-            color="primary"
+            color="secondary"
             icon="mso-edit"
             aria-label="Edit project"
             @click="$emit('edit', project as Project)"

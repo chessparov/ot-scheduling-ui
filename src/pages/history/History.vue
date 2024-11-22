@@ -9,6 +9,8 @@ import { Project } from './types'
 import {useModal, useToast} from 'vuestic-ui'
 import router from "@/router";
 import {useUserStore} from "@/stores/user-store";
+import axios from "axios";
+import {useScheduleStore} from "@/stores/global-store";
 
 const doShowAsCards = useLocalStorage('projects-view', true)
 
@@ -66,6 +68,23 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
     hide()
   }
 }
+
+const viewSchedule = async(scheduleId: number) => {
+  await axios
+      .get('http://localhost:8000/api/scheduler/get-schedule/' + scheduleId.toString())
+      .then((res) => {
+        useScheduleStore().updateSchedule(res.data.schedule_data, res.data.title);
+        router.push({name: 'dashboard'});
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          notify({message: 'La schedula non è stata trovata'})
+        }
+        else {
+          notify({message: 'Errore lato server'})
+        }
+      })
+}
 </script>
 
 <template>
@@ -99,6 +118,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
           :loading="isLoading"
           @edit="editProject"
           @delete="onProjectDeleted"
+          @view="projectId => {viewSchedule(projectId)}"
       />
       <ProjectTable
           v-else
@@ -111,6 +131,7 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
           :input="input"
           @edit="editProject"
           @delete="onProjectDeleted"
+          @view="projectId => {viewSchedule(projectId)}"
       />
     </VaCardContent>
 

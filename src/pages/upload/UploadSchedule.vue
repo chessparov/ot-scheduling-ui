@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {defineComponent, ref} from 'vue'
+import {defineComponent, ref, watch} from 'vue'
 import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 import Montecarlo from "@/pages/scheduler/cards/Montecarlo.vue";
 import Optimization from "@/pages/scheduler/cards/Optimization.vue";
@@ -40,6 +40,15 @@ const allowSingleFile = () => {
 const getMcCycles = (mc: number) => {
   mcCycles.value = mc;
 }
+
+watch(scheduleSource, () => {
+  if (scheduleSource.value === 'archive') {
+    filesSchedule.value = [] as VaFile[];
+  }
+  else {
+    selectedSchedule.value = null;
+  }
+})
 
 </script>
 
@@ -112,6 +121,7 @@ const getMcCycles = (mc: number) => {
         :name="name"
         :start-date="startDate"
         :optimization="optimization"
+        :selected-schedule="selectedSchedule"
         :files-waiting-list="filesWaitingList"
         :files-schedule.allowSingleFile="filesSchedule"
         :analyzer="true"

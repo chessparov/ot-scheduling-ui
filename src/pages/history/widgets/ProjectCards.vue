@@ -3,7 +3,7 @@ import { PropType } from 'vue'
 import { Project } from '../types'
 import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
 import Stores from "../../../stores";
-import {VaCard, VaCardContent, VaInnerLoading} from "vuestic-ui";
+import {useToast, VaCard, VaCardContent, VaInnerLoading} from "vuestic-ui";
 import {dateParser} from "../../../services/utils";
 
 defineProps({
@@ -21,6 +21,7 @@ defineProps({
 defineEmits<{
   (event: 'edit', project: Project): void
   (event: 'delete', project: Project): void
+  (event: 'view', projectId: number): void
 }>()
 
 
@@ -52,6 +53,7 @@ defineEmits<{
         </div>
         <VaDivider class="my-6" />
         <div class="flex justify-between" v-if="userStore.admin">
+          <VaButton preset="secondary" icon="mso-visibility" color="primary" @click="$emit('view', project.id)" />
           <VaButton preset="secondary" icon="mso-edit" color="secondary" @click="$emit('edit', project)" />
           <VaButton preset="secondary" icon="mso-delete" color="danger" @click="$emit('delete', project)" />
         </div>
