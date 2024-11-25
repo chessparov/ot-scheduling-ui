@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref, setDevtoolsHook} from 'vue'
+import {computed, onMounted, onUpdated, ref, setDevtoolsHook} from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { useProjects } from './composables/useProjects'
 import ProjectCards from './widgets/ProjectCards.vue'
@@ -11,10 +11,12 @@ import router from "@/router";
 import {useUserStore} from "@/stores/user-store";
 import axios from "axios";
 import {useScheduleStore} from "@/stores/global-store";
+import {useDataStore} from "@/stores/data-store";
+import {fetchedProjects} from "@/data/pages/projects";
 
 const doShowAsCards = useLocalStorage('projects-view', true)
 
-const { projects, update, add, isLoading, remove, pagination, sorting } = useProjects()
+const { projects, update, add, isLoading, refresh, remove, pagination, sorting, filters } = useProjects()
 
 const projectToEdit = ref<Project | null>(null)
 const doShowProjectFormModal = ref(false)
@@ -85,6 +87,19 @@ const viewSchedule = async(scheduleId: number) => {
         }
       })
 }
+
+onMounted(
+    () => {
+      useDataStore().fetchProjects();
+      refresh();
+    }
+)
+onUpdated(
+    (projects) => {
+      console.log(projects)
+    }
+)
+
 </script>
 
 <template>
@@ -101,7 +116,7 @@ const viewSchedule = async(scheduleId: number) => {
               { label: 'Elenco', value: false },
             ]"
           />
-          <VaInput v-if="!doShowAsCards" v-model="input" placeholder="Cerca...">
+          <VaInput v-if="!doShowAsCards" v-model="filters.search" placeholder="Cerca...">
             <template #prependInner>
               <VaIcon name="manage_search" color="secondary" size="small" />
             </template>
@@ -124,7 +139,7 @@ const viewSchedule = async(scheduleId: number) => {
           v-else
           v-model:sort-by="sorting.sortBy"
           v-model:sorting-order="sorting.sortingOrder"
-          v-model:pagination="pagination"
+          :pagination="pagination"
           :user-store="userStore"
           :projects="projects"
           :loading="isLoading"

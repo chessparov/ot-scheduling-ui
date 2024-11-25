@@ -10,6 +10,7 @@ const routes: Array<RouteRecordRaw> = [
     {
         name:'home',
         path: '/',
+        redirect: {name: 'login'},
         component: AppLayout,
         props: true,
         children: [
@@ -78,6 +79,7 @@ const routes: Array<RouteRecordRaw> = [
     },
     {
         path: '/auth',
+        redirect: {name: 'login'},
         component: AuthLayout,
         children: [
             {
@@ -102,10 +104,10 @@ const routes: Array<RouteRecordRaw> = [
             },
         ]
     },
-    {
-        path: '',
-        redirect: {name: 'login'}
-    }
+    // {
+    //     path: '',
+    //     redirect: {name: 'login'}
+    // }
 
 ]
 
@@ -129,23 +131,31 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const userStore = useUserStore();
-
     if (to.name == 'login' || to.name == 'signup' || to.name == 'recover-password' || to.name == 'recover-password-email') {
         axios
-            .get('http://localhost:8000/api/scheduler/logout');
-        userStore.loggedIn = false;
+            .get('http://localhost:8000/api/scheduler/logout')
+            .then((res) => {
+                userStore.loggedIn = false;
+            })
+            .catch((error) => {
+                throw error;
+            })
     }
     if (to.matched.some(record => record.meta.requiresAuth)) {
-        if (!userStore.loggedIn) {
+        if (!userStore.loggedIn && to.name !== 'login') {
             next({
                 name: 'login',
             })
+            return;
         }
         else {
-            next()
+            next();
+            return;
         }
-    } else {
-        next()
+    }
+    else {
+        next();
+        return;
     }
 })
 

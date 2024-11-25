@@ -11,21 +11,21 @@ import {Project} from "@/pages/history/types";
 import {Store} from "pinia";
 import {Uo} from "@/pages/settings/types";
 
-let name = '';
-let optimization = false;
-let startDate = new Date();
-let errorMsg = "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx";
+const name = ref('');
+const optimization = ref(false);
+const startDate = ref(new Date());
+const errorMsg = "Formato del file non supportato, assicurarsi che si tratti di un file con estensione .xls o .xlsx";
 
-let filesWaitingList = ref<VaFile[]>([]);
-let filesSchedule = ref<VaFile[]>([]);
+const filesWaitingList = ref<VaFile[]>([]);
+const filesSchedule = ref<VaFile[]>([]);
 
 const {init: notify} = useToast();
 const selectedSchedule = ref<Project>();
 const projects = useDataStore().projects as Project[];
 const scheduleSource = ref('archive');
 
-let mcCycles = ref(useGlobalStore().montecarloDefault);
-let tabuTime = 0;
+const mcCycles = ref(useGlobalStore().montecarloDefault);
+const tabuTime = ref(0);
 
 const allowSingleFile = () => {
   if (filesSchedule.value.length > 1) {

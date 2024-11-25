@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import {PropType, computed, toRef, onUpdated} from 'vue'
 import {defineVaDataTableColumns, useModal} from 'vuestic-ui'
-import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
 import {User, UserRole} from "@/pages/settings/types";
 import UserPrivilegesBadge from "@/pages/settings/components/UserPrivilegesBadge.vue";
 import {dateParser} from "../../../services/utils";
+import {Pagination, Sorting} from "@/data/pages/users";
 
 const columns = defineVaDataTableColumns([
-  { label: 'Nome', key: 'name', sortable: true },
-  { label: 'Cognome', key: 'surname', sortable: true },
+  { label: 'Nome', key: 'first_name', sortable: true },
+  { label: 'Cognome', key: 'last_name', sortable: true },
   { label: 'Email', key: 'email', sortable: true },
   { label: 'Privilegi', key: 'privileges', sortable: true },
   { label: 'Data Creazione', key: 'date_joined', sortable: true },
@@ -24,7 +24,7 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   pagination: { type: Object as PropType<Pagination>, required: true },
   sortBy: { type: String as PropType<Sorting['sortBy']>, required: true },
-  sortingOrder: { type: String as PropType<Sorting['sortingOrder']>, required: true },
+  sortingOrder: { type: [String as PropType<Sorting['sortingOrder']>, null], required: true },
 })
 
 const emit = defineEmits<{
@@ -68,17 +68,19 @@ const onUserDelete = async (user: User) => {
 <template>
   <div>
     <VaDataTable
+        v-model:sort-by="sortByVModel"
+        v-model:sorting-order="sortingOrderVModel"
         class="va-table--clickable"
         :items="users"
         :columns="columns"
         :loading="loading"
     >
-      <template #cell(name)="{ rowData }">
+      <template #cell(first_name)="{ rowData }">
         <div class="ellipsis max-w-[230px] lg:max-w-[450px]">
           {{ rowData.first_name }}
         </div>
       </template>
-      <template #cell(surname)="{ rowData }">
+      <template #cell(last_name)="{ rowData }">
         <div class="flex items-center gap-2 ellipsis max-w-[230px]">
           {{ rowData.last_name }}
         </div>

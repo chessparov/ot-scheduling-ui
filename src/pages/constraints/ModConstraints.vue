@@ -3,6 +3,7 @@
 import {useToast, VaButton, VaCard, VaCheckbox, VaSelect} from "vuestic-ui";
 import {watch} from "vue";
 import axios from "axios";
+import {useDataStore} from "@/stores/data-store";
 
 export default {
   components: {VaButton, VaCheckbox, VaSelect},
@@ -11,6 +12,14 @@ export default {
   inheritAttrs: false,
   props: {
     param: String,
+    propItems: {
+      type: Object,
+      default: {},
+    },
+    propOptions: {
+      type: Array,
+      default: ['GLOBALE']
+    }
   },
   data() {
     return {
@@ -57,8 +66,8 @@ export default {
           width: '120px'
         }
       ],
-      items: {},
-      options: [],
+      items: this.propItems,
+      options: this.propOptions,
     }
   },
   methods: {
@@ -129,7 +138,8 @@ export default {
           })
     }
   },
-  mounted() {
+  created() {
+    this.options.push(this.$route.params.constraint);
     this.getUos();
     this.getConstraints();
   },
@@ -185,7 +195,7 @@ export default {
               {{ rowData.day }}
             </div>
           </template>
-          <template #cell(ROBOT_A_MAT)="{ rowData }">
+          <template #cell(ROBOT_A_MAT)="{ rowData }" style="text-align: center">
             <div style="color: green; text-align: center;" @click="changeCell(rowData, 'ROBOT_A_MAT');">
               {{ rowData.ROBOT_A_MAT ? '&#10004' :'&#x274c' }}
             </div>

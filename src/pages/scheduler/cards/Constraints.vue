@@ -1,18 +1,19 @@
 <script lang="ts">
 
+import {useDataStore} from "@/stores/data-store";
+
 export default  {
   data() {
     return {
       collapsed: false,
-      constraint: "",
-      uos: [
-        "Chirurgia generale",
-        "Urologia 1",
-        "Endocrinochirurgia",
-        "Chirurgia toracica"
-      ],
+      constraint: '',
+      uos: [],
     }
   },
+  mounted() {
+    useDataStore().fetchUos();
+    this.uos = useDataStore().uos;
+  }
 }
 </script>
 
@@ -30,9 +31,10 @@ export default  {
             label="Seleziona vincoli"
             placeholder="Scegli un vincolo da modificare..."
             :options="uos"
+            :text-by="option => option.title"
         >
         </VaSelect>
-        <VaButton :to="{name: 'constraints', params: { constraint: constraint }}">
+        <VaButton :to="{name: 'constraints', params: { constraint: constraint.title as string }}">
           Conferma
         </VaButton>
       </div>

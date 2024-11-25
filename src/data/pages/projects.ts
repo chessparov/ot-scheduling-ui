@@ -3,6 +3,8 @@ import {Project} from "../../pages/history/types";
 import {users} from "./users";
 import axios from "axios";
 import {useToast} from "vuestic-ui";
+import {ref} from "vue";
+import {User} from "../../pages/settings/types";
 
 // Simulate API calls
 export type Pagination = {
@@ -16,7 +18,12 @@ export type Sorting = {
   sortingOrder: 'asc' | 'desc' | null
 }
 
-export const fetchedProjects: Project[] = useDataStore().projects
+export type Filters = {
+  search: string
+}
+
+// export const fetchedProjects = ref(useDataStore().projects);
+export const fetchedProjects: Project[] = useDataStore().projects;
 
 const {init: notify} = useToast();
 
@@ -32,53 +39,52 @@ const getSortItem = (obj: any, sortBy: keyof (typeof fetchedProjects)[number]) =
   return obj[sortBy]
 }
 
-export const getProjects = async (options: Sorting & Pagination) => {
+export const getProjects = async (filters: Partial<Filters & Pagination & Sorting>) => {
+  const {  search, sortBy, sortingOrder } = filters
 
-  const projects = fetchedProjects.map((project) => ({
+  let projects: Project[] = fetchedProjects;
+
+  if (search) {
+    projects = projects.filter((project: Project[]) => project.title.toLowerCase().includes(search.toLowerCase()))
+  }
+  projects = projects.map((project: Project[]) => ({
     ...project,
-    author: users.find((user) => user.email === project.author)?.email! as string,
+    author: users.find((user: User[]) => user.email === project.author)?.email! as string,
   }))
 
-  if (options.sortBy && options.sortingOrder) {
+  if (sortBy && sortingOrder) {
     projects.sort((a, b) => {
-      a = getSortItem(a, options.sortBy!)
-      b = getSortItem(b, options.sortBy!)
+      a = getSortItem(a, sortBy!)
+      b = getSortItem(b, sortBy!)
       if (a < b) {
-        return options.sortingOrder === 'asc' ? -1 : 1
+        return sortingOrder === 'asc' ? -1 : 1
       }
       if (a > b) {
-        return options.sortingOrder === 'asc' ? 1 : -1
+        return sortingOrder === 'asc' ? 1 : -1
       }
       return 0
     })
   }
+  const { page = 1, perPage = 10 } = filters || {}
 
-  const normalizedProjects: Project[] = projects.slice((options.page - 1) * options.perPage, options.page * options.perPage)
+  const normalizedProjects: Project[] = projects.slice((page - 1) * perPage, page * perPage)
 
   return {
     data: normalizedProjects,
     pagination: {
-      page: options.page,
-      perPage: options.perPage,
-      total: fetchedProjects.length,
+      page: page,
+      perPage: perPage,
+      total: projects.length,
     },
   }
 }
 
-export const addProject = async (project: Omit<(typeof fetchedProjects)[number], 'id' | 'creation_date'>) => {
+export const addProject = async (project: (typeof fetchedProjects)[number]) => {
 
-  const newProject = {
-    ...project,
-    id: fetchedProjects.length + 1,
-    creation_date: new Date().toLocaleDateString('gb', { day: 'numeric', month: 'short', year: 'numeric' }),
-  }
 
-  fetchedProjects.push(newProject)
+  fetchedProjects.push(project)
 
-  return {
-    ...newProject,
-    author: users.find((user) => user.email === project.author)?.email! as string,
-  }
+  return project
 }
 
 export const updateProject = async (project: (typeof fetchedProjects)[number]) => {

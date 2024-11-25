@@ -3,10 +3,11 @@
 import {defineComponent, PropType} from "vue";
 import {useToast, VaCardContent, VaFile} from "vuestic-ui";
 import axios from "axios";
-import router from "@/router";
 import {useUserStore} from "@/stores/user-store";
 import {useScheduleStore} from "@/stores/global-store";
 import {Project} from "@/pages/history/types";
+import {useDataStore} from "@/stores/data-store";
+import { useProjects } from '../../history/composables/useProjects'
 
 
 export default defineComponent ({
@@ -58,6 +59,8 @@ export default defineComponent ({
 
     requestMsc() {
 
+      let { add } = useProjects();
+
       if (!this.name) {
         return;
       }
@@ -65,6 +68,9 @@ export default defineComponent ({
         return;
       }
       if (this.filesSchedule?.length === 0 && this.selectedSchedule === null) {
+        return;
+      }
+      if (this.filesWaitingList.length !== 1)  {
         return;
       }
 
@@ -81,41 +87,39 @@ export default defineComponent ({
       formData.append('file', this.filesWaitingList[0], 'lista.xlsx');
 
       let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
+      useDataStore().fetchProjects();
 
       if (!this.analyzer) {
+        axios
+            .post('http://localhost:8000/api/scheduler/new-schedule',
+                formData,
+                {
+                  headers: {
+                    'Content-Type': 'multipart/form-data'
+                  }
+                })
+            .then(response => {
+              useScheduleStore().updateSchedule(response.data.schedule_data, this.name);
+              this.currentTime = 0;
+              this.percent = 0;
+              clearInterval(progressBarTimeOut);
 
-        if (this.filesWaitingList.length == 1) {
-          axios
-              .post('http://localhost:8000/api/scheduler/new-schedule',
-                  formData,
-                  {
-                    headers: {
-                      'Content-Type': 'multipart/form-data'
-                    }
-                  })
-              .then(response => {
-                useScheduleStore().updateSchedule(response.data, this.name);
-                this.currentTime = 0;
-                clearInterval(progressBarTimeOut);
-                router.push({name: 'dashboard'});
-              })
-              .catch(error => {
-                if (error.response.status === 400) {
-                  this.toast.init({ message: "File non valido", color: "danger" })
-                }
-                else {
-                  this.toast.init({ message: "Errore lato server", color: "danger" })
-                }
-                clearInterval(progressBarTimeOut);
-                this.currentTime = 0;
-              })
+              let newProject = response.data as Project;
+              add(newProject);
+              this.$router.push({name: 'dashboard', replace: true}).catch(failure => {console.log(failure)});
+            })
+            .catch(error => {
+              if (error.response.status === 400) {
+                this.toast.init({ message: "File non valido", color: "danger" })
+              }
+              else {
+                this.toast.init({ message: "Errore lato server", color: "danger" })
+              }
+              clearInterval(progressBarTimeOut);
+              this.currentTime = 0;
+              this.percent = 0;
+            })
         }
-        else {
-          this.toast.init({ message: "Non è possibile caricare più di un file!", color: "danger" })
-          clearInterval(progressBarTimeOut);
-          this.currentTime = 0;
-        }
-      }
       else {
         if (this.filesSchedule?.length === 0) {
           formData.append('scheduleId', this.selectedSchedule?.id);
@@ -128,10 +132,14 @@ export default defineComponent ({
                     }
                   })
               .then(response => {
-                useScheduleStore().updateSchedule(response.data, this.name);
+                useScheduleStore().updateSchedule(response.data.schedule_data, this.name);
                 this.currentTime = 0;
+                this.percent = 0;
                 clearInterval(progressBarTimeOut);
-                router.push({name: 'dashboard'});
+
+                let newProject = response.data as Project;
+                add(newProject);
+                this.$router.push({name: 'dashboard', replace: true}).catch(failure => {console.log(failure)});
               })
               .catch(error => {
                 if (error.response.status === 400) {
@@ -141,6 +149,7 @@ export default defineComponent ({
                 }
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
+                this.percent = 0;
               })
           }
         else if (this.filesSchedule.length === 1) {
@@ -154,10 +163,14 @@ export default defineComponent ({
                     }
                   })
               .then(response => {
-                useScheduleStore().updateSchedule(response.data, this.name);
+                useScheduleStore().updateSchedule(response.data.schedule_data, this.name);
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
-                router.push({name: 'dashboard'});
+                this.percent = 0;
+
+                let newProject = response.data as Project;
+                add(newProject);
+                this.$router.push({name: 'dashboard', replace: true}).catch(failure => {console.log(failure)});
               })
               .catch(error => {
                 if (error.response.status === 400) {
@@ -167,12 +180,14 @@ export default defineComponent ({
                 }
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
+                this.percent = 0;
               })
         }
         else {
           this.toast.init({message: "Non è possibile caricare più di un file!", color: "danger"})
           clearInterval(progressBarTimeOut);
           this.currentTime = 0;
+          this.percent = 0;
         }
       }
     }

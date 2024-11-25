@@ -25,8 +25,8 @@ const emit = defineEmits<{
   (e: 'mc-cycles', value: number): void
 }>()
 
-const name = defineModel('name')
-const startDate = defineModel('startDate')
+const name: string = defineModel('name')
+const startDate: Date = defineModel('startDate')
 const optimization: boolean = defineModel('optimization')
 const [files, modifiers] = defineModel('files',
     {
@@ -60,13 +60,13 @@ function cyclesNumber(newValue: number) {
     <VaCardContent>
       <section class="flex flex-col gap-4">
         <VaInput
-            v-model="name as string"
+            v-model="name"
             placeholder="Inserisci il nome della schedula"
             label="Nome schedula"
         />
         <VaDateInput
             label="Data inizio schedulazione"
-            v-model="startDate as Date" />
+            v-model="startDate" />
         <div class="flex flex-col gap-2" >
           <BindedSlider
               :slider-label="'Montecarlo'"

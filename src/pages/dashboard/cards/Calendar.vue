@@ -81,9 +81,10 @@ export default {
       </template>
     </VaTabs>
     <VaDataTable
-        class="table-inline"
+        class="table-inline va-table va-table--striped"
         :items="items[currentTab]"
         :columns="columns"
+
     >
       <template
           v-for="item in columns"
@@ -109,8 +110,8 @@ export default {
                 :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
                 @click="item.key == 'day' ? null : doShowInput.value = true"
             >
-            {{ value.toUpperCase() }}
-          </span>
+              {{ value.toUpperCase() }}
+            </span>
           </VaValue>
         </div>
       </template>
@@ -123,16 +124,15 @@ export default {
 .table-inline {
   &__cell {
     position: relative;
-    height: 2.75rem;
+    height: 3rem;
     width: 100%;
     display: flex;
     align-items: center;
+    font-size:0.8rem;
   }
 
   &__item {
     cursor: pointer;
-    font-size:0.8rem;
-    font-weight: bold;
 
     &--hidden {
       z-index: -1;

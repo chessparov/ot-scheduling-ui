@@ -11,6 +11,7 @@ import router from "@/router";
 import {useDataStore} from "@/stores/data-store";
 import {useScheduleStore} from "@/stores/global-store";
 import axios from "axios";
+import PropTypes from "prop-types";
 
 const columns = defineVaDataTableColumns([
   { label: 'Nome', key: 'title', sortable: true },
@@ -31,11 +32,11 @@ const props = defineProps({
     required: true,
   },
   sortBy: {
-    type: Object as PropType<Sorting['sortBy']>,
+    type: String,
     required: true,
   },
   sortingOrder: {
-    type: Object as PropType<Sorting['sortingOrder']>,
+    type: [String, null],
     required: true,
   },
   pagination: {
@@ -52,6 +53,8 @@ const emit = defineEmits<{
   (event: 'edit', project: Project): void
   (event: 'delete', project: Project): void
   (event: 'view', projectId: number): void
+  (event: 'update:sortBy', sortBy: Sorting['sortBy']): void
+  (event: 'update:sortingOrder', sortingOrder: Sorting['sortingOrder']): void
 }>()
 
 const sortByVModel = useVModel(props, 'sortBy', emit)

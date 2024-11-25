@@ -9,7 +9,7 @@
     @update:modelValue="emits('cancel')"
   >
     <h1 class="va-h5 mb-4">Modifica {{ props.field }}</h1>
-    <VaForm ref="form" @submit.prevent="submit">
+    <VaForm ref="form">
       <VaInput
         v-if="props.field === 'Nome'"
         v-model="Name"
@@ -39,7 +39,7 @@
           :style="buttonStyles"
           class="mb-4 md:mb-0"
           type="submit"
-          @click="submit"
+          @click="submitMods"
         >
           Conferma</VaButton
         >
@@ -70,14 +70,11 @@ const Name = ref<string>(store.name);
 const Surname = ref<string>(store.surname);
 const Email = ref<string>(store.email);
 
-const submit = () => {
+const submitMods = () => {
   if (props.field === "Nome") {
     if (!Name.value || Name.value === store.name) {
       return emits("cancel");
     }
-    let formData = new FormData();
-    formData.append("name", Name.value);
-    formData.append("admin", store.admin);
     axios
         .put('http://localhost:8000/api/scheduler/mod-name/' + store.email.toString(),
             {
@@ -97,16 +94,12 @@ const submit = () => {
         })
         .catch((error) => {
             init({message: "Errore lato server", color: "danger"});
-            console.log(error.response.data.message);
         })
 
   } else {
     if (!Surname.value || Surname.value === store.surname) {
       return emits("cancel");
     }
-    let formData = new FormData();
-    formData.append("name", Name.value);
-    formData.append("admin", store.admin);
     axios
         .put('http://localhost:8000/api/scheduler/mod-surname/' + store.email.toString(),
             {
@@ -126,7 +119,6 @@ const submit = () => {
         })
         .catch((error) => {
             init({message: "Errore lato server", color: "danger"});
-            console.log(error.response.data.message);
         })
   }
 };

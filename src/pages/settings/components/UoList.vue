@@ -12,8 +12,8 @@ let defaultUo: Uo = {
   creation_date: new Date,
   fixed_schedule: false,
 }
-let currentUo = ref<Uo>(defaultUo);
-let uoToEdit = '';
+const currentUo = ref<Uo>(defaultUo);
+const uoToEdit = ref('');
 
 const {init: notify} = useToast();
 const dataStore = useDataStore();
@@ -24,7 +24,7 @@ const { confirm } = useModal();
 
 function onAdd() {
   doShowEditUoModal.value = true
-  uoToEdit = ''
+  uoToEdit.value = ''
 }
 
 const addUo = async(newUo: string, fixed: boolean) => {
@@ -52,7 +52,7 @@ const addUo = async(newUo: string, fixed: boolean) => {
 function onModify() {
   if (currentUo.value.title !== 'ù') {
     doShowEditUoModal.value = true
-    uoToEdit = currentUo.value?.title as string
+    uoToEdit.value = currentUo.value?.title as string
   }
 }
 
@@ -187,7 +187,7 @@ const deleteUO = async (uo: Uo) => {
         close-button
         hide-default-actions
     >
-      <h1 class="va-h5">{{ uoToEdit ? 'Modifica unità operativa' : 'Aggiungi unità operativa' }}</h1>
+      <h1 class="va-h5">{{ uoToEdit.value ? 'Modifica unità operativa' : 'Aggiungi unità operativa' }}</h1>
       <div style="padding-top: 1rem">
         <VaInput
             v-if="uoToEdit"
@@ -199,10 +199,10 @@ const deleteUO = async (uo: Uo) => {
             ref="editFormRef"
             :ifEdit="uoToEdit"
             :uo="currentUo"
-            :save-button-label="uoToEdit ? 'Salva' : 'Aggiungi'"
+            :save-button-label="uoToEdit.value !== '' ? 'Salva' : 'Aggiungi'"
             @close="cancel"
             @save="(uoTitle: string, uoFixed: boolean) => {
-                  (uoToEdit != '') ? modifyUo(uoTitle, uoFixed): addUo(uoTitle, uoFixed)
+                  (uoToEdit.value != '') ? modifyUo(uoTitle, uoFixed): addUo(uoTitle, uoFixed)
                   ok()
                 }
               "
