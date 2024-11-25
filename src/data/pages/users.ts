@@ -1,5 +1,4 @@
 import {User} from '../../pages/settings/types'
-import projectsDb from './projects-db.json'
 import {Project} from '../../pages/history/types'
 import {useDataStore} from "../../stores/data-store";
 import axios from "axios";
