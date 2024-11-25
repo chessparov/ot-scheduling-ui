@@ -29,7 +29,7 @@ export default {
                 responseType: 'blob'
               })
           .then((res) => {
-            FileDownload(res.data, 'schedula.xlsx')
+            FileDownload(res.data, `${this.scheduleStore.scheduleName}.xlsx`)
             console.log(res)})
           .catch((error) => {
             if (error.response.status == 404) {

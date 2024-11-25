@@ -50,8 +50,8 @@ let display = props.showToggle ? 'flex' : 'none';
 
 
 function cyclesNumber(newValue: number) {
-  cycles = newValue;
-  emit("mc-cycles", cycles);
+  cycles.value = newValue;
+  emit("mc-cycles", cycles.value);
 }
 </script>
 

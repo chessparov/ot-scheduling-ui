@@ -131,10 +131,18 @@ export default {
             })
           })
           .catch((err) => {
-            this.init.notify({
-              message: `Errore lato server: ${ err.message }`,
-              color: 'warning'
-            })
+            if (err.response.status === 404) {
+              this.init.notify({
+                message: `Operazione annullata. L'unità operativa "${ this.selectedOption }" non è stata trovata`,
+                color: 'warning'
+              })
+            }
+            else {
+              this.init.notify({
+                message: `Errore lato server: ${err.message}`,
+                color: 'warning'
+              })
+            }
           })
     }
   },
