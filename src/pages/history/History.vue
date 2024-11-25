@@ -7,12 +7,11 @@ import ProjectTable from './widgets/ProjectsTable.vue'
 import EditProjectForm from './widgets/EditProjectForm.vue'
 import { Project } from './types'
 import {useModal, useToast} from 'vuestic-ui'
-import router from "@/router";
 import {useUserStore} from "@/stores/user-store";
 import axios from "axios";
 import {useScheduleStore} from "@/stores/global-store";
 import {useDataStore} from "@/stores/data-store";
-import {fetchedProjects} from "@/data/pages/projects";
+import {useRouter} from "vue-router";
 
 const doShowAsCards = useLocalStorage('projects-view', true)
 
@@ -27,6 +26,7 @@ const editProject = (project: Project) => {
 }
 
 const { init: notify } = useToast()
+const router = useRouter();
 
 const onProjectSaved = async (project: Project) => {
   doShowProjectFormModal.value = false
@@ -52,7 +52,6 @@ const onProjectDeleted = async (project: Project) => {
 }
 
 const input = ref('')
-
 const editFormRef = ref()
 const userStore = useUserStore()
 
@@ -92,11 +91,6 @@ onMounted(
     () => {
       useDataStore().fetchProjects();
       refresh();
-    }
-)
-onUpdated(
-    (projects) => {
-      console.log(projects)
     }
 )
 
@@ -146,7 +140,7 @@ onUpdated(
           :input="input"
           @edit="editProject"
           @delete="onProjectDeleted"
-          @view="projectId => {viewSchedule(projectId)}"
+          @view="(projectId: number) => {viewSchedule(projectId)}"
       />
     </VaCardContent>
 

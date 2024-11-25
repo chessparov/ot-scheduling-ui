@@ -96,7 +96,7 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
         </div>
       </template>
 
-      <template #cell(actions)="{ rowData: project }" v-if="userStore.admin">
+      <template #cell(actions)="{ rowData: project }">
         <div class="flex gap-2 justify-end">
           <VaButton
               preset="primary"
@@ -107,6 +107,7 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
               @click="$emit('view', project.id as number)"
           />
           <VaButton
+            v-if="userStore.admin"
             preset="primary"
             size="small"
             color="secondary"
@@ -115,6 +116,7 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
             @click="$emit('edit', project as Project)"
           />
           <VaButton
+            v-if="userStore.admin"
             preset="primary"
             size="small"
             icon="mso-delete"

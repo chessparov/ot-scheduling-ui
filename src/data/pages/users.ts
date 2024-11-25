@@ -12,7 +12,7 @@ export const users = useDataStore().users as User[]
 const { init: notify } = useToast()
 
 const getUserProjects = (userEmail: string) => {
-  return fetchedProjects
+  return fetchedProjects()
     .map((project) => ({
       ...project,
       author: users.find((user) => user.email === project.author)?.email! as string,

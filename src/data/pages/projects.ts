@@ -3,8 +3,7 @@ import {Project} from "../../pages/history/types";
 import {users} from "./users";
 import axios from "axios";
 import {useToast} from "vuestic-ui";
-import {ref} from "vue";
-import {User} from "../../pages/settings/types";
+import {useUserStore} from "../../stores/user-store";
 
 // Simulate API calls
 export type Pagination = {
@@ -14,7 +13,7 @@ export type Pagination = {
 }
 
 export type Sorting = {
-  sortBy: keyof (typeof fetchedProjects)[number] | undefined
+  sortBy: keyof (Project[])[number] | undefined
   sortingOrder: 'asc' | 'desc' | null
 }
 
@@ -23,11 +22,21 @@ export type Filters = {
 }
 
 // export const fetchedProjects = ref(useDataStore().projects);
-export const fetchedProjects: Project[] = useDataStore().projects;
+export const fetchedProjects = (): Project[] => {
+
+  let projects: Project[] = useDataStore().projects;
+  if (useUserStore().admin) {
+    return projects as Project[]
+  }
+  else {
+    projects = projects.filter((project) => project.status === "completed")
+    return projects as Project[]
+  }
+}
 
 const {init: notify} = useToast();
 
-const getSortItem = (obj: any, sortBy: keyof (typeof fetchedProjects)[number]) => {
+const getSortItem = (obj: any, sortBy: keyof (Project[])[number]) => {
   if (sortBy === 'author') {
     return obj.author
   }
@@ -42,14 +51,14 @@ const getSortItem = (obj: any, sortBy: keyof (typeof fetchedProjects)[number]) =
 export const getProjects = async (filters: Partial<Filters & Pagination & Sorting>) => {
   const {  search, sortBy, sortingOrder } = filters
 
-  let projects: Project[] = fetchedProjects;
+  let projects: Project[] = fetchedProjects();
 
   if (search) {
-    projects = projects.filter((project: Project[]) => project.title.toLowerCase().includes(search.toLowerCase()))
+    projects = projects.filter((project) => project.title.toLowerCase().includes(search.toLowerCase()))
   }
-  projects = projects.map((project: Project[]) => ({
+  projects = projects.map((project) => ({
     ...project,
-    author: users.find((user: User[]) => user.email === project.author)?.email! as string,
+    author: users.find((user) => user.email === project.author)?.email! as string,
   }))
 
   if (sortBy && sortingOrder) {
@@ -79,15 +88,15 @@ export const getProjects = async (filters: Partial<Filters & Pagination & Sortin
   }
 }
 
-export const addProject = async (project: (typeof fetchedProjects)[number]) => {
+export const addProject = async (project: (Project[])[number]) => {
 
 
-  fetchedProjects.push(project)
+  fetchedProjects().push(project)
 
   return project
 }
 
-export const updateProject = async (project: (typeof fetchedProjects)[number]) => {
+export const updateProject = async (project: (Project[])[number]) => {
   await axios
       .put('http://localhost:8000/api/scheduler/update-project/' + project.id,
           {title: project.title,
@@ -113,13 +122,13 @@ export const updateProject = async (project: (typeof fetchedProjects)[number]) =
           notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
         }
       })
-  const index = fetchedProjects.findIndex((p) => p.id === project.id)
-  fetchedProjects[index] = project
+  const index = fetchedProjects().findIndex((p) => p.id === project.id)
+  fetchedProjects()[index] = project
 
   return project
 }
 
-export const removeProject = async (project: (typeof fetchedProjects)[number]) => {
+export const removeProject = async (project: (Project[])[number]) => {
   await axios
       .delete('http://localhost:8000/api/scheduler/delete-project/' + project.id)
       .then((res) => {
@@ -137,8 +146,8 @@ export const removeProject = async (project: (typeof fetchedProjects)[number]) =
           notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
         }
       })
-  const index = fetchedProjects.findIndex((p) => p.id === project.id)
-  fetchedProjects.splice(index, 1)
+  const index = fetchedProjects().findIndex((p) => p.id === project.id)
+  fetchedProjects().splice(index, 1)
 
   return project
 }
