@@ -74,7 +74,11 @@ const viewSchedule = async(scheduleId: number) => {
   await axios
       .get('http://localhost:8000/api/scheduler/get-schedule/' + scheduleId.toString())
       .then((res) => {
-        useScheduleStore().updateSchedule(res.data.schedule_data, res.data.title);
+        let scheduleStore = useScheduleStore();
+        scheduleStore.schedule_data =res.data.schedule_data;
+        scheduleStore.scheduleName =res.data.title;
+        scheduleStore.scheduleId =res.data.id;
+        scheduleStore.scheduleStats =res.data.schedule_stats;
         router.push({name: 'dashboard'});
       })
       .catch((err) => {

@@ -1,7 +1,14 @@
 <script setup lang="ts">
 
-import {VaCollapse, VaDataTable} from "vuestic-ui";
-import {onMounted} from "vue";
+import {defineVaDataTableColumns, VaCollapse, VaDataTable} from "vuestic-ui";
+import {onMounted, PropType} from "vue";
+
+const props = defineProps({
+  riepilogo: {
+    type: Object as PropType<Record<string, any>>,
+    required: true
+  }
+})
 
 const optionsInterventi = {
   chart: {
@@ -268,9 +275,6 @@ const healthOptions = {
           fontSize: '17px'
         },
         value: {
-          formatter: function(val) {
-            return parseInt(val) + "%";
-          },
           color: '#111',
           fontSize: '30px',
           show: true,
@@ -312,13 +316,16 @@ const classiInterventi = [{
 const healthRadial = [89];
 
 const riepilogoData = [
-  {Parametri_: 'Corse Montecarlo', valore: 1000, Dettagli: 'Data esecuzione', valore_: new Date().toDateString()},
-  {Parametri_: 'Tempo ottimizzazione [s]', valore: 120, Dettagli: 'Tempo di calcolo [s]', valore_: 125},
-  {Parametri_: 'Ottimizzazione', valore: 'Si', Dettagli: 'Autore', valore_:  'Mimmo'},
-  {Parametri_: 'Alpha', valore: 2, Dettagli:'', valore_: ''},
-  {Parametri_: 'Beta', valore: 5, Dettagli:'', valore_: ''},
-  {Parametri_: 'Gamma', valore: 0, Dettagli:'', valore_: ''},
-  {Parametri_: 'Epsilon', valore: 3, Dettagli:'', valore_: ''},
+  {Parametri_: 'Corse Montecarlo', valore: props.riepilogo.mcCycles,
+    Dettagli: 'Data esecuzione', valore_:props.riepilogo.creationDate},
+  {Parametri_: 'Ottimizzazione', valore: props.riepilogo.optimization ? 'Sì' : 'No',
+    Dettagli: 'Tempo di calcolo [s]', valore_: props.riepilogo.compTime},
+  {Parametri_: 'Tempo ottimizzazione [s]', valore: props.riepilogo.tabuTime,
+    Dettagli: 'Autore', valore_:  props.riepilogo.author},
+  {Parametri_: 'Alpha', valore: props.riepilogo.alpha, Dettagli:'', valore_: ''},
+  {Parametri_: 'Beta', valore: props.riepilogo.beta, Dettagli:'', valore_: ''},
+  {Parametri_: 'Gamma', valore: props.riepilogo.gamma, Dettagli:'', valore_: ''},
+  {Parametri_: 'Epsilon', valore: props.riepilogo.epsilon, Dettagli:'', valore_: ''},
 ]
 
 function addGradientStops() {
@@ -379,6 +386,13 @@ function addGradientStops() {
       )
   }
 }
+
+const columns =  defineVaDataTableColumns([
+  { label: 'Parametri', key: 'Parametri_', sortable: true },
+  { label: 'Valore', key: 'valore', sortable: true },
+  { label: 'Dettagli', key: 'Dettagli', sortable: true },
+  { label: 'Valore', key: 'valore_', sortable: true },
+])
 onMounted(() => {addGradientStops()});
 
 let firstCollapse = true;
@@ -391,10 +405,12 @@ let firstCollapse = true;
       <div class="flex flex-col md:flex-row gap-4">
           <VaDataTable
               style="--va-data-table-thead-font-size: 0.5rem; --va-data-table-height: 100%; font-size: 0.8rem"
+              :columns="columns"
               :items="riepilogoData"
               class="w-1 md:w-2/3"
           />
           <apexchart
+              hidden=""
               style="min-width: 300px; margin: auto"
               height="300px"
               class="w-1 md:w-1/3 hidden md:hidden"

@@ -6,6 +6,8 @@ import DashboardMenu from "@/pages/dashboard/cards/DashboardMenu.vue";
 import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
 import {useScheduleStore} from "@/stores/global-store";
+import axios from "axios";
+import {ref} from "vue";
 
 export default {
   components: {VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
@@ -16,9 +18,29 @@ export default {
       menuTabs: ['SCHEDULA', 'STATISTICHE'],
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
+      scheduleStore: useScheduleStore(),
       scheduleTitle: useScheduleStore().scheduleName,
+      scheduleStats: useScheduleStore().scheduleStats,
     }
   },
+  mounted() {
+  }
+    // console.log(useScheduleStore().scheduleStats);
+    // axios
+    //   .get('http://localhost:8000/api/scheduler/get-stats/' + this.scheduleStore.scheduleId.toString())
+    //   .then(res => {
+    //     console.log(res)
+        // this.riepilogo = [
+        //   {Parametri_: 'Corse Montecarlo', valore: 1000, Dettagli: 'Data esecuzione', valore_: new Date().toDateString()},
+        //   {Parametri_: 'Tempo ottimizzazione [s]', valore: 120, Dettagli: 'Tempo di calcolo [s]', valore_: 125},
+        //   {Parametri_: 'Ottimizzazione', valore: 'Si', Dettagli: 'Autore', valore_:  'Mimmo'},
+        //   {Parametri_: 'Alpha', valore: 2, Dettagli:'', valore_: ''},
+        //   {Parametri_: 'Beta', valore: 5, Dettagli:'', valore_: ''},
+        //   {Parametri_: 'Gamma', valore: 0, Dettagli:'', valore_: ''},
+        //   {Parametri_: 'Epsilon', valore: 3, Dettagli:'', valore_: ''},
+        // ]
+      // })
+  // }
 }
 </script>
 
@@ -43,7 +65,7 @@ export default {
         <SaveDownload :modified-schedule="this.modifiedSchedule"/>
       </section>
       <section v-else class="flex flex-col gap-4">
-        <StatsReport/>
+        <StatsReport :riepilogo="this.scheduleStats"/>
       </section>
     </div>
   </VaCard>

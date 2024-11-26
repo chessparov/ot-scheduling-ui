@@ -7,6 +7,7 @@ export type Project = {
   status: 'completed' | 'archived' | 'in progress'
   creation_date: string
   schedule_data: JSON
+  schedule_stats: JSON
 }
 
 export type EmptyProject = Omit<Project, 'id' | 'author' | 'creation_date' | 'status'> & {

@@ -77,6 +77,18 @@ export default defineComponent ({
       this.compTime = this.estimatedTime;
 
       let formData = new FormData();
+      let scheduleStats = JSON.stringify({
+        'mcCycles': this.mcCycles,
+        'tabuTime': this.tabuTime,
+        'optimization': this.optimization,
+        'alpha': 0,
+        'beta': 0,
+        'gamma': 0,
+        'epsilon': 0,
+        'creationDate': new Date(),
+        'computationTime': 0,
+        'author': useUserStore().email
+      });
 
       formData.append('title', this.name);
       formData.append('author', useUserStore().email);
@@ -85,6 +97,7 @@ export default defineComponent ({
       formData.append('mcCycles', this.mcCycles);
       formData.append('tabuTime', this.tabuTime);
       formData.append('file', this.filesWaitingList[0], 'lista.xlsx');
+      formData.append('schedule_stats', scheduleStats)
 
       let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
       useDataStore().fetchProjects();

@@ -68,6 +68,7 @@ export const useScheduleStore = defineStore('scheduleStore', {
       scheduleName: '',
       scheduleId: Number,
       scheduleData: JSON,
+      scheduleStats: JSON
     }
   },
   actions: {
@@ -77,11 +78,12 @@ export const useScheduleStore = defineStore('scheduleStore', {
     },
     async fetchData() {
       await axios
-          .get('http://localhost:8000/api/scheduler/new-schedule', )
+          .get('http://localhost:8000/api/scheduler/new-schedule')
           .then((res) => {
             this.scheduleId = res.data.id;
             this.scheduleName = res.data.title;
             this.scheduleData = res.data.schedule_data;
+            this.scheduleStats = res.data.schedule_stats;
           })
           .catch((error) => {
             if (error.response.status === 404) {
