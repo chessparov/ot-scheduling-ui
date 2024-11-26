@@ -2,6 +2,7 @@
 
 import {defineVaDataTableColumns, VaCollapse, VaDataTable} from "vuestic-ui";
 import {PropType} from "vue";
+import {dateParser} from "@/services/utils";
 
 const props = defineProps({
   riepilogo: {
@@ -236,9 +237,9 @@ const classiInterventi = [{
 
 const riepilogoData = [
   {Parametri_: 'Corse Montecarlo', valore: props.riepilogo.mcCycles,
-    Dettagli: 'Data esecuzione', valore_:props.riepilogo.creationDate},
+    Dettagli: 'Data esecuzione', valore_: dateParser(props.riepilogo.creationDate)},
   {Parametri_: 'Ottimizzazione', valore: props.riepilogo.optimization ? 'Sì' : 'No',
-    Dettagli: 'Tempo di calcolo [s]', valore_: props.riepilogo.compTime},
+    Dettagli: 'Tempo di calcolo [s]', valore_: props.riepilogo.computationTime},
   {Parametri_: 'Tempo ottimizzazione [s]', valore: props.riepilogo.tabuTime,
     Dettagli: 'Autore', valore_:  props.riepilogo.author},
   {Parametri_: 'Alpha', valore: props.riepilogo.alpha, Dettagli:'', valore_: ''},
