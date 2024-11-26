@@ -102,6 +102,7 @@ export default defineComponent ({
       let progressBarTimeOut = setInterval(this.setProgressBar, 1000);
       useDataStore().fetchProjects();
 
+      const scheduleStore = useScheduleStore();
       if (!this.analyzer) {
         axios
             .post('http://localhost:8000/api/scheduler/new-schedule',
@@ -112,7 +113,10 @@ export default defineComponent ({
                   }
                 })
             .then(response => {
-              useScheduleStore().updateSchedule(response.data.schedule_data, this.name);
+              scheduleStore.scheduleId = response.data.id;
+              scheduleStore.scheduleName = response.data.title;
+              scheduleStore.scheduleData = response.data.schedule_data;
+              scheduleStore.scheduleStats = response.data.schedule_stats;
               this.currentTime = 0;
               this.percent = 0;
               clearInterval(progressBarTimeOut);
@@ -145,7 +149,10 @@ export default defineComponent ({
                     }
                   })
               .then(response => {
-                useScheduleStore().updateSchedule(response.data.schedule_data, this.name);
+                scheduleStore.scheduleId = response.data.id;
+                scheduleStore.scheduleName = response.data.title;
+                scheduleStore.scheduleData = response.data.schedule_data;
+                scheduleStore.scheduleStats = response.data.schedule_stats;
                 this.currentTime = 0;
                 this.percent = 0;
                 clearInterval(progressBarTimeOut);
@@ -176,7 +183,10 @@ export default defineComponent ({
                     }
                   })
               .then(response => {
-                useScheduleStore().updateSchedule(response.data.schedule_data, this.name);
+                scheduleStore.scheduleId = response.data.id;
+                scheduleStore.scheduleName = response.data.title;
+                scheduleStore.scheduleData = response.data.schedule_data;
+                scheduleStore.scheduleStats = response.data.schedule_tats;
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
                 this.percent = 0;
