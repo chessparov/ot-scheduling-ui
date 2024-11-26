@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {defineVaDataTableColumns, VaCollapse, VaDataTable} from "vuestic-ui";
-import {onMounted, PropType} from "vue";
+import {PropType} from "vue";
 
 const props = defineProps({
   riepilogo: {
@@ -202,87 +202,7 @@ const optionsClsseInterventi = {
     },
   }
 }
-const healthOptions = {
-  chart: {
-    id: 'scheduleHealth',
 
-  },
-  title: {
-    text: 'SALUTE SCHEDULA'
-  },
-  stroke: {
-    lineCap: 'round'
-  },
-  labels: ['Health'],
-  fill: {
-    type: 'gradient',
-    gradient: {
-      shade: 'dark',
-      type: 'vertical',
-      shadeIntensity: 0.5,
-      gradientToColors: undefined,
-      inverseColors: false,
-      opacityFrom: 0.95,
-      opacityTo: 1,
-      stops: [0, 100],
-      colorStops: []
-    }
-  },
-  grid: {
-    show: false,
-    padding: {
-      left: 0, right: 0, top: 50, bottom: 0
-    }
-  },
-  plotOptions: {
-    radialBar: {
-      startAngle: 0,
-      endAngle: 270,
-      hollow: {
-        margin: 0,
-        size: '60%',
-        background: '#fff',
-        image: undefined,
-        imageOffsetX: 0,
-        imageOffsetY: 0,
-        position: 'front',
-        dropShadow: {
-          enabled: true,
-          top: 3,
-          left: 0,
-          blur: 4,
-          opacity: 0.24
-        }
-      },
-      track: {
-        background: '#fff',
-        strokeWidth: '10%',
-        margin: 15, // margin is in pixels
-        dropShadow: {
-          enabled: true,
-          top: -3,
-          left: 0,
-          blur: 4,
-          opacity: 0.35
-        }
-      },
-      dataLabels: {
-        show: true,
-        name: {
-          offsetY: -10,
-          show: true,
-          color: '#888',
-          fontSize: '17px'
-        },
-        value: {
-          color: '#111',
-          fontSize: '30px',
-          show: true,
-        }
-      }
-    },
-  },
-}
 const interventi = [{
   name: 'N° Interventi effettuati',
   data: [130, 130, 128, 134, 127, 136, 131, 129, 134, 133]
@@ -313,7 +233,6 @@ const classiInterventi = [{
     data: [2, 1, 8, 0, 4, 7, 2, 11, 1, 5]
   }
 ]
-const healthRadial = [89];
 
 const riepilogoData = [
   {Parametri_: 'Corse Montecarlo', valore: props.riepilogo.mcCycles,
@@ -328,72 +247,12 @@ const riepilogoData = [
   {Parametri_: 'Epsilon', valore: props.riepilogo.epsilon, Dettagli:'', valore_: ''},
 ]
 
-function addGradientStops() {
-  if (healthRadial[0] >= 75) {
-    healthOptions.fill.gradient.colorStops.push(
-    {
-      offset: 0,
-          color: "#ff0000",
-        opacity: 1
-    },
-    {
-      offset: 30,
-          color: "#f4e208",
-        opacity: 1
-    },
-    {
-      offset: 50,
-          color: "#15ed15",
-        opacity: 1
-    })
-  }
-  else if (healthRadial[0] < 75 && healthRadial[0] > 50) {
-    healthOptions.fill.gradient.colorStops.push(
-        {
-          offset: 0,
-          color: "#ea2121",
-          opacity: 1
-        },
-        {
-          offset: 50,
-          color: "#f46208",
-          opacity: 1
-        },
-        {
-          offset: 100,
-          color: "#f4e208",
-          opacity: 1
-        }
-      )
-  }
-  else {
-    healthOptions.fill.gradient.colorStops.push(
-        {
-          offset: 0,
-          color: "#ff0000",
-          opacity: 1
-        },
-        {
-          offset: 50,
-          color: "#ed3030",
-          opacity: 1
-        },
-        {
-          offset: 100,
-          color: "rgb(237,81,81)",
-          opacity: 1
-        }
-      )
-  }
-}
-
 const columns =  defineVaDataTableColumns([
   { label: 'Parametri', key: 'Parametri_', sortable: true },
   { label: 'Valore', key: 'valore', sortable: true },
   { label: 'Dettagli', key: 'Dettagli', sortable: true },
   { label: 'Valore', key: 'valore_', sortable: true },
 ])
-onMounted(() => {addGradientStops()});
 
 let firstCollapse = true;
 </script>
@@ -409,17 +268,6 @@ let firstCollapse = true;
               :items="riepilogoData"
               class="w-1 md:w-2/3"
           />
-          <apexchart
-              hidden=""
-              style="min-width: 300px; margin: auto"
-              height="300px"
-              class="w-1 md:w-1/3 hidden md:hidden"
-              type="radialBar"
-              :series="healthRadial"
-              :options="healthOptions"
-          >
-
-          </apexchart>
       </div>
     </VaCollapse>
     <VaCollapse header="Statistiche Montecarlo">
