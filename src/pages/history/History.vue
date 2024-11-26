@@ -75,10 +75,10 @@ const viewSchedule = async(scheduleId: number) => {
       .get('http://localhost:8000/api/scheduler/get-schedule/' + scheduleId.toString())
       .then((res) => {
         let scheduleStore = useScheduleStore();
-        scheduleStore.schedule_data =res.data.schedule_data;
-        scheduleStore.scheduleName =res.data.title;
-        scheduleStore.scheduleId =res.data.id;
-        scheduleStore.scheduleStats =res.data.schedule_stats;
+        scheduleStore.scheduleData = res.data.schedule_data;
+        scheduleStore.scheduleName = res.data.title;
+        scheduleStore.scheduleId = res.data.id;
+        scheduleStore.scheduleStats = res.data.schedule_stats;
         router.push({name: 'dashboard'});
       })
       .catch((err) => {

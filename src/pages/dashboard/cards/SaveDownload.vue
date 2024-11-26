@@ -56,6 +56,7 @@ export default {
                 }
               })
           .then((res) => {
+
             this.init.notify({
               message: 'Schedula modificata con successo',
               color: 'success'

@@ -23,24 +23,6 @@ export default {
       scheduleStats: useScheduleStore().scheduleStats,
     }
   },
-  mounted() {
-  }
-    // console.log(useScheduleStore().scheduleStats);
-    // axios
-    //   .get('http://localhost:8000/api/scheduler/get-stats/' + this.scheduleStore.scheduleId.toString())
-    //   .then(res => {
-    //     console.log(res)
-        // this.riepilogo = [
-        //   {Parametri_: 'Corse Montecarlo', valore: 1000, Dettagli: 'Data esecuzione', valore_: new Date().toDateString()},
-        //   {Parametri_: 'Tempo ottimizzazione [s]', valore: 120, Dettagli: 'Tempo di calcolo [s]', valore_: 125},
-        //   {Parametri_: 'Ottimizzazione', valore: 'Si', Dettagli: 'Autore', valore_:  'Mimmo'},
-        //   {Parametri_: 'Alpha', valore: 2, Dettagli:'', valore_: ''},
-        //   {Parametri_: 'Beta', valore: 5, Dettagli:'', valore_: ''},
-        //   {Parametri_: 'Gamma', valore: 0, Dettagli:'', valore_: ''},
-        //   {Parametri_: 'Epsilon', valore: 3, Dettagli:'', valore_: ''},
-        // ]
-      // })
-  // }
 }
 </script>
 
