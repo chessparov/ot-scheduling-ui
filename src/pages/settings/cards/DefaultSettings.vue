@@ -10,24 +10,27 @@ const globalStore = useGlobalStore();
 const formData = reactive({
   mc_cycles: ref(globalStore.montecarloDefault as number),
   tabu_time: ref(globalStore.tabuTimeDefault as number),
-  n_rooms: ref(globalStore.roomsNumberDefault as number),
-  n_weeks: ref(globalStore.weeksNumberDefault as number),
+  // n_rooms: ref(globalStore.roomsNumberDefault as number),
+  // n_weeks: ref(globalStore.weeksNumberDefault as number),
   n_days: ref(globalStore.daysNumberDefault as number),
   slot_duration: ref(globalStore.slotDurationDefault as number),
+  turnover_time: ref(globalStore.turnoverTime as number),
 })
 const numericInput1 = ref();
 const numericInput2 = ref();
-const numericInput3 = ref();
-const numericInput4 = ref();
+// const numericInput3 = ref();
+// const numericInput4 = ref();
 const numericInput5 = ref();
 const numericInput6 = ref();
+const numericInput7 = ref();
 
 useInputMask(createNumeralMask(), numericInput1);
 useInputMask(createNumeralMask(), numericInput2);
-useInputMask(createNumeralMask(), numericInput3);
-useInputMask(createNumeralMask(), numericInput4);
+// useInputMask(createNumeralMask(), numericInput3);
+// useInputMask(createNumeralMask(), numericInput4);
 useInputMask(createNumeralMask(), numericInput5);
 useInputMask(createNumeralMask(), numericInput6);
+useInputMask(createNumeralMask(), numericInput7);
 
 const modParams = () => {
   axios
@@ -42,10 +45,11 @@ const modParams = () => {
         globalStore.updateGlobal(
             Number(formData.mc_cycles.toString().replace(' ', '')),
             Number(formData.tabu_time.toString().replace(' ', '')),
-            Number(formData.n_weeks.toString().replace(' ', '')),
+            // Number(formData.n_weeks.toString().replace(' ', '')),
             Number(formData.n_days.toString().replace(' ', '')),
-            Number(formData.n_rooms.toString().replace(' ', '')),
+            // Number(formData.n_rooms.toString().replace(' ', '')),
             Number(formData.slot_duration.toString().replace(' ', '')),
+            Number(formData.turnover_time.toString().replace(' ', '')),
         )
         init({message: 'Modifiche salvate con successo', color: 'success'})
 
@@ -80,16 +84,16 @@ const modParams = () => {
           </template>
         </VaInput>
       </div>
-      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
-        <span class="text-regularMedium">
-          Numero di settimane
-        </span>
-        <VaInput class="md:w-[50%]" v-model="formData.n_weeks" ref="numericInput3" size="small">
-          <template #appendInner>
-            <span>N°</span>
-          </template>
-        </VaInput>
-      </div>
+<!--      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">-->
+<!--        <span class="text-regularMedium">-->
+<!--          Numero di settimane-->
+<!--        </span>-->
+<!--        <VaInput class="md:w-[50%]" v-model="formData.n_weeks" ref="numericInput3" size="small">-->
+<!--          <template #appendInner>-->
+<!--            <span>N°</span>-->
+<!--          </template>-->
+<!--        </VaInput>-->
+<!--      </div>-->
       <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
         <span class="text-regularMedium">
           Numero di giorni
@@ -100,13 +104,23 @@ const modParams = () => {
           </template>
         </VaInput>
       </div>
+<!--      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">-->
+<!--        <span class="text-regularMedium">-->
+<!--          Numero di sale-->
+<!--        </span>-->
+<!--        <VaInput class="md:w-[50%]" v-model="formData.n_rooms" ref="numericInput5" size="small">-->
+<!--          <template #appendInner>-->
+<!--            <span>N°</span>-->
+<!--          </template>-->
+<!--        </VaInput>-->
+<!--      </div>-->
       <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
         <span class="text-regularMedium">
-          Numero di sale
+          Tempo di turnover
         </span>
-        <VaInput class="md:w-[50%]" v-model="formData.n_rooms" ref="numericInput5" size="small">
+        <VaInput class="md:w-[50%]" v-model="formData.turnover_time" ref="numericInput4" size="small">
           <template #appendInner>
-            <span>N°</span>
+            <span>Minuti</span>
           </template>
         </VaInput>
       </div>
@@ -120,6 +134,7 @@ const modParams = () => {
           </template>
         </VaInput>
       </div>
+
       <VaButton class="button-left md:button-right" @click="modParams">
         Conferma modifiche
       </VaButton>
