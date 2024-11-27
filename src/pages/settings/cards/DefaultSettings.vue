@@ -10,6 +10,8 @@ const globalStore = useGlobalStore();
 const formData = reactive({
   mc_cycles: ref(globalStore.montecarloDefault as number),
   tabu_time: ref(globalStore.tabuTimeDefault as number),
+  n_rooms: ref(4),
+  n_weeks: ref(4),
   // n_rooms: ref(globalStore.roomsNumberDefault as number),
   // n_weeks: ref(globalStore.weeksNumberDefault as number),
   n_days: ref(globalStore.daysNumberDefault as number),
@@ -45,9 +47,9 @@ const modParams = () => {
         globalStore.updateGlobal(
             Number(formData.mc_cycles.toString().replace(' ', '')),
             Number(formData.tabu_time.toString().replace(' ', '')),
-            // Number(formData.n_weeks.toString().replace(' ', '')),
+            Number(formData.n_weeks.toString().replace(' ', '')),
             Number(formData.n_days.toString().replace(' ', '')),
-            // Number(formData.n_rooms.toString().replace(' ', '')),
+            Number(formData.n_rooms.toString().replace(' ', '')),
             Number(formData.slot_duration.toString().replace(' ', '')),
             Number(formData.turnover_time.toString().replace(' ', '')),
         )

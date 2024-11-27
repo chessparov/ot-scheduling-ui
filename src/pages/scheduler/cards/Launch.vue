@@ -16,8 +16,14 @@ export default defineComponent ({
     name: String,
     startDate: Date,
     optimization: Boolean,
-    mcCycles: Number,
-    tabuTime: Number,
+    mcCycles: {
+      type: Number,
+      required: true
+    },
+    tabuTime: {
+      type: Number,
+      required: true,
+    },
     filesWaitingList: Array,
     filesSchedule: Array,
     analyzer: Boolean,
