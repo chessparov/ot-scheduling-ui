@@ -20,7 +20,6 @@ export const useDataStore = defineStore('data', {
                     this.users = res.data;
                 })
                 .catch((error) => {
-                    console.log(error);
                 })
         },
         async fetchProjects() {
@@ -30,7 +29,6 @@ export const useDataStore = defineStore('data', {
                     this.projects = res.data;
                 })
                 .catch((error) => {
-                    console.log(error);
                 })
         },
         async fetchUos() {
@@ -40,7 +38,6 @@ export const useDataStore = defineStore('data', {
                     this.uos = res.data;
                 })
                 .catch((error) => {
-                    console.log(error);
                 })
         }
     }

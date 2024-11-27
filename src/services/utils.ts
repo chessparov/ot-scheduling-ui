@@ -34,3 +34,13 @@ export const dateParser = (dateFromPython: string) => {
     return '';
   }
 }
+
+export const timeParser = (time: number) => {
+  const hours = Math.floor(time / (60 * 60)).toString();
+  const minutes = Math.floor((time % (60 * 60)) / 60).toString();
+  const seconds = Math.floor((time % (60 * 60)) % 60).toString();
+  return Number(hours) >= 1
+      ? hours + ' ore ' + minutes + ' min ' + seconds + ' secondi'
+      : Number(minutes) >= 1 ? minutes + ' min ' + seconds + ' secondi'
+          : seconds + ' secondi';
+}

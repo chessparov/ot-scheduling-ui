@@ -30,7 +30,7 @@ export default {
               })
           .then((res) => {
             FileDownload(res.data, `${this.scheduleStore.scheduleName}.xlsx`)
-            console.log(res)})
+          })
           .catch((error) => {
             if (error.response.status == 404) {
               this.init.notify({
