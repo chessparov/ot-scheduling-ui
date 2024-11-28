@@ -89,6 +89,7 @@ export default {
                 message: 'L\'unità operativa non è stata trovata nel database',
                 color: 'warning'
               })
+              this.items = {};
             }
             else {
               this.init.notify({

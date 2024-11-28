@@ -24,7 +24,11 @@ export default defineComponent ({
       type: Number,
       required: true,
     },
-    filesWaitingList: Array,
+    filesWaitingList:
+        {
+          type: Array,
+          required: true,
+        },
     filesSchedule: Array,
     analyzer: Boolean,
     selectedSchedule: {
@@ -68,15 +72,15 @@ export default defineComponent ({
       let { add } = useProjects();
 
       if (!this.name) {
-        return;
-      }
-      if (!this.filesWaitingList) {
+        this.toast.init({ message: "Inserire un nome valido!", color: "warning" });
         return;
       }
       if (this.filesSchedule?.length === 0 && this.selectedSchedule === null) {
+        this.toast.init({ message: "Caricare una schedula o sceglierne una dall'archivio!", color: "warning" })
         return;
       }
       if (this.filesWaitingList.length !== 1)  {
+        this.toast.init({ message: "Caricare una lista d'attesa!", color: "warning" })
         return;
       }
 
