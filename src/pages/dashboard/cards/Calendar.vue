@@ -26,39 +26,59 @@ export default {
         },
         {
           key: 'ROBOT_A_MAT',
-          width: '120px'
+          // width: '120px'
         },
         {
           key: 'ROBOT_A_POM',
-          width: '120px'
+          // width: '120px'
         },
         {
           key: 'ROBOT_B_MAT',
-          width: '120px'
+          // width: '120px'
         },
         {
           key: 'ROBOT_B_POM',
-          width: '120px'
+          // width: '120px'
         },
         {
           key: 'ROBOT_C_MAT',
-          width: '120px'
+          // width: '120px'
         },
         {
           key: 'ROBOT_C_POM',
-          width: '120px'
+          // width: '120px'
         },
         {
           key: 'ROBOT_D_MAT',
-          width: '120px'
+          // width: '120px'
         },
         {
           key: 'ROBOT_D_POM',
-          width: '120px'
+          // width: '120px'
         }
       ],
     }
   },
+  methods: {
+    getStyle(itemKey: string) {
+      console.log(itemKey)
+      const robot = itemKey.split('_')[1]
+
+      if (robot == 'A') {
+        return {'background-color': 'red'}
+      }
+      else if (robot == 'B') {
+        return {color: 'red'}
+      }
+      else if (robot == 'C') {
+        return {color: 'red'}
+      }
+      else if (robot == 'D') {
+        return {color: 'red'}
+      }
+
+    }
+  }
 }
 </script>
 
@@ -80,46 +100,80 @@ export default {
         </VaTab>
       </template>
     </VaTabs>
-    <VaDataTable
-        class="table-inline va-table va-table--striped"
-        :items="items[currentTab]"
-        :columns="columns"
-
-    >
-      <template
-          v-for="item in columns"
-          :key="item.key"
-          #[`cell(${item.key})`]="{ value, row }"
-      >
-        <div class="table-inline__cell" style="overflow: hidden;">
-          <VaValue v-slot="doShowInput">
-            <VaInput
-                ref="inputBox"
-                v-if="doShowInput.value"
-                :model-value="value.toUpperCase()"
-                @change="($event) => {
-                    row.rowData[item.key] = $event.target.value;
-                    doShowInput.value = false;
-                    this.modifiedSchedule = true;
-                    $emit('modifiedSchedule', row);
-                  }"
-                @blur="doShowInput.value = false"
-            />
-            <span
-                class="table-inline__item"
-                :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-                @click="item.key == 'day' ? null : doShowInput.value = true"
-            >
-              {{ value.toUpperCase() }}
-            </span>
-          </VaValue>
-        </div>
-      </template>
-    </VaDataTable>
+<!--    <VaDataTable-->
+<!--        class="table-inline va-table va-table&#45;&#45;striped"-->
+<!--        :items="items[currentTab]"-->
+<!--        :columns="columns"-->
+<!---->
+<!--    >-->
+<!--      <template-->
+<!--          v-for="item in columns"-->
+<!--          :key="item.key"-->
+<!--          #[`cell(${item.key})`]="{ value, row }"-->
+<!--      >-->
+<!--        <div class="table-inline__cell" v-bind:style="getStyle(item.key)" style="overflow: hidden;">-->
+<!--          <VaValue v-slot="doShowInput">-->
+<!--            <VaInput-->
+<!--                ref="inputBox"-->
+<!--                v-if="doShowInput.value"-->
+<!--                :model-value="value.toUpperCase()"-->
+<!--                @change="($event) => {-->
+<!--                    row.rowData[item.key] = $event.target.value;-->
+<!--                    doShowInput.value = false;-->
+<!--                    this.modifiedSchedule = true;-->
+<!--                    $emit('modifiedSchedule', row);-->
+<!--                  }"-->
+<!--                @blur="doShowInput.value = false"-->
+<!--            />-->
+<!--            <span-->
+<!--                class="table-inline__item"-->
+<!--                :class="doShowInput.value ? 'table-inline__item&#45;&#45;hidden' : ''"-->
+<!--                @click="item.key == 'day' ? null : doShowInput.value = true"-->
+<!--            >-->
+<!--              {{ value.toUpperCase() }}-->
+<!--            </span>-->
+<!--          </VaValue>-->
+<!--        </div>-->
+<!--      </template>-->
+<!--    </VaDataTable>-->
+    <div class="va-table-responsive">
+      <table class="va-table va-table--clickable">
+        <thead>
+          <tr>
+            <th v-for="item in columns">{{ item.key }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+              v-for="rowData in items[currentTab]"
+              :key="rowData.day"
+              style="font-size: 0.75rem;"
+          >
+            <td>{{ rowData.day }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(226,54,54,0.27)">{{ rowData.ROBOT_A_MAT }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(226,54,54,0.27)">{{ rowData.ROBOT_A_POM }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(84,221,86,0.54)">{{ rowData.ROBOT_B_MAT }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(84,221,86,0.54)">{{ rowData.ROBOT_B_POM }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(87,220,184,0.63)">{{ rowData.ROBOT_C_MAT }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(87,220,184,0.63)">{{ rowData.ROBOT_C_POM }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(205,46,230,0.54)">{{ rowData.ROBOT_D_MAT }}</td>
+            <td style="outline: black 1px; width: 200px; height: 7rem; background-color: rgba(205,46,230,0.54)">{{ rowData.ROBOT_D_POM }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
 <style scoped lang="scss">
+
+.va-table-responsive {
+  //overflow: auto;
+}
+
+.va-table {
+
+}
 
 .table-inline {
   &__cell {
