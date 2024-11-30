@@ -1,5 +1,5 @@
-<script  setup="ts">
-import {defineComponent, onUpdated, ref} from 'vue'
+<script setup="ts">
+import {onUpdated, ref} from 'vue'
 import {createRegexMask, useInputMask} from "vuestic-ui";
 
 // export default defineComponent({

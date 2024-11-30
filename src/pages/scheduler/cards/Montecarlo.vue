@@ -25,9 +25,9 @@ const emit = defineEmits<{
   (e: 'mc-cycles', value: number): void
 }>()
 
-const name: string = defineModel('name')
-const startDate: Date = defineModel('startDate')
-const optimization: boolean = defineModel('optimization')
+const name = defineModel('name')
+const startDate = defineModel('startDate')
+const optimization = defineModel('optimization')
 const [files, modifiers] = defineModel('files',
     {
   set(value: VaFile[]) {
