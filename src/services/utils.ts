@@ -28,7 +28,7 @@ export const dateParser = (dateFromPython: string) => {
       'Dicembre',
     ]
     let preParsedDate = dateFromPython.toString().split('T')[0].split('-').reverse()
-    return preParsedDate[0] + ' ' + monthDictionary[Number(preParsedDate[1])] + ' ' + preParsedDate[2]
+    return preParsedDate[0] + ' ' + monthDictionary[Number(preParsedDate[1]) - 1] + ' ' + preParsedDate[2]
   }
   catch (error) {
     return '';
