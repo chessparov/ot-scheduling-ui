@@ -13,7 +13,7 @@ let defaultUo: Uo = {
   fixed_schedule: false,
 }
 const currentUo = ref<Uo>(defaultUo);
-const uoToEdit = ref('');
+const uoToEdit = ref<string>('');
 
 const {init: notify} = useToast();
 const dataStore = useDataStore();
@@ -23,8 +23,8 @@ const editFormRef = ref();
 const { confirm } = useModal();
 
 function onAdd() {
-  doShowEditUoModal.value = true
-  uoToEdit.value = ''
+  uoToEdit.value = '';
+  doShowEditUoModal.value = true;
 }
 
 const addUo = async(newUo: string, fixed: boolean) => {
@@ -42,7 +42,7 @@ const addUo = async(newUo: string, fixed: boolean) => {
         uos.push(res.data);
         dataStore.fetchUos();
         currentUo.value = res.data;
-        notify({message: `La schedula "${newUo}" è stata creata con successo!`})
+        notify({message: `L'unità operativa "${newUo}" è stata creata con successo!`})
       })
       .catch((err) => {
         notify({message: `Errore lato server: "${err.response.message}"`})
@@ -50,9 +50,12 @@ const addUo = async(newUo: string, fixed: boolean) => {
 }
 
 function onModify() {
-  if (currentUo.value.title !== 'ù') {
+  if (currentUo.value === undefined) {
+    return
+  }
+  if (currentUo.value.title !== '') {
     doShowEditUoModal.value = true
-    uoToEdit.value = currentUo.value?.title as string
+    uoToEdit.value = currentUo.value.title
   }
 }
 
@@ -76,11 +79,11 @@ const modifyUo = async(newUo: string, fixed: boolean) => {
         uos.push(res.data);
         dataStore.fetchUos();
         currentUo.value = res.data;
-        notify({message: `La schedula "${currentUo.value.title}" è stata modificata con successo!`})
+        notify({message: `L'unità operativa "${currentUo.value.title}" è stata modificata con successo!`})
       })
       .catch((err) => {
         if (err.response.status === 404) {
-          notify({message: `La schedula "${currentUo.value.title}" non è stata trovata`})
+          notify({message: `L'unità operativa "${currentUo.value.title}" non è stata trovata`})
         }
         else {
           notify({message: `Errore lato server: "${err.response.message}"`})
@@ -103,10 +106,11 @@ const onUoDelete = async (uo: Uo) => {
     if (agreed) {
       const index = uos.indexOf(uo);
       currentUo.value = uos[index + 1];
-      deleteUO(uo);
+      await deleteUO(uo);
     }
   }
 }
+
 const deleteUO = async (uo: Uo) => {
   await axios
       .delete('http://localhost:8000/api/scheduler/delete-uo/' + uo.id)
@@ -114,11 +118,11 @@ const deleteUO = async (uo: Uo) => {
         const index = uos.indexOf(uo);
         uos.splice(index, 1);
         dataStore.fetchUos();
-        notify({message: `La schedula "${uo.title}" è stata eliminata con successo!`})
+        notify({message: `L'unità operativa "${uo.title}" è stata eliminata con successo!`})
       })
       .catch((err) => {
         if (err.response.status === 404) {
-          notify({message: `La schedula "${uo.title}" non è stata trovata`})
+          notify({message: `L'unità operativa "${uo.title}" non è stata trovata`})
         }
         else {
           notify({message: `Errore lato server: "${err.response.message}"`})
@@ -187,7 +191,7 @@ const deleteUO = async (uo: Uo) => {
         close-button
         hide-default-actions
     >
-      <h1 class="va-h5">{{ uoToEdit.value ? 'Modifica unità operativa' : 'Aggiungi unità operativa' }}</h1>
+      <h1 class="va-h5">{{ uoToEdit ? 'Modifica unità operativa' : 'Aggiungi unità operativa' }}</h1>
       <div style="padding-top: 1rem">
         <VaInput
             v-if="uoToEdit"
@@ -199,10 +203,10 @@ const deleteUO = async (uo: Uo) => {
             ref="editFormRef"
             :ifEdit="uoToEdit"
             :uo="currentUo"
-            :save-button-label="uoToEdit.value !== '' ? 'Salva' : 'Aggiungi'"
+            :save-button-label="(uoToEdit !== '') ? 'Salva' : 'Aggiungi'"
             @close="cancel"
             @save="(uoTitle: string, uoFixed: boolean) => {
-                  (uoToEdit.value != '') ? modifyUo(uoTitle, uoFixed): addUo(uoTitle, uoFixed)
+                  (uoToEdit != '') ? modifyUo(uoTitle, uoFixed): addUo(uoTitle, uoFixed)
                   ok()
                 }
               "

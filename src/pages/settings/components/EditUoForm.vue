@@ -23,7 +23,7 @@ const form = useForm('add-uo-form')
 const emit = defineEmits(['close', 'save'])
 
 let uoToModify = (props.ifEdit ? props.uo.title : props.ifEdit);
-let uoTitle = ref(props.ifEdit ? props.uo.title : '');
+let uoTitle = ref(props.ifEdit  ? props.uo.title : '');
 let fixUo = ref(false);
 
 const onSave = () => {
@@ -52,7 +52,7 @@ const onSave = () => {
       </div>
       <div class="flex gap-2 flex-col-reverse items-stretch justify-end w-full sm:flex-row sm:items-center">
         <VaButton preset="secondary" color="secondary" @click="$emit('close')">Annulla</VaButton>
-        <VaButton :disabled="!isValid" @click="onSave">Salva</VaButton>
+        <VaButton :disabled="!isValid" @click="onSave">{{ props.saveButtonLabel }}</VaButton>
       </div>
     </div>
   </VaForm>
