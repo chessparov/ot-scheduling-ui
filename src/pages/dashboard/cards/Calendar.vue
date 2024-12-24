@@ -1,10 +1,12 @@
 <script lang="ts">
 
 import {useScheduleStore} from "@/stores/global-store";
+import {useUserStore} from "@/stores/user-store";
 
 export default {
   data() {
     return {
+      userStore: useUserStore(),
       modifiedSchedule: false,
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
@@ -128,7 +130,7 @@ export default {
             <span
                 class="table-inline__item"
                 :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-                @click="item.key == 'day' ? null : doShowInput.value = true"
+                @click="userStore.admin ? (item.key == 'day' ? null : doShowInput.value = true) : null"
             >
               {{ value.toUpperCase() }}
             </span>
