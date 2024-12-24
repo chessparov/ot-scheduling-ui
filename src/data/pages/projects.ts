@@ -88,10 +88,16 @@ export const getProjects = async (filters: Partial<Filters & Pagination & Sortin
   }
 }
 
-export const addProject = async (project: (Project[])[number]) => {
+export const addProject = async (project: {
+    schedule_stats: JSON;
+    author: string;
+    schedule_data: JSON;
+    title: string;
+    status: "completed" | "archived" | "in progress"
+}) => {
 
 
-  fetchedProjects().push(project)
+  fetchedProjects().push(project as Project)
 
   return project
 }

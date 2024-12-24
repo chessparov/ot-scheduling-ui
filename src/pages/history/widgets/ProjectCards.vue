@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { PropType } from 'vue'
+import {computed, PropType} from 'vue'
 import { Project } from '../types'
 import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
 import Stores from "../../../stores";
 import {useToast, VaCard, VaCardContent, VaInnerLoading} from "vuestic-ui";
 import {dateParser} from "../../../services/utils";
+import {Pagination} from "@/data/pages/projects";
 
-defineProps({
+const props = defineProps({
   userStore: Stores,
   projects: {
     type: Array as PropType<Project[]>,
@@ -16,6 +17,22 @@ defineProps({
     type: Boolean,
     required: true,
   },
+  sortBy: {
+    type: String,
+    required: true,
+  },
+  sortingOrder: {
+    type: [String, null],
+    required: true,
+  },
+  pagination: {
+    type: Object as PropType<Pagination>,
+    required: true,
+  },
+  input: {
+    type: String,
+    required: true,
+  }
 })
 
 defineEmits<{
@@ -24,6 +41,7 @@ defineEmits<{
   (event: 'view', projectId: number): void
 }>()
 
+const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.perPage))
 
 </script>
 
@@ -61,4 +79,38 @@ defineEmits<{
     </VaCard>
   </VaInnerLoading>
   <div v-else class="p-4 flex justify-center items-center text-[var(--va-secondary)]">No projects</div>
+  <div class="flex flex-col-reverse md:flex-row gap-2 justify-between items-center py-6">
+    <div>
+      <b>{{ $props.pagination.total }} risultati.</b>
+      Risultati per pagina
+      <VaSelect v-model="$props.pagination.perPage" class="!w-20" :options="[10, 50, 100]" />
+    </div>
+
+    <div v-if="totalPages > 1" class="flex">
+      <VaButton
+          preset="secondary"
+          icon="va-arrow-left"
+          aria-label="Previous page"
+          :disabled="$props.pagination.page === 1"
+          @click="$props.pagination.page--"
+      />
+      <VaButton
+          class="mr-2"
+          preset="secondary"
+          icon="va-arrow-right"
+          aria-label="Next page"
+          :disabled="$props.pagination.page === totalPages"
+          @click="$props.pagination.page++"
+      />
+      <VaPagination
+          v-model="$props.pagination.page"
+          buttons-preset="secondary"
+          :pages="totalPages"
+          :visible-pages="5"
+          :boundary-links="false"
+          :direction-links="false"
+      />
+    </div>
+  </div>
+
 </template>

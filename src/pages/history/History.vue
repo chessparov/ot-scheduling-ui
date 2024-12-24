@@ -114,7 +114,7 @@ onMounted(
               { label: 'Elenco', value: false },
             ]"
           />
-          <VaInput v-if="!doShowAsCards" v-model="filters.search" placeholder="Cerca...">
+          <VaInput v-model="filters.search" placeholder="Cerca...">
             <template #prependInner>
               <VaIcon name="manage_search" color="secondary" size="small" />
             </template>
@@ -126,9 +126,13 @@ onMounted(
 
       <ProjectCards
           v-if="doShowAsCards"
+          v-model:sort-by="sorting.sortBy"
+          v-model:sorting-order="sorting.sortingOrder"
           :user-store="userStore"
           :projects="projects"
           :loading="isLoading"
+          :pagination="pagination"
+          :input="input"
           @edit="editProject"
           @delete="onProjectDeleted"
           @view="projectId => {viewSchedule(projectId)}"
