@@ -53,6 +53,18 @@ export const useProjects = (options?: {
       { deep: true },
   )
 
+  watch(
+      // Necessary for avoiding getting no objects in the case you switch perPage, but there are no sufficient objects
+      // no more in this page. For e.g there are 75 rows in the table, I'm on page 3 and then I switch to 50 items per
+      // page. Now I'm still at page 3, but there aren't obviously sufficient items, so I get a blank table.
+      () => pagination.value.perPage,
+      (newPagination, oldPagination) => {
+        pagination.value.page = 1
+        fetch()
+      },
+  )
+
+
   fetch()
 
   return {
@@ -100,8 +112,5 @@ export const useProjects = (options?: {
       await fetch()
       isLoading.value = false
     },
-
-    pagination,
-    sorting,
   }
 }
