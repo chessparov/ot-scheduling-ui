@@ -47,10 +47,10 @@ export default defineComponent({
 
 <template>
   <h1 class="h1">Nuova schedula</h1>
-  <div class="flex flex-col md:flex-col gap-2">
-    <div class="flex flex-col md:flex-row gap-2">
+  <div class="flex flex-col gap-2">
+    <div class="flex flex-col lg:flex-row gap-2">
       <Montecarlo
-          class="w-full md:w-[55%]"
+          class="w-full lg:w-[55%]"
           v-model:name="name"
           v-model:start-date="startDate"
           v-model:files.allowSingleFile="files"
@@ -61,7 +61,7 @@ export default defineComponent({
           @mc-cycles="getMcCycles"
       />
       <Optimization
-          class="w-full md:w-[45%]"
+          class="w-full lg:w-[45%]"
           @tabu-time="getTabuTime"
           :optimization="optimization"
           :tb-time="tabuTime"

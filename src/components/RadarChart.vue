@@ -21,7 +21,7 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 12rem">
+        <div style="width: 10rem">
           Numero interventi
         </div>
       </template>
@@ -41,7 +41,7 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 12rem">
+        <div style="width: 10rem">
           Ritardo medio
         </div>
       </template>
@@ -61,7 +61,7 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 12rem">
+        <div style="width: 10rem">
           Percentuale oncologici in orario
         </div>
       </template>
@@ -81,7 +81,7 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 12rem">
+        <div style="width: 10rem">
           Percentuale oncologici
         </div>
       </template>
@@ -92,6 +92,7 @@
 <script>
 import { Chart, registerables } from 'chart.js';
 import {VaCounter, VaSlider} from "vuestic-ui";
+import {useGlobalStore} from "@/stores/global-store";
 Chart.register(...registerables);
 
 
@@ -102,7 +103,7 @@ export default {
   data() {
     return {
       dragging: false,
-      marker: { x: 1, y: 1 }, // Normalized coordinates (0 to 1)
+      activeVertex: null,
       alpha: 0,
       beta: 0,
       epsilon: 0,
@@ -117,30 +118,37 @@ export default {
   watch: {
     alpha() {
       if (this.chart !== null) {
-        this.chart.data.datasets[0].data[0] = this.alpha
-        this.chart.update()
+        this.chart.data.datasets[0].data[0] = this.alpha;
+        this.chart.update();
+        this.updateParams();
       }
     },
     beta() {
       if (this.chart) {
-        this.chart.data.datasets[0].data[1] = this.beta
-        this.chart.update()
+        this.chart.data.datasets[0].data[1] = this.beta;
+        this.chart.update();
+        this.updateParams();
       }
     },
     epsilon() {
       if (this.chart) {
-        this.chart.data.datasets[0].data[2] = this.epsilon
-        this.chart.update()
+        this.chart.data.datasets[0].data[2] = this.epsilon;
+        this.chart.update();
+        this.updateParams();
       }
     },
     theta() {
       if (this.chart) {
-        this.chart.data.datasets[0].data[3] = this.theta
-        this.chart.update()
+        this.chart.data.datasets[0].data[3] = this.theta;
+        this.chart.update();
+        this.updateParams();
       }
     }
   },
   methods: {
+    updateParams() {
+      useGlobalStore().optParams = [this.alpha, this.beta, this.epsilon, this.theta];
+    },
     initChart() {
       const ctx = this.$refs.chart.getContext("2d");
 
@@ -161,8 +169,6 @@ export default {
           ],
         },
         options: {
-          maintainAspectRatio: true, // Ensures a consistent aspect ratio
-          aspectRatio: 1, // Forces the canvas to be a square
           responsive: true,
           scales: {
             r: {
@@ -188,50 +194,98 @@ export default {
             },
           },
           layout: {
-            padding: 4,
+            autoPadding: true,
           }
         },
       });
     },
     getMousePosition(event) {
       const rect = this.$refs.chart.getBoundingClientRect();
-      const x = event.clientX - rect.left;
-      const y = event.clientY - rect.top;
-      const normalizedX = x / rect.width;
-      const normalizedY = y / rect.height;
-      return { x: normalizedX, y: normalizedY };
+      return {
+        x: event.clientX - rect.left,
+        y: event.clientY - rect.top,
+      };
+    },
+    getPolarCoordinates(x, y) {
+      const chartArea = this.chart.chartArea; // Get the chart area dimensions
+      const cx = (chartArea.left + chartArea.right) / 2; // Center X
+      const cy = (chartArea.top + chartArea.bottom) / 2; // Center Y
+
+      // Apply an offset adjustment for the x-axis. Manual offset necessary because the label are considered inside the
+      // chart area, but still they have variable length
+      const xOffset = 20; // Adjust this based on the observed offset
+      const dx = x - (cx + xOffset);
+      const dy = y - cy;
+
+      const r = Math.sqrt(dx * dx + dy * dy); // Radial distance
+      const theta = Math.atan2(dy, dx); // Angle in radians
+      return { r, theta };
+    },
+    findNearestVertex(theta) {
+      const angles = [
+        - Math.PI / 2, // 90 degrees (top)
+        0, // 0 degrees (right)
+        Math.PI / 2, // 270 degrees (bottom)
+        Math.PI, // 180 degrees (left)
+      ];
+
+      let minDifference = Infinity;
+      let closestCorner = null;
+      let difference = null;
+
+      angles.forEach((angle, index) => {
+        // Necessary because of how theta is calculated. Near the third vertex on one side of the x-axis
+        // theta is closer to - pi while on the other is closer to + pi
+        if (index === 3) {
+          difference = Math.min(Math.abs(angle - theta), Math.abs(angle + theta));
+        }
+        else {
+          difference = Math.abs(angle - theta);
+        }
+        if (difference < minDifference) {
+          minDifference = difference;
+          closestCorner = index;
+        }
+      });
+      return closestCorner;
     },
     startDragging(event) {
+      const { x, y } = this.getMousePosition(event);
+      const { theta } = this.getPolarCoordinates(x, y);
+
+      this.activeVertex = this.findNearestVertex(theta);
       this.dragging = true;
     },
     dragMarker(event) {
-      if (!this.dragging) return;
+      if (!this.dragging || this.activeVertex === null) return;
 
       const { x, y } = this.getMousePosition(event);
+      const { r } = this.getPolarCoordinates(x, y);
 
-      // Update marker position (clamp between 0 and 1)
-      // this.marker.x = Math.min(1, Math.max(0, x));
-      // this.marker.y = Math.min(1, Math.max(0, y));
-      this.marker.x = Math.min(5, Math.max(0, Math.round(5 * x)));
-      this.marker.y = Math.min(5, Math.max(0, Math.round(5 * y)));
+      console.log(r, this.chart.chartArea.width)
 
-      // Update radar chart dataset
-      this.chart.data.datasets[0].data = [
-        this.marker.y,
-        this.marker.x,
-        5 - this.marker.y,
-        5 - this.marker.x,
-      ];
+      const newValue = Math.min(5, Math.max(0, Math.round((r / 130) * 5)));
 
-      this.alpha = this.marker.y;
-      this.beta = this.marker.x;
-      this.epsilon = 5 - this.marker.y;
-      this.theta = 5 - this.marker.x;
-
-      this.chart.update()
+      switch (this.activeVertex) {
+        case 0:
+          this.alpha = newValue;
+          break;
+        case 1:
+          this.beta = newValue;
+          break;
+        case 2:
+          this.epsilon = newValue;
+          break;
+        case 3:
+          this.theta = newValue;
+          break;
+        default:
+          break;
+      }
     },
     stopDragging() {
       this.dragging = false;
+      this.activeVertex = null;
     },
   },
 };
@@ -240,7 +294,7 @@ export default {
 <style>
 canvas {
   margin: auto;
-  max-width: 500px;
-  max-height: 500px;
+  width: 500px;
+  height: 500px;
 }
 </style>

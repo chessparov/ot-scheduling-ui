@@ -12,6 +12,7 @@ export const useGlobalStore = defineStore('global', {
       roomsNumberDefault: 0,
       slotDurationDefault: 0,
       turnoverTime: 0,
+      optParams: [0, 0, 0, 0],
     }
   },
 
@@ -40,7 +41,8 @@ export const useGlobalStore = defineStore('global', {
                  daysNumber: number,
                  roomsNumber: number,
                  slotDuration: number,
-                 turnoverTime: number,) {
+                 turnoverTime: number,
+                 optParams: Array<number>) {
       this.montecarloDefault = mc;
       this.tabuTimeDefault = tabuTime;
       this.weeksNumberDefault = weeksNumber;
@@ -48,6 +50,7 @@ export const useGlobalStore = defineStore('global', {
       this.roomsNumberDefault = roomsNumber;
       this.slotDurationDefault = slotDuration;
       this.turnoverTime = turnoverTime;
+      this.optParams = optParams;
     },
     async fetchData() {
       await axios
@@ -60,7 +63,8 @@ export const useGlobalStore = defineStore('global', {
                 res.data.n_days,
                 res.data.n_rooms,
                 res.data.slot_duration,
-                res.data.turnover_time);
+                res.data.turnover_time,
+                res.data.optParams);
           })
     }
   },
