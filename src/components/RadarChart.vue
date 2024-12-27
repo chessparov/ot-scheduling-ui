@@ -91,7 +91,8 @@
 
 <script>
 import { Chart, registerables } from 'chart.js';
-import {VaCounter, VaSlider} from "vuestic-ui";
+import {VaCounter, VaSlider, useColors} from "vuestic-ui";
+
 import {useGlobalStore, useOptParamsStore} from "@/stores/global-store";
 Chart.register(...registerables);
 
@@ -108,9 +109,11 @@ export default {
       beta: useGlobalStore().optParams[1],
       epsilon: useGlobalStore().optParams[2],
       theta: useGlobalStore().optParams[3],
+      currentPresetName: useColors().currentPresetName,
     };
   },
   mounted() {
+    console.log(this.currentPresetName)
     this.$nextTick(() => {
       this.initChart();
     });
@@ -176,15 +179,17 @@ export default {
               max: 5,
               grid: {
                 circular: true, // Makes the gridlines circular
+                color: this.currentPresetName === 'light' ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.35)",
               },
               ticks: {
                 stepSize: 1,
                 display: true, // Show values on the radial scale
                 backdropColor: "transparent", // Remove tick background
+                color: this.currentPresetName === 'light' ? "rgba(0,0,0,0.65)" : "rgba(255,255,255,0.84)",
               },
               angleLines: {
                 display: true, // Show angle lines (spokes)
-                color: "#ddd",
+                color: "rgba(221,221,221,0.51)",
               },
             },
           },
