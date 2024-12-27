@@ -17,6 +17,10 @@ const formData = reactive({
   n_days: ref(globalStore.daysNumberDefault as number),
   slot_duration: ref(globalStore.slotDurationDefault as number),
   turnover_time: ref(globalStore.turnoverTime as number),
+  alpha: ref(globalStore.optParams[0] as number),
+  beta: ref(globalStore.optParams[1] as number),
+  epsilon: ref(globalStore.optParams[2] as number),
+  theta: ref(globalStore.optParams[3] as number),
 })
 const numericInput1 = ref();
 const numericInput2 = ref();
@@ -25,6 +29,10 @@ const numericInput2 = ref();
 const numericInput5 = ref();
 const numericInput6 = ref();
 const numericInput7 = ref();
+const numericInput8 = ref();
+const numericInput9 = ref();
+const numericInput10 = ref();
+const numericInput11 = ref();
 
 useInputMask(createNumeralMask(), numericInput1);
 useInputMask(createNumeralMask(), numericInput2);
@@ -33,6 +41,10 @@ useInputMask(createNumeralMask(), numericInput2);
 useInputMask(createNumeralMask(), numericInput5);
 useInputMask(createNumeralMask(), numericInput6);
 useInputMask(createNumeralMask(), numericInput7);
+useInputMask(createNumeralMask(), numericInput8);
+useInputMask(createNumeralMask(), numericInput9);
+useInputMask(createNumeralMask(), numericInput10);
+useInputMask(createNumeralMask(), numericInput11);
 
 const modParams = () => {
   axios
@@ -52,12 +64,22 @@ const modParams = () => {
             Number(formData.n_rooms.toString().replace(' ', '')),
             Number(formData.slot_duration.toString().replace(' ', '')),
             Number(formData.turnover_time.toString().replace(' ', '')),
+            [Number(formData.alpha.toString().replace(' ', '')),
+              Number(formData.beta.toString().replace(' ', '')),
+              Number(formData.epsilon.toString().replace(' ', '')),
+              Number(formData.theta.toString().replace(' ', ''))
+            ],
         )
         init({message: 'Modifiche salvate con successo', color: 'success'})
 
       })
       .catch(err => {
-        init({message: 'Errore lato server', color: 'danger'})
+        if (err.response.status === 400) {
+          init({ message: "Parametri non validi", color: "danger" })
+        }
+        else {
+          init({message: 'Errore lato server', color: 'danger'})
+        }
       })
 }
 </script>
@@ -116,25 +138,73 @@ const modParams = () => {
 <!--          </template>-->
 <!--        </VaInput>-->
 <!--      </div>-->
-      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
+      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4">
         <span class="text-regularMedium">
           Tempo di turnover
         </span>
-        <VaInput class="md:w-[50%]" v-model="formData.turnover_time" ref="numericInput4" size="small">
+        <VaInput class="md:w-[50%]" v-model="formData.turnover_time" ref="numericInput6" size="small">
           <template #appendInner>
             <span>Minuti</span>
           </template>
         </VaInput>
       </div>
-      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 " style="margin-bottom: 1rem">
+      <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4" style="margin-bottom: 1rem">
         <span class="text-regularMedium">
           Durata slot sala operatoria
         </span>
-        <VaInput class="md:w-[50%]" v-model="formData.slot_duration" ref="numericInput6" size="small">
+        <VaInput class="md:w-[50%]" v-model="formData.slot_duration" ref="numericInput7" size="small">
           <template #appendInner>
             <span>Ore</span>
           </template>
         </VaInput>
+      </div>
+      <VaDivider class="py-4 group-last:hidden" />
+      <h3 class="va-title mb-6">Parametri ottimizzazione</h3>
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col md:flex-row justify-between gap-4 px-4">
+          <div class="flex flex-col md:flex-row md:w-[40%] justify-between overflow-x-hidden gap-4">
+            <span class="text-regularMedium">
+              Alpha
+            </span>
+            <VaInput class="md:w-[50%]" v-model="formData.alpha" ref="numericInput8" size="small">
+              <template #appendInner>
+                <span></span>
+              </template>
+            </VaInput>
+          </div>
+          <div class="flex flex-col md:flex-row md:w-[40%] justify-between overflow-x-hidden gap-4 ">
+            <span class="text-regularMedium">
+              Beta
+            </span>
+            <VaInput class="md:w-[50%]" v-model="formData.beta" ref="numericInput9" size="small">
+              <template #appendInner>
+                <span></span>
+              </template>
+            </VaInput>
+          </div>
+        </div>
+        <div class="flex flex-col md:flex-row justify-between px-4 gap-4" style="margin-bottom: 3rem">
+          <div class="flex flex-col md:flex-row md:w-[40%] justify-between overflow-x-hidden gap-4">
+            <span class="text-regularMedium">
+              Epsilon
+            </span>
+            <VaInput class="md:w-[50%]" v-model="formData.epsilon" ref="numericInput10" size="small">
+              <template #appendInner>
+                <span></span>
+              </template>
+            </VaInput>
+          </div>
+          <div class="flex flex-col md:flex-row md:w-[40%] justify-between overflow-x-hidden gap-4">
+            <span class="text-regularMedium">
+              Theta
+            </span>
+            <VaInput class="md:w-[50%]" v-model="formData.theta" ref="numericInput11" size="small">
+              <template #appendInner>
+                <span></span>
+              </template>
+            </VaInput>
+          </div>
+        </div>
       </div>
 
       <VaButton class="button-left md:button-right" @click="modParams">

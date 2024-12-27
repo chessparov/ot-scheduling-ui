@@ -56,6 +56,7 @@ export const useGlobalStore = defineStore('global', {
       await axios
           .get('http://localhost:8000/api/scheduler/mod-simparams')
           .then((res) => {
+            console.log(res.data)
             this.updateGlobal(
                 res.data.mc_cycles,
                 res.data.tabu_time,
@@ -64,7 +65,7 @@ export const useGlobalStore = defineStore('global', {
                 res.data.n_rooms,
                 res.data.slot_duration,
                 res.data.turnover_time,
-                res.data.optParams);
+                [res.data.alpha, res.data.beta, res.data.epsilon, res.data.theta]);
           })
     }
   },
@@ -100,4 +101,12 @@ export const useScheduleStore = defineStore('scheduleStore', {
           })
     }
   }
+})
+
+export const useOptParamsStore = defineStore('optParamsStore', {
+  state: () => {
+    return {
+      optParams: useGlobalStore().optParams,
+    }
+  },
 })

@@ -4,7 +4,7 @@ import {defineComponent, PropType} from "vue";
 import {useToast, VaCardContent, VaFile} from "vuestic-ui";
 import axios from "axios";
 import {useUserStore} from "@/stores/user-store";
-import {useGlobalStore, useScheduleStore} from "@/stores/global-store";
+import {useGlobalStore, useOptParamsStore, useScheduleStore} from "@/stores/global-store";
 import {Project} from "@/pages/history/types";
 import {useDataStore} from "@/stores/data-store";
 import { useProjects } from '../../history/composables/useProjects'
@@ -91,10 +91,10 @@ export default defineComponent ({
         'mcCycles': this.mcCycles,
         'tabuTime': this.tabuTime,
         'optimization': this.optimization,
-        'alpha': this.optimization ? useGlobalStore().optParams[0] : 0,
-        'beta': this.optimization ? useGlobalStore().optParams[1] : 0,
-        'gamma': this.optimization ? useGlobalStore().optParams[2] : 0,
-        'epsilon': this.optimization ? useGlobalStore().optParams[3] : 0,
+        'alpha': this.optimization ? useOptParamsStore().optParams[0] : 0,
+        'beta': this.optimization ? useOptParamsStore().optParams[1] : 0,
+        'gamma': this.optimization ? useOptParamsStore().optParams[2] : 0,
+        'epsilon': this.optimization ? useOptParamsStore().optParams[3] : 0,
         'creationDate': new Date(),
         'computationTime': 0,
         'author': useUserStore().email
@@ -106,7 +106,7 @@ export default defineComponent ({
       formData.append('optimization', this.optimization);
       formData.append('mcCycles', this.mcCycles);
       formData.append('tabuTime', this.tabuTime);
-      formData.append('optParams', this.optimization ? useGlobalStore().optParams : [0, 0, 0, 0])
+      formData.append('optParams', this.optimization ? useOptParamsStore().optParams : [0, 0, 0, 0])
       formData.append('file', this.filesWaitingList[0], 'lista.xlsx');
       formData.append('schedule_stats', scheduleStats)
 

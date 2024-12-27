@@ -92,7 +92,7 @@
 <script>
 import { Chart, registerables } from 'chart.js';
 import {VaCounter, VaSlider} from "vuestic-ui";
-import {useGlobalStore} from "@/stores/global-store";
+import {useGlobalStore, useOptParamsStore} from "@/stores/global-store";
 Chart.register(...registerables);
 
 
@@ -104,10 +104,10 @@ export default {
     return {
       dragging: false,
       activeVertex: null,
-      alpha: 0,
-      beta: 0,
-      epsilon: 0,
-      theta: 0,
+      alpha: useGlobalStore().optParams[0],
+      beta: useGlobalStore().optParams[1],
+      epsilon: useGlobalStore().optParams[2],
+      theta: useGlobalStore().optParams[3],
     };
   },
   mounted() {
@@ -147,7 +147,7 @@ export default {
   },
   methods: {
     updateParams() {
-      useGlobalStore().optParams = [this.alpha, this.beta, this.epsilon, this.theta];
+      useOptParamsStore().optParams = [this.alpha, this.beta, this.epsilon, this.theta];
     },
     initChart() {
       const ctx = this.$refs.chart.getContext("2d");
@@ -261,8 +261,6 @@ export default {
 
       const { x, y } = this.getMousePosition(event);
       const { r } = this.getPolarCoordinates(x, y);
-
-      console.log(r, this.chart.chartArea.width)
 
       const newValue = Math.min(5, Math.max(0, Math.round((r / 130) * 5)));
 
