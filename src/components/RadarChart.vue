@@ -22,7 +22,7 @@
       </template>
       <template #prepend>
         <div style="width: 10rem">
-          Numero interventi
+          Alpha
         </div>
       </template>
     </VaSlider>
@@ -42,7 +42,7 @@
       </template>
       <template #prepend>
         <div style="width: 10rem">
-          Ritardo medio
+          Beta
         </div>
       </template>
     </VaSlider>
@@ -62,7 +62,7 @@
       </template>
       <template #prepend>
         <div style="width: 10rem">
-          Percentuale oncologici in orario
+          Epsilon
         </div>
       </template>
     </VaSlider>
@@ -82,7 +82,7 @@
       </template>
       <template #prepend>
         <div style="width: 10rem">
-          Percentuale oncologici
+          Theta
         </div>
       </template>
     </VaSlider>
