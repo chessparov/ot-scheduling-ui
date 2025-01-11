@@ -70,10 +70,10 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
           <ProjectStatusBadge :status="project.status" />
         </div>
         <VaDivider class="my-6" />
-        <div class="flex justify-between" v-if="userStore.admin">
+        <div class="flex justify-center gap-20">
+          <VaButton preset="secondary" v-if="userStore.admin" icon="mso-edit" color="secondary" @click="$emit('edit', project)" />
           <VaButton preset="secondary" icon="mso-visibility" color="primary" @click="$emit('view', project.id)" />
-          <VaButton preset="secondary" icon="mso-edit" color="secondary" @click="$emit('edit', project)" />
-          <VaButton preset="secondary" icon="mso-delete" color="danger" @click="$emit('delete', project)" />
+          <VaButton preset="secondary" v-if="userStore.admin" icon="mso-delete" color="danger" @click="$emit('delete', project)" />
         </div>
       </VaCardContent>
     </VaCard>

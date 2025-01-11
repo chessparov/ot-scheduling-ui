@@ -107,13 +107,13 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
               @click="$emit('view', project.id as number)"
           />
           <VaButton
-            v-if="userStore.admin"
-            preset="primary"
-            size="small"
-            color="secondary"
-            icon="mso-edit"
-            aria-label="Edit project"
-            @click="$emit('edit', project as Project)"
+              v-if="userStore.admin"
+              preset="primary"
+              size="small"
+              color="secondary"
+              icon="mso-edit"
+              aria-label="Edit project"
+              @click="$emit('edit', project as Project)"
           />
           <VaButton
             v-if="userStore.admin"
