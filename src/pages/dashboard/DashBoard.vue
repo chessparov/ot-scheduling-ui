@@ -8,14 +8,15 @@ import {VaButtonToggle, VaCard} from "vuestic-ui";
 import {useScheduleStore} from "@/stores/global-store";
 import axios from "axios";
 import {ref} from "vue";
+import NotaReport from "@/pages/dashboard/cards/NotaReport.vue";
 
 export default {
-  components: {VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
+  components: {NotaReport, VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
   data() {
     return {
       modifiedSchedule: false,
       menuCurrentTab: 'SCHEDULA',
-      menuTabs: ['SCHEDULA', 'STATISTICHE'],
+      menuTabs: ['SCHEDULA', 'NOTA', 'STATISTICHE'],
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
       scheduleStore: useScheduleStore(),
@@ -38,13 +39,17 @@ export default {
             v-model="menuCurrentTab"
             :options="[
                   {label: 'Schedula', icon: 'calendar_month', value: 'SCHEDULA'},
-                  {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'}
+                  {label: 'Nota', icon: 'library_books', value: 'NOTA'},
+                  {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'},
                 ]"
         />
       </div>
       <section v-if="menuCurrentTab === 'SCHEDULA'" class="flex flex-col gap-4">
         <Calendar @modifiedSchedule="this.modifiedSchedule = true"/>
         <SaveDownload :modified-schedule="this.modifiedSchedule"/>
+      </section>
+      <section v-else-if="menuCurrentTab === 'NOTA'" class="flex flex-col gap-4">
+        <NotaReport/>
       </section>
       <section v-else class="flex flex-col gap-4">
         <StatsReport :riepilogo="this.scheduleStats"/>

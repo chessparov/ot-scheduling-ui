@@ -56,7 +56,6 @@ export const useGlobalStore = defineStore('global', {
       await axios
           .get('http://localhost:8000/api/scheduler/mod-simparams')
           .then((res) => {
-            console.log(res.data)
             this.updateGlobal(
                 res.data.mc_cycles,
                 res.data.tabu_time,
@@ -77,14 +76,12 @@ export const useScheduleStore = defineStore('scheduleStore', {
       scheduleName: '',
       scheduleId: Number,
       scheduleData: JSON,
-      scheduleStats: JSON
+      scheduleStats: JSON,
+      scheduleNote: JSON,
+      scheduleReport: JSON,
     }
   },
   actions: {
-    updateSchedule(newSchedule: JSON, newName: string) {
-      this.scheduleName = newName;
-      this.scheduleData = newSchedule;
-    },
     async fetchData() {
       await axios
           .get('http://localhost:8000/api/scheduler/new-schedule')
@@ -93,6 +90,8 @@ export const useScheduleStore = defineStore('scheduleStore', {
             this.scheduleName = res.data.title;
             this.scheduleData = res.data.schedule_data;
             this.scheduleStats = res.data.schedule_stats;
+            this.scheduleNote = res.data.note;
+            this.scheduleReport = res.data.mc_results;
           })
           .catch((error) => {
             if (error.response.status === 404) {

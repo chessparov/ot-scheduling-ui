@@ -113,7 +113,6 @@ export default {
     };
   },
   mounted() {
-    console.log(this.currentPresetName)
     this.$nextTick(() => {
       this.initChart();
     });
