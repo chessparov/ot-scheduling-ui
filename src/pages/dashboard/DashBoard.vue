@@ -49,10 +49,10 @@ export default {
         <SaveDownload :modified-schedule="this.modifiedSchedule"/>
       </section>
       <section v-else-if="menuCurrentTab === 'NOTA'" class="flex flex-col gap-4">
-        <NotaReport/>
+        <NotaReport :modified-schedule="this.modifiedSchedule"/>
       </section>
       <section v-else class="flex flex-col gap-4">
-        <StatsReport :riepilogo="this.scheduleStats"/>
+        <StatsReport :riepilogo="this.scheduleStats" :modified="this.modifiedSchedule"/>
       </section>
     </div>
   </VaCard>

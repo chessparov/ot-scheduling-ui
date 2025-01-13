@@ -106,7 +106,8 @@ export const updateProject = async (project: (Project[])[number]) => {
   await axios
       .put('http://localhost:8000/api/scheduler/update-project/' + project.id,
           {title: project.title,
-                status: project.status,},
+                status: project.status,
+                modified: false},
           {
             headers: {
               'Content-Type': 'application/json'

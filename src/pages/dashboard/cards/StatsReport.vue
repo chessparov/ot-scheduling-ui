@@ -8,6 +8,10 @@ const props = defineProps({
   riepilogo: {
     type: Object as PropType<Record<string, any>>,
     required: true
+  },
+  modified: {
+    type: Boolean,
+    required: true
   }
 })
 
@@ -260,6 +264,15 @@ let firstCollapse = true;
 
 <template>
   <div class="flex flex-col gap-4">
+    <VaAlert
+        v-model="props.modified"
+        color="warning"
+        closeable
+        class="w-full"
+        style="margin-bottom: 0.5rem"
+    >
+      Attenzione! La schedula è stata modificata, i dati e le statistiche non sono più aggiornati. Ripetere la simulazione.
+    </VaAlert>
     <VaCollapse header="Riepilogo" v-model="firstCollapse">
 
       <div class="flex flex-col md:flex-row gap-4">

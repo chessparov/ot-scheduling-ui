@@ -79,6 +79,7 @@ export const useScheduleStore = defineStore('scheduleStore', {
       scheduleStats: JSON,
       scheduleNote: JSON,
       scheduleReport: JSON,
+      modified: Boolean,
     }
   },
   actions: {
@@ -92,10 +93,11 @@ export const useScheduleStore = defineStore('scheduleStore', {
             this.scheduleStats = res.data.schedule_stats;
             this.scheduleNote = res.data.note;
             this.scheduleReport = res.data.mc_results;
+            this.modified = res.data.modified;
           })
           .catch((error) => {
             if (error.response.status === 404) {
-
+              console.log(error)
             }
           })
     }

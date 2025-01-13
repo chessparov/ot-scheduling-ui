@@ -4,9 +4,16 @@ import {useScheduleStore} from "@/stores/global-store";
 
 
 export default {
+  props: {
+    modifiedSchedule: {
+      type: Boolean,
+      required: true,
+    }
+  },
   data() {
     const input = '';
     return {
+      modified: this.$props.modifiedSchedule,
       mc_results: useScheduleStore().scheduleNote,
       scheduleData: useScheduleStore().scheduleData,
       currentTab: "pe",
@@ -82,36 +89,43 @@ export default {
 
 <template>
   <div class="flex flex-col gap-4">
-    <div class="flex flex-col gap-4">
-      <VaTabs v-model="currentTab">
-        <template #tabs>
-          <VaTab
-              v-for="tab in tabs"
-              :key="tab"
-              :name="tab"
-          >
-            {{ tabNames[tab] }}
-          </VaTab>
-        </template>
-      </VaTabs>
-      <VaRadio
-          v-model="currentNota"
-          :options="options"
-          value-by="value"
+    <VaAlert
+        v-model="modified"
+        color="warning"
+        closeable
+        class="w-full"
+        style="margin-bottom: 0.5rem"
+    >
+      Attenzione! La schedula è stata modificata, i dati e le statistiche non sono più aggiornati. Ripetere la simulazione.
+    </VaAlert>
+    <VaTabs v-model="currentTab">
+      <template #tabs>
+        <VaTab
+            v-for="tab in tabs"
+            :key="tab"
+            :name="tab"
+        >
+          {{ tabNames[tab] }}
+        </VaTab>
+      </template>
+    </VaTabs>
+    <VaRadio
+        v-model="currentNota"
+        :options="options"
+        value-by="value"
+    />
+    <div class="flex flex-row gap-4">
+      <VaInput
+          v-model="input"
+          placeholder="Filtro..."
+          class="max-w-[50%]"
       />
-      <div class="flex flex-row gap-4">
-        <VaInput
-            v-model="input"
-            placeholder="Filtro..."
-            class="max-w-[50%]"
-        />
-        <VaCheckbox
-            v-model="isCustomFilteringFn"
-            label="Corrispondenza esatta"
-            style="margin: auto; justify-items: center"
-            class="min-w-[25%]"
-        />
-      </div>
+      <VaCheckbox
+          v-model="isCustomFilteringFn"
+          label="Corrispondenza esatta"
+          style="margin: auto; justify-items: center"
+          class="min-w-[25%]"
+      />
     </div>
     <VaDataTable
         :columns="colNames[currentTab]"

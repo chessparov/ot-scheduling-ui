@@ -49,14 +49,13 @@ export default {
     async onUpdate() {
       await axios
           .put('http://localhost:8000/api/scheduler/update-project/' + this.scheduleStore.scheduleId.toString(),
-              {schedule_data: this.scheduleStore.scheduleData},
+              {schedule_data: this.scheduleStore.scheduleData, modified: true},
               {
                 headers: {
                   'Content-Type': 'application/json'
                 }
               })
           .then((res) => {
-
             this.init.notify({
               message: 'Schedula modificata con successo',
               color: 'success'
