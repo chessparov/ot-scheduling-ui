@@ -7,11 +7,7 @@ import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
 import Stores from "@/stores";
 import {dateParser} from "../../../services/utils";
-import router from "@/router";
-import {useDataStore} from "@/stores/data-store";
-import {useScheduleStore} from "@/stores/global-store";
-import axios from "axios";
-import PropTypes from "prop-types";
+
 
 const columns = defineVaDataTableColumns([
   { label: 'Nome', key: 'title', sortable: true },
