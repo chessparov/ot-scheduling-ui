@@ -5,7 +5,7 @@ import {useScheduleStore} from "@/stores/global-store";
 
 export default {
   props: {
-    modifiedSchedule: {
+    modified: {
       type: Boolean,
       required: true,
     }
@@ -13,7 +13,7 @@ export default {
   data() {
     const input = '';
     return {
-      modified: this.$props.modifiedSchedule,
+      isModified: this.$props.modified,
       mc_results: useScheduleStore().scheduleNote,
       scheduleData: useScheduleStore().scheduleData,
       currentTab: "pe",
@@ -90,7 +90,7 @@ export default {
 <template>
   <div class="flex flex-col gap-4">
     <VaAlert
-        v-model="modified"
+        v-model="isModified"
         color="warning"
         closeable
         class="w-full"

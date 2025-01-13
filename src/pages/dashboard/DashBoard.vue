@@ -14,16 +14,18 @@ export default {
   components: {NotaReport, VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
   data() {
     return {
-      modifiedSchedule: false,
       menuCurrentTab: 'SCHEDULA',
       menuTabs: ['SCHEDULA', 'NOTA', 'STATISTICHE'],
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
-      scheduleStore: useScheduleStore(),
       scheduleTitle: useScheduleStore().scheduleName,
       scheduleStats: useScheduleStore().scheduleStats,
+      isModified: useScheduleStore().modified,
     }
   },
+  mounted() {
+    console.log(useScheduleStore());
+  }
 }
 </script>
 
@@ -33,7 +35,7 @@ export default {
     <div class="flex flex-col gap-4 " style="padding: 1.5rem">
       <div class="flex flex-col sm:flex-row gap-4 justify-between" style="padding-bottom: 1.25rem">
         <label class="va-title" style="font-size: 1rem; padding: 0.25rem">
-          {{ scheduleTitle }}
+          {{ isModified }}
         </label>
         <VaButtonToggle
             v-model="menuCurrentTab"
@@ -45,14 +47,14 @@ export default {
         />
       </div>
       <section v-if="menuCurrentTab === 'SCHEDULA'" class="flex flex-col gap-4">
-        <Calendar @modifiedSchedule="this.modifiedSchedule = true"/>
-        <SaveDownload :modified-schedule="this.modifiedSchedule"/>
+        <Calendar @modifiedSchedule="this.isModified = true"/>
+        <SaveDownload :modified="this.isModified = false"/>
       </section>
       <section v-else-if="menuCurrentTab === 'NOTA'" class="flex flex-col gap-4">
-        <NotaReport :modified-schedule="this.modifiedSchedule"/>
+        <NotaReport :modified="this.isModified"/>
       </section>
       <section v-else class="flex flex-col gap-4">
-        <StatsReport :riepilogo="this.scheduleStats" :modified="this.modifiedSchedule"/>
+        <StatsReport :riepilogo="this.scheduleStats" :modified="this.isModified"/>
       </section>
     </div>
   </VaCard>

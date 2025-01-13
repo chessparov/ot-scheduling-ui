@@ -8,7 +8,7 @@ import {useToast} from "vuestic-ui";
 
 export default {
   props: {
-    modifiedSchedule: {
+    modified: {
       default: false,
       type: Boolean,
     },
@@ -49,7 +49,7 @@ export default {
     async onUpdate() {
       await axios
           .put('http://localhost:8000/api/scheduler/update-project/' + this.scheduleStore.scheduleId.toString(),
-              {schedule_data: this.scheduleStore.scheduleData, modified: true},
+              {schedule_data: this.scheduleStore.scheduleData, modified: this.$props.modified},
               {
                 headers: {
                   'Content-Type': 'application/json'
@@ -85,7 +85,7 @@ export default {
     <div class="flex flex-col md:flex-row gap-2" style="justify-content: space-between">
       <div class="flex flex-col md:flex-row gap-2" v-if="userStore.admin">
         <VaButton
-            :disabled="!modifiedSchedule"
+            :disabled="!modified"
             icon="check"
             class="calendar-button"
             @click="onUpdate"
