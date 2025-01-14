@@ -14,7 +14,7 @@ export default {
     const input = '';
     return {
       isModified: this.$props.modified,
-      mc_results: useScheduleStore().scheduleNote,
+      mc_results: typeof useScheduleStore().scheduleNote === 'undefined' ? {'pe': [[]], 'pne': [[]]} : useScheduleStore().scheduleNote,
       scheduleData: useScheduleStore().scheduleData,
       currentTab: "pe",
       tabs: ["pe", "pne"],
@@ -60,6 +60,9 @@ export default {
       isCustomFilteringFn: false,
     }
   },
+  beforeCreate() {
+    this.mc_results = typeof useScheduleStore().scheduleNote === 'undefined' ? {'pe': [[]], 'pne': [[]]} : useScheduleStore().scheduleNote;
+  },
   computed: {
     customFilteringFn() {
       return this.isCustomFilteringFn ? this.filterExact : undefined;
@@ -88,7 +91,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4">
+  <div class="flex flex-col gap-4" v-if="typeof mc_results !== 'undefined'">
     <VaAlert
         v-model="isModified"
         color="warning"

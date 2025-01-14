@@ -94,6 +94,9 @@ export const addProject = async (project: {
     schedule_data: JSON;
     title: string;
     status: "completed" | "archived" | "in progress"
+    modified: boolean
+    note: JSON
+    mc_results: JSON
 }) => {
 
 

@@ -130,6 +130,7 @@ export default defineComponent ({
               scheduleStore.scheduleStats = response.data.schedule_stats;
               scheduleStore.scheduleNote = response.data.note;
               scheduleStore.scheduleReport = response.data.mc_results;
+              scheduleStore.modified = response.data.modified;
               this.currentTime = 0;
               this.percent = 0;
               clearInterval(progressBarTimeOut);
@@ -168,6 +169,7 @@ export default defineComponent ({
                 scheduleStore.scheduleStats = response.data.schedule_stats;
                 scheduleStore.scheduleNote = response.data.note;
                 scheduleStore.scheduleReport = response.data.mc_results;
+                scheduleStore.modofied = response.data.modified;
                 this.currentTime = 0;
                 this.percent = 0;
                 clearInterval(progressBarTimeOut);
@@ -204,6 +206,7 @@ export default defineComponent ({
                 scheduleStore.scheduleStats = response.data.schedule_stats;
                 scheduleStore.scheduleNote = response.data.note;
                 scheduleStore.scheduleReport = response.data.mc_results;
+                scheduleStore.modified = response.data.modified;
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
                 this.percent = 0;

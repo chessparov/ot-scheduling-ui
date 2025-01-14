@@ -79,6 +79,9 @@ const viewSchedule = async(scheduleId: number) => {
         scheduleStore.scheduleName = res.data.title;
         scheduleStore.scheduleId = res.data.id;
         scheduleStore.scheduleStats = res.data.schedule_stats;
+        scheduleStore.scheduleNote = res.data.note;
+        scheduleStore.scheduleReport = res.data.mc_results;
+        scheduleStore.modified = res.data.modified;
         router.push({name: 'dashboard'});
       })
       .catch((err) => {
