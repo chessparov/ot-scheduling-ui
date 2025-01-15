@@ -1,6 +1,8 @@
 <script lang="ts">
 
 import {useScheduleStore} from "@/stores/global-store";
+import {json} from "node:stream/consumers";
+import {toRaw} from "vue";
 
 
 export default {
@@ -12,9 +14,10 @@ export default {
   },
   data() {
     const input = '';
+    const mc_results = Object.keys(useScheduleStore().scheduleNote).length === 0 ? {'pe': [[]], 'pne': [[]]} : useScheduleStore().scheduleNote;
     return {
       isModified: this.$props.modified,
-      mc_results: typeof useScheduleStore().scheduleNote === 'undefined' ? {'pe': [[]], 'pne': [[]]} : useScheduleStore().scheduleNote,
+      mc_results: mc_results,
       scheduleData: useScheduleStore().scheduleData,
       currentTab: "pe",
       tabs: ["pe", "pne"],
@@ -60,9 +63,6 @@ export default {
       isCustomFilteringFn: false,
     }
   },
-  beforeCreate() {
-    this.mc_results = typeof useScheduleStore().scheduleNote === 'undefined' ? {'pe': [[]], 'pne': [[]]} : useScheduleStore().scheduleNote;
-  },
   computed: {
     customFilteringFn() {
       return this.isCustomFilteringFn ? this.filterExact : undefined;
@@ -91,7 +91,7 @@ export default {
 </script>
 
 <template>
-  <div class="flex flex-col gap-4" v-if="typeof mc_results !== 'undefined'">
+  <div class="flex flex-col gap-4">
     <VaAlert
         v-model="isModified"
         color="warning"
