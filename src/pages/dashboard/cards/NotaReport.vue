@@ -1,8 +1,6 @@
 <script lang="ts">
 
 import {useScheduleStore} from "@/stores/global-store";
-import {json} from "node:stream/consumers";
-import {toRaw} from "vue";
 import axios from "axios";
 import FileDownload from "js-file-download";
 import {useToast} from "vuestic-ui";
@@ -24,8 +22,8 @@ export default {
       scheduleData: useScheduleStore().scheduleData,
       init: useToast(),
       currentTab: "pe",
-      tabs: ["pe", "pne"],
-      tabNames: {"pe": "Pazienti eletti", "pne": "Pazienti non eletti"},
+      tabs: ["pe", "pne", "nota"],
+      tabNames: {"pe": "Pazienti eletti", "pne": "Pazienti non eletti", "nota": "Nota operatoria"},
       colNames: {
         "pe": [
           {key: "Data Intervento", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
@@ -62,6 +60,14 @@ export default {
           value: 2,
         }
       ],
+      arrRobot: [
+        {text: "Totale", value: 'total'},
+        {text: "Robot A", value: 'ROBOT_A'},
+        {text: "Robot B", value: 'ROBOT_B'},
+        {text: "Robot C", value: 'ROBOT_C'},
+        {text: "Robot D", value: 'ROBOT_D'}
+      ],
+      currentRobot: {text: "Totale", value: 'total'},
       input,
       filter: input,
       isCustomFilteringFn: false,
@@ -86,6 +92,7 @@ export default {
     async onDownload(){
       const pk = useScheduleStore().scheduleId.toString();
       const index = this.currentNota.toString();
+      const robot = this.currentRobot.value.toString();
 
       if (this.currentTab == "pe") {
         await axios
@@ -110,7 +117,7 @@ export default {
               }
             })
       }
-      else {
+      else if (this.currentTab == "pne") {
         await axios
             .get('http://localhost:8000/api/scheduler/download-pne/' + pk + '/' + index,
                 {
@@ -118,6 +125,29 @@ export default {
                 })
             .then((res) => {
               FileDownload(res.data, `${useScheduleStore().scheduleName}_pne_${this.currentNota}.xlsx`)
+            })
+            .catch((error) => {
+              if (error.response.status == 404) {
+                this.init.notify({
+                  message: 'Richiesta non valida. Schedula inesistente',
+                  color: 'warning'
+                })
+              } else {
+                this.init.notify({
+                  message: 'Errore lato server',
+                  color: 'danger'
+                })
+              }
+            })
+      }
+      else {
+        await axios
+            .get('http://localhost:8000/api/scheduler/download-nota/' + pk + '/' + index + '/' + robot,
+                {
+                  responseType: 'blob'
+                })
+            .then((res) => {
+              FileDownload(res.data, `${useScheduleStore().scheduleName}_nota_${this.currentNota}_${robot.toLowerCase()}.xlsx`)
             })
             .catch((error) => {
               if (error.response.status == 404) {
@@ -171,29 +201,49 @@ export default {
         :options="options"
         value-by="value"
     />
-    <div class="flex flex-col sm:flex-row gap-4">
-      <VaInput
-          v-model="input"
-          placeholder="Filtro..."
-          class="max-w-[50%]"
-      />
-      <VaCheckbox
-          v-model="isCustomFilteringFn"
-          label="Corrispondenza esatta"
-          style="margin: 0 0 0 0; justify-items: center"
-          class="min-w-[25%]"
+    <div class="flex flex-col gap-4" v-if="currentTab != 'nota'">
+      <div class="flex flex-col sm:flex-row gap-4">
+        <VaInput
+            v-model="input"
+            placeholder="Filtro..."
+            class="max-w-[50%]"
+        />
+        <VaCheckbox
+            v-model="isCustomFilteringFn"
+            label="Corrispondenza esatta"
+            style="margin: 0 0 0 0; justify-items: center"
+            class="min-w-[25%]"
+        />
+      </div>
+      <VaDataTable
+          :columns="colNames[currentTab]"
+          :items="mc_results[currentTab][currentNota]"
+          :filter="filter"
+          :filter-method="customFilteringFn"
+          sticky-header
+          striped
+          height="500px"
       />
     </div>
-    <VaDataTable
-        :columns="colNames[currentTab]"
-        :items="mc_results[currentTab][currentNota]"
-        :filter="filter"
-        :filter-method="customFilteringFn"
-        sticky-header
-        striped
-        height="500px"
-    />
+    <div class="flex flex-col gap-4" v-if="currentTab == 'nota'">
+      <VaSelect
+          v-model="currentRobot"
+          placeholder="Seleziona robot..."
+          label="Robot"
+          color="#158DE3"
+          class="calendar-button"
+          :options="arrRobot"
+      />
+      <VaButton
+          icon="download"
+          class="calendar-button"
+          @click="onDownload"
+      >
+        Download
+      </VaButton>
+    </div>
     <VaButton
+        v-if="currentTab != 'nota'"
         icon="download"
         class="calendar-button"
         @click="onDownload"
@@ -210,7 +260,7 @@ export default {
   max-width: none;
 
   @media (min-width: 640px) {
-    max-width: 10rem;
+    max-width: 12rem;
   }
 }
 
