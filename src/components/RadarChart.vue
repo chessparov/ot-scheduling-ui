@@ -157,7 +157,7 @@ export default {
       this.chart = new Chart(ctx, {
         type: "radar",
         data: {
-          labels: ["Numero interventi", "Ritardo medio", "Oncoligi in orario", "Percentuale oncologici"],
+          labels: ["Numero interventi", "Ritardo medio", "Oncologici in orario", "Percentuale oncologici"],
           datasets: [
             {
               label: "Valore parametro",
