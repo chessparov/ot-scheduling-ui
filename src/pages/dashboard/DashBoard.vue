@@ -21,6 +21,7 @@ export default {
       scheduleTitle: useScheduleStore().scheduleName,
       scheduleStats: useScheduleStore().scheduleStats,
       isModified: useScheduleStore().modified,
+      changesMade: false,
     }
   }
 }
@@ -44,8 +45,8 @@ export default {
         />
       </div>
       <section v-if="menuCurrentTab === 'SCHEDULA'" class="flex flex-col gap-4">
-        <Calendar @modifiedSchedule="this.isModified = true;"/>
-        <SaveDownload :modified="this.isModified"/>
+        <Calendar @modifiedSchedule="this.isModified = true; changesMade = true"/>
+        <SaveDownload :changesMade="this.changesMade" @changes-saved="this.changesMade = false"/>
       </section>
       <section v-else-if="menuCurrentTab === 'NOTA'" class="flex flex-col gap-4">
         <NotaReport :modified="this.isModified"/>

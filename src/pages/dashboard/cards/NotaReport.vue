@@ -25,8 +25,8 @@ export default {
       colNames: {
         "pe": [
           {key: "Data Intervento", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
-          {key: "Data Prenot.", label: "Data prenotazione", sortable: true, sortingOptions: ["desc", "asc"]},
-          {key: "due date", sortable: true, sortingOptions: ["desc", "asc"]},
+          {key: "Data Prenot.", label: "Data prenotazione", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
+          {key: "due date", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
           {key: "Ritardo", sortingOptions: ["desc", "asc"], sortable: true,},
           {key: "Priorità", label: "Priorita", sortable: true, sortingOptions: ["desc", "asc"]},
           {key: "Cod. Int.", label: "ICD", sortable: true, sortingOptions: ["desc", "asc"]},
@@ -35,8 +35,8 @@ export default {
           {key: "ID Percorso", sortable: true, sortingOptions: ["desc", "asc"]},
         ],
         "pne": [
-          {key: "Data Prenot.", label: "Data prenotazione", sortable: true, sortingOptions: ["desc", "asc"]},
-          {key: "due date", sortable: true, sortingOptions: ["desc", "asc"]},
+          {key: "Data Prenot.", label: "Data prenotazione", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
+          {key: "due date", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
           {key: "Priorità", label: "Priorita", sortable: true, sortingOptions: ["desc", "asc"]},
           {key: "Cod. Int.", label: "ICD", sortable: true, sortingOptions: ["desc", "asc"]},
           {key: "Cod. Diagn.", label: "Cod diagnosi", sortable: true, sortingOptions: ["desc", "asc"]},
