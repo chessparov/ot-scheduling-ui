@@ -59,7 +59,7 @@ export default {
                   'Content-Type': 'application/json'
                 }
               })
-          .then((res) => {
+          .then(() => {
             this.init.notify({
               message: 'Schedula modificata con successo',
               color: 'success'

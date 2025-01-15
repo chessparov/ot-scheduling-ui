@@ -3,6 +3,9 @@
 import {useScheduleStore} from "@/stores/global-store";
 import {json} from "node:stream/consumers";
 import {toRaw} from "vue";
+import axios from "axios";
+import FileDownload from "js-file-download";
+import {useToast} from "vuestic-ui";
 
 
 export default {
@@ -19,6 +22,7 @@ export default {
       isModified: this.$props.modified,
       mc_results: mc_results,
       scheduleData: useScheduleStore().scheduleData,
+      init: useToast(),
       currentTab: "pe",
       tabs: ["pe", "pne"],
       tabNames: {"pe": "Pazienti eletti", "pne": "Pazienti non eletti"},
@@ -79,8 +83,58 @@ export default {
     updateFilter(filter) {
       this.filter = filter;
     },
-  },
+    async onDownload(){
+      const pk = useScheduleStore().scheduleId.toString();
+      const index = this.currentNota.toString();
 
+      if (this.currentTab == "pe") {
+        await axios
+            .get('http://localhost:8000/api/scheduler/download-pe/' + pk + '/' + index,
+                {
+                  responseType: 'blob'
+                })
+            .then((res) => {
+              FileDownload(res.data, `${useScheduleStore().scheduleName}_pe_${this.currentNota}.xlsx`)
+            })
+            .catch((error) => {
+              if (error.response.status == 404) {
+                this.init.notify({
+                  message: 'Richiesta non valida. Schedula inesistente',
+                  color: 'warning'
+                })
+              } else {
+                this.init.notify({
+                  message: 'Errore lato server',
+                  color: 'danger'
+                })
+              }
+            })
+      }
+      else {
+        await axios
+            .get('http://localhost:8000/api/scheduler/download-pne/' + pk + '/' + index,
+                {
+                  responseType: 'blob'
+                })
+            .then((res) => {
+              FileDownload(res.data, `${useScheduleStore().scheduleName}_pne_${this.currentNota}.xlsx`)
+            })
+            .catch((error) => {
+              if (error.response.status == 404) {
+                this.init.notify({
+                  message: 'Richiesta non valida. Schedula inesistente',
+                  color: 'warning'
+                })
+              } else {
+                this.init.notify({
+                  message: 'Errore lato server',
+                  color: 'danger'
+                })
+              }
+            })
+      }
+    },
+  },
   watch: {
     input(newValue) {
       this.updateFilter(newValue);
@@ -117,7 +171,7 @@ export default {
         :options="options"
         value-by="value"
     />
-    <div class="flex flex-row gap-4">
+    <div class="flex flex-col sm:flex-row gap-4">
       <VaInput
           v-model="input"
           placeholder="Filtro..."
@@ -126,7 +180,7 @@ export default {
       <VaCheckbox
           v-model="isCustomFilteringFn"
           label="Corrispondenza esatta"
-          style="margin: auto; justify-items: center"
+          style="margin: 0 0 0 0; justify-items: center"
           class="min-w-[25%]"
       />
     </div>
@@ -139,9 +193,25 @@ export default {
         striped
         height="500px"
     />
+    <VaButton
+        icon="download"
+        class="calendar-button"
+        @click="onDownload"
+    >
+      Download
+    </VaButton>
   </div>
 </template>
 
 <style scoped lang="scss">
+
+.calendar-button {
+  margin-top: 0.5rem;
+  max-width: none;
+
+  @media (min-width: 640px) {
+    max-width: 10rem;
+  }
+}
 
 </style>
