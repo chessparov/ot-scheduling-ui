@@ -117,7 +117,14 @@ export default {
                   message: 'Richiesta non valida. Schedula inesistente',
                   color: 'warning'
                 })
-              } else {
+              }
+              else if (error.response.status == 400) {
+                this.init.notify({
+                  message: 'Richiesta non valida. La nota non esiste',
+                  color: 'warning'
+                })
+              }
+              else {
                 this.init.notify({
                   message: 'Errore lato server',
                   color: 'danger'
@@ -140,7 +147,15 @@ export default {
                   message: 'Richiesta non valida. Schedula inesistente',
                   color: 'warning'
                 })
-              } else {
+
+              }
+              else if (error.response.status == 400) {
+                this.init.notify({
+                  message: 'Richiesta non valida. La nota non esiste',
+                  color: 'warning'
+                })
+              }
+              else {
                 this.init.notify({
                   message: 'Errore lato server',
                   color: 'danger'
@@ -163,7 +178,14 @@ export default {
                   message: 'Richiesta non valida. Schedula inesistente',
                   color: 'warning'
                 })
-              } else {
+              }
+              else if (error.response.status == 400) {
+                this.init.notify({
+                  message: 'Richiesta non valida. La nota non esiste',
+                  color: 'warning'
+                })
+              }
+              else {
                 this.init.notify({
                   message: 'Errore lato server',
                   color: 'danger'
@@ -237,7 +259,7 @@ export default {
       <VaSelect
           v-model="currentRobot"
           placeholder="Seleziona robot..."
-          label="Robot"
+          label="Seleziona Robot"
           color="#158DE3"
           class="calendar-button"
           :options="arrRobot"
