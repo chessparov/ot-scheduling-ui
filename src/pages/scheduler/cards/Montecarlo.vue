@@ -85,6 +85,7 @@ async function onClean() {
         btnDisabled.value = false;
       })
       .catch((error) => {
+        btnDisabled.value = false;
         if (error.response.status == 400) {
           notify({
             message: 'File non valido',
