@@ -78,6 +78,7 @@ watch(scheduleSource, () => {
                 :options="projects"
                 :text-by="(option: Project) => option.title"
                 v-model="selectedSchedule"
+                searchable
                 placeholder="Scegli una schedula da analizzare..."
                 label="Scegli una schedula"
                 style="padding: 1.35rem 0 1rem 0"
