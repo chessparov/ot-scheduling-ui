@@ -3,8 +3,9 @@
     <h1 class="font-semibold text-4xl mb-4">Log in</h1>
     <p class="text-base mb-4 leading-5">
       Non hai ancora un account?
-      <RouterLink :to="{ name: 'signup' }" class="font-semibold text-primary"
-        >Registrati</RouterLink
+      <a href="mailto:francesca.daga@ao-pisa.toscana.it?subject=Richiesta%20credenziali%20schedulatore&body=Vorrei%20creare%20un%20account"
+        class="font-semibold text-primary"
+        >Richiedilo</a
       >
     </p>
     <VaInput
