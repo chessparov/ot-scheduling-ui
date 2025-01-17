@@ -75,6 +75,7 @@ export const useScheduleStore = defineStore('scheduleStore', {
     return {
       scheduleName: '',
       scheduleId: Number,
+      scheduleStartDate: String,
       scheduleData: JSON,
       scheduleStats: JSON,
       scheduleNote: JSON,
@@ -90,6 +91,7 @@ export const useScheduleStore = defineStore('scheduleStore', {
             this.scheduleId = res.data.id;
             this.scheduleName = res.data.title;
             this.scheduleData = res.data.schedule_data;
+            this.scheduleStartDate = res.data.start_date;
             this.scheduleStats = res.data.schedule_stats;
             this.scheduleNote = res.data.note;
             this.scheduleReport = res.data.mc_results;

@@ -4,12 +4,27 @@ import {useScheduleStore} from "@/stores/global-store";
 import {useUserStore} from "@/stores/user-store";
 
 export default {
+  props: {
+    startDate: {type: Date, required: true},
+  },
   data() {
     return {
       userStore: useUserStore(),
       modifiedSchedule: false,
       currentTab: 'SETTIMANA 1',
-      weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
+      weeks: [
+        'SETTIMANA 1',
+        'SETTIMANA 2',
+        'SETTIMANA 3',
+        'SETTIMANA 4',
+      ],
+      weekNames:
+      {
+        'SETTIMANA 1': this.weekToDate(1),
+        'SETTIMANA 2': this.weekToDate(2),
+        'SETTIMANA 3': this.weekToDate(3),
+        'SETTIMANA 4': this.weekToDate(4)
+      },
       items: useScheduleStore().scheduleData,
       days: [
         'LUNEDì',
@@ -62,6 +77,35 @@ export default {
     }
   },
   methods: {
+    addDays(date: Date, days: number) {
+      const newDate = new Date(date);
+      newDate.setDate(date.getDate() + days);
+      return newDate;
+    },
+    weekToDate(numWeek: number) {
+      const monthNames = [
+        "Gennaio",
+        "Febbraio",
+        "Marzo",
+        "Aprile",
+        "Maggio",
+        "Giugno",
+        "Luglio",
+        "Agosto",
+        "Settembre",
+        "Ottobre",
+        "Novembre",
+        "Dicembre"
+      ];
+      const date1 = this.addDays(this.$props.startDate,7 * (numWeek - 1));
+      const date2 = this.addDays(date1, 6);
+      const day1 = date1.getUTCDate().toString()
+      const day2 = date2.getUTCDate().toString()
+      const month1 = monthNames[date1.getUTCMonth()]
+      const month2 = monthNames[date2.getUTCMonth()]
+      return day1 + " " + month1 + " - " + day2 + " " + month2
+
+    },
     getStyle(itemKey: string) {
       // console.log(itemKey)
       // const robot = itemKey.split('_')[1]
@@ -80,7 +124,7 @@ export default {
       // }
     //
     }
-  }
+  },
 }
 </script>
 
@@ -98,7 +142,7 @@ export default {
             :key="tab"
             :name="tab"
         >
-          {{ tab }}
+          {{ weekNames[tab] }}
         </VaTab>
       </template>
     </VaTabs>

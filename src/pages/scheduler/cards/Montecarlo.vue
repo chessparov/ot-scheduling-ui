@@ -113,7 +113,10 @@ async function onClean() {
         />
         <VaDateInput
             label="Data inizio schedulazione"
-            v-model="startDate" />
+            first-weekday="Monday"
+            highlight-weekend
+            v-model="startDate"
+        />
         <div class="flex flex-col gap-2" >
           <BindedSlider
               :slider-label="'Montecarlo'"

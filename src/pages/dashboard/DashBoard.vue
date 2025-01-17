@@ -20,6 +20,7 @@ export default {
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
       scheduleTitle: useScheduleStore().scheduleName,
       scheduleStats: useScheduleStore().scheduleStats,
+      startDate: new Date(useScheduleStore().scheduleStartDate),
       isModified: useScheduleStore().modified,
       changesMade: false,
     }
@@ -45,7 +46,7 @@ export default {
         />
       </div>
       <section v-if="menuCurrentTab === 'SCHEDULA'" class="flex flex-col gap-4">
-        <Calendar @modifiedSchedule="this.isModified = true; changesMade = true"/>
+        <Calendar @modifiedSchedule="this.isModified = true; changesMade = true;" :start-date="startDate"/>
         <SaveDownload :changesMade="this.changesMade" @changes-saved="this.changesMade = false"/>
       </section>
       <section v-else-if="menuCurrentTab === 'NOTA'" class="flex flex-col gap-4">

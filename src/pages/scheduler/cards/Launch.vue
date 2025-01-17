@@ -43,6 +43,7 @@ export default defineComponent ({
       estimatedTime: this.mcCycles + this.tabuTime,
       compTime: 0,
       currentTime: 0,
+      btnDisabled: false,
       toast: useToast(),
     }
   },
@@ -66,7 +67,6 @@ export default defineComponent ({
         this.percent = 99;
       }
     },
-
     requestMsc() {
 
       let { add } = useProjects();
@@ -83,7 +83,7 @@ export default defineComponent ({
         this.toast.init({ message: "Caricare una lista d'attesa!", color: "warning" })
         return;
       }
-
+      this.btnDisabled = true;
       this.compTime = this.estimatedTime;
 
       let formData = new FormData();
@@ -102,7 +102,7 @@ export default defineComponent ({
 
       formData.append('title', this.name);
       formData.append('author', useUserStore().email);
-      formData.append('startDate', this.startDate?.toUTCString());
+      formData.append('startDate', this.startDate?.toLocaleDateString());
       formData.append('optimization', this.optimization);
       formData.append('mcCycles', this.mcCycles);
       formData.append('tabuTime', this.tabuTime);
@@ -131,15 +131,18 @@ export default defineComponent ({
               scheduleStore.scheduleNote = response.data.note;
               scheduleStore.scheduleReport = response.data.mc_results;
               scheduleStore.modified = response.data.modified;
+              scheduleStore.scheduleStartDate = response.data.start_date;
               this.currentTime = 0;
               this.percent = 0;
               clearInterval(progressBarTimeOut);
+              this.btnDisabled = false;
 
               let newProject = response.data as Project;
               add(newProject);
               this.$router.push({name: 'dashboard', replace: true}).catch(failure => {console.log(failure)});
             })
             .catch(error => {
+              this.btnDisabled = false;
               if (error.response.status === 400) {
                 this.toast.init({ message: "File non valido", color: "danger" })
               }
@@ -170,15 +173,18 @@ export default defineComponent ({
                 scheduleStore.scheduleNote = response.data.note;
                 scheduleStore.scheduleReport = response.data.mc_results;
                 scheduleStore.modofied = response.data.modified;
+                scheduleStore.scheduleStartDate = response.data.start_date;
                 this.currentTime = 0;
                 this.percent = 0;
                 clearInterval(progressBarTimeOut);
+                this.btnDisabled = false;
 
                 let newProject = response.data as Project;
                 add(newProject);
                 this.$router.push({name: 'dashboard', replace: true}).catch(failure => {console.log(failure)});
               })
               .catch(error => {
+                this.btnDisabled = false;
                 if (error.response.status === 400) {
                   this.toast.init({message: "File non valido", color: "danger"})
                 } else {
@@ -207,15 +213,19 @@ export default defineComponent ({
                 scheduleStore.scheduleNote = response.data.note;
                 scheduleStore.scheduleReport = response.data.mc_results;
                 scheduleStore.modified = response.data.modified;
+                scheduleStore.scheduleStartDate = response.data.start_date;
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
                 this.percent = 0;
+
+                this.btnDisabled = false;
 
                 let newProject = response.data as Project;
                 add(newProject);
                 this.$router.push({name: 'dashboard', replace: true}).catch(failure => {console.log(failure)});
               })
               .catch(error => {
+                this.btnDisabled = false;
                 if (error.response.status === 400) {
                   this.toast.init({message: "File non valido", color: "danger"})
                 } else {
@@ -257,7 +267,7 @@ export default defineComponent ({
               content-inside
               show-percent
           />
-          <VaButton @click="requestMsc()">
+          <VaButton @click="requestMsc()" :disabled="btnDisabled" :loading="btnDisabled">
             Ottieni schedula
           </VaButton>
         </div>
