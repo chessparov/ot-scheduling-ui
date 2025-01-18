@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BindedSlider from "@/components/BindedSlider.vue";
-import RadarChart from "@/components/RadarChart.vue";
+import RadarChart from "@/components/RadarChartPicker.vue";
 
 
 export default defineComponent({
