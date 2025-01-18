@@ -37,6 +37,7 @@ export default {
           {key: "Tipo Intervento", sortingOptions: ["desc", "asc"], sortable: true,},
           {key: "Cod. Diagn.", label: "Cod diagnosi", sortable: true, sortingOptions: ["desc", "asc"]},
           {key: "Diagnosi ICD-9-CM", sortingOptions: ["desc", "asc"], sortable: true,},
+          {key: "pne/pngla", sortingOptions: ["desc", "asc"], sortable: true,},
           {key: "Tempo Intervento", sortable: true, sortingOptions: ["desc", "asc"]},
           {key: "ID Percorso", sortable: true, sortingOptions: ["desc", "asc"]},
         ],
@@ -50,6 +51,7 @@ export default {
           {key: "Tipo Intervento", sortingOptions: ["desc", "asc"], sortable: true,},
           {key: "Cod. Diagn.", label: "Cod diagnosi", sortable: true, sortingOptions: ["desc", "asc"]},
           {key: "Diagnosi ICD-9-CM", sortingOptions: ["desc", "asc"], sortable: true,},
+          {key: "pne/pngla", sortingOptions: ["desc", "asc"], sortable: true,},
           {key: "ID Percorso", sortable: true, sortingOptions: ["desc", "asc"]},
         ]
       },
