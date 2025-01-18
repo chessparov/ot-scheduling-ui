@@ -54,7 +54,16 @@ watch(scheduleSource, () => {
 
 <template>
   <h1 class="h1">Analizza schedula</h1>
-  <div class="flex flex-col md:flex-col gap-2">
+  <div class="flex flex-col gap-2">
+    <VaAlert
+        v-if="startDate.getDay() !== 1"
+        color="warning"
+        closeable
+        class="w-full"
+        style="margin-top: 0.5rem; margin-bottom: 0.5rem"
+    >
+      Attenzione! La data di inizio schedulazione selezionata non è un lunedì.
+    </VaAlert>
     <div class="flex flex-col sm:flex-row gap-2">
       <VaCard class="w-full md:w-[45%]" style="padding: 1rem">
         <div class="flex flex-col gap-4 mb-2">

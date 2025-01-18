@@ -49,7 +49,7 @@ export default defineComponent({
   <h1 class="h1">Nuova schedula</h1>
   <div class="flex flex-col gap-2">
     <VaAlert
-        v-if="startDate.getUTCDay() !== 0"
+        v-if="startDate.getDay() !== 1"
         color="warning"
         closeable
         class="w-full"

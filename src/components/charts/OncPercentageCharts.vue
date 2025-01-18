@@ -14,7 +14,7 @@ const histGenerator = d3.bin()
 const bins = histGenerator(arrPctOnc);
 const categories = () => {
   let arrCategories = [];
-  for (let i = minPctOnc; i <= maxPctOnc; i++) {
+  for (let i = Math.round(minPctOnc); i <= maxPctOnc; i++) {
     arrCategories.push(i + "%");
   }
   return arrCategories
