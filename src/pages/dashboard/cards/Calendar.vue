@@ -43,37 +43,55 @@ export default {
         },
         {
           key: 'ROBOT_A_MAT',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         },
         {
           key: 'ROBOT_A_POM',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         },
         {
           key: 'ROBOT_B_MAT',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         },
         {
           key: 'ROBOT_B_POM',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         },
         {
           key: 'ROBOT_C_MAT',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         },
         {
           key: 'ROBOT_C_POM',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         },
         {
           key: 'ROBOT_D_MAT',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         },
         {
           key: 'ROBOT_D_POM',
+          tdClass: '',
+          tdStyle: '',
           // width: '120px'
         }
       ],
+      useAdditionalStyle: true,
+      useAdditionalClass: true,
     }
   },
   methods: {
@@ -125,6 +143,21 @@ export default {
     //
     }
   },
+  watch: {
+    useAdditionalClass: {
+      handler(value) {
+        this.columns[1].tdClass = value && "color1";
+        this.columns[2].tdClass = value && "color1";
+        this.columns[3].tdClass = value && "color2";
+        this.columns[4].tdClass = value && "color2";
+        this.columns[5].tdClass = value && "color3";
+        this.columns[6].tdClass = value && "color3";
+        this.columns[7].tdClass = value && "color4";
+        this.columns[8].tdClass = value && "color4";
+      },
+      immediate: true,
+    },
+  }
 }
 </script>
 
@@ -147,7 +180,7 @@ export default {
       </template>
     </VaTabs>
     <VaDataTable
-        class="table-inline va-table va-table--striped"
+        class="table-inline va-table"
         :items="items[currentTab]"
         :columns="columns"
 
@@ -156,6 +189,7 @@ export default {
           v-for="item in columns"
           :key="item.key"
           #[`cell(${item.key})`]="{ value, row }"
+
       >
         <div class="table-inline__cell" v-bind:style="getStyle(item.key)" style="overflow: hidden;">
           <VaValue v-slot="doShowInput">
@@ -213,12 +247,34 @@ export default {
 
 <style scoped lang="scss">
 
-.va-table-responsive {
-  //overflow: auto;
+.table {
+  ::v-deep(th) {
+    border: 1px solid var(--va-background-border);
+  }
+
+  ::v-deep(tr) {
+    border-bottom: 1px solid var(--va-background-border);
+
+    td {
+      height: 4rem;
+      white-space: normal;
+      border: 1px solid;
+
+    }
+  }
 }
 
-.va-table {
-
+::v-deep(.color1) {
+  background-color: rgba(75, 244, 244, 0.06);
+}
+::v-deep(.color2) {
+  background-color: rgba(243, 90, 153, 0.06);
+}
+::v-deep(.color3) {
+  background-color: rgba(167, 248, 81, 0.06);
+}
+::v-deep(.color4) {
+  background-color: rgba(108, 116, 255, 0.06);
 }
 
 .table-inline {

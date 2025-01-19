@@ -18,7 +18,8 @@ export default {
     const mc_results = Object.keys(useScheduleStore().scheduleNote).length === 0 ? {'pe': [[]], 'pne': [[]]} : useScheduleStore().scheduleNote;
     return {
       isModified: this.$props.modified,
-      mc_results: mc_results,
+      pe_report: mc_results['pe'],
+      pne_report: mc_results['pne'],
       scheduleData: useScheduleStore().scheduleData,
       init: useToast(),
       currentTab: "pe",
@@ -249,7 +250,7 @@ export default {
       </div>
       <VaDataTable
           :columns="colNames[currentTab]"
-          :items="mc_results[currentTab][currentNota]"
+          :items="currentTab == 'pe' ? pe_report[currentNota] : pne_report[currentNota]"
           :filter="filter"
           :filter-method="customFilteringFn"
           sticky-header
