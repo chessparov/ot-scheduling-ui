@@ -6,8 +6,6 @@ import DashboardMenu from "@/pages/dashboard/cards/DashboardMenu.vue";
 import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
 import {useScheduleStore} from "@/stores/global-store";
-import axios from "axios";
-import {ref} from "vue";
 import NotaReport from "@/pages/dashboard/cards/NotaReport.vue";
 
 export default {

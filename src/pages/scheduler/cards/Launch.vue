@@ -40,7 +40,7 @@ export default defineComponent ({
   data () {
     return {
       percent: 0,
-      estimatedTime: this.mcCycles + this.tabuTime,
+      estimatedTime: 4 + 0.006 * this.mcCycles + this.tabuTime,
       compTime: 0,
       currentTime: 0,
       btnDisabled: false,
@@ -51,7 +51,7 @@ export default defineComponent ({
     getLabel() {
       const hours = Math.floor(this.estimatedTime / (60 * 60)).toString();
       const minutes = Math.floor((this.estimatedTime % (60 * 60)) / 60).toString();
-      const seconds = ((this.estimatedTime % (60 * 60)) % 60).toString();
+      const seconds = Math.round((this.estimatedTime % (60 * 60)) % 60).toString();
       return Number(hours) >= 1
           ? hours + ' ore ' + minutes + ' min ' + seconds + ' secondi'
           : Number(minutes) >= 1 ? minutes + ' min ' + seconds + ' secondi'
@@ -246,7 +246,7 @@ export default defineComponent ({
     }
   },
   updated() {
-    this.estimatedTime = this.mcCycles + this.tabuTime;
+    this.estimatedTime = 4 + 0.006 * this.mcCycles + this.tabuTime;
   }
 })
 </script>
