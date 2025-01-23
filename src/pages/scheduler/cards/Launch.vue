@@ -144,7 +144,7 @@ export default defineComponent ({
             .catch(error => {
               this.btnDisabled = false;
               if (error.response.status === 400) {
-                this.toast.init({ message: "File non valido", color: "danger" })
+                this.toast.init({ message: `File non valido:\n${error.response.data}`, color: "danger" })
               }
               else {
                 this.toast.init({ message: "Errore lato server", color: "danger" })
@@ -186,8 +186,9 @@ export default defineComponent ({
               .catch(error => {
                 this.btnDisabled = false;
                 if (error.response.status === 400) {
-                  this.toast.init({message: "File non valido", color: "danger"})
-                } else {
+                  this.toast.init({ message: `File non valido:\n${error.response.data}`, color: "danger" })
+                }
+                else {
                   this.toast.init({message: "Errore lato server", color: "danger"})
                 }
                 clearInterval(progressBarTimeOut);
@@ -227,8 +228,9 @@ export default defineComponent ({
               .catch(error => {
                 this.btnDisabled = false;
                 if (error.response.status === 400) {
-                  this.toast.init({message: "File non valido", color: "danger"})
-                } else {
+                  this.toast.init({ message: `File non valido:\n${error.response.data}`, color: "danger" })
+                }
+                else {
                   this.toast.init({message: "Errore lato server", color: "danger"})
                 }
                 clearInterval(progressBarTimeOut);
