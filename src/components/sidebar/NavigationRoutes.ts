@@ -33,7 +33,7 @@ export default {
     },
     {
       name: 'schedule',
-      displayName: 'Nuova Schedula',
+      displayName: 'Nuova schedula',
       meta: {
         icon: 'group',
       },
@@ -42,7 +42,16 @@ export default {
     },
     {
       name: 'upload',
-      displayName: 'Carica Schedula',
+      displayName: 'Analizza schedula',
+      meta: {
+        icon: 'speed',
+      },
+      display: true,
+      requiresAdminPrivileges: true
+    },
+    {
+      name: 'cleaner',
+      displayName: 'Filtra lista',
       meta: {
         icon: 'upload',
       },

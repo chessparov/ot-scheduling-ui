@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import BindedSlider from "@/components/BindedSlider.vue";
 import {useToast, VaCard, VaCardContent, VaDateInput, VaFile, VaFileUpload, VaInput, VaSwitch} from "vuestic-ui";
-import {ref, toRaw} from "vue";
-import axios from "axios";
-import FileDownload from "js-file-download";
+import {ref} from "vue";
 
 const props = defineProps({
   upload: {
@@ -49,7 +47,6 @@ const [files, modifiers] = defineModel('files',
 let cycles = ref(props.cycles)
 let visibility = props.upload ? 'visible' : 'hidden';
 let display = props.showToggle ? 'flex' : 'none';
-let btnDisabled = ref(false);
 
 
 function cyclesNumber(newValue: number) {
@@ -57,49 +54,6 @@ function cyclesNumber(newValue: number) {
   emit("mc-cycles", cycles.value);
 }
 
-async function onClean() {
-
-  if (files.value.length === 0) {
-    notify({
-      message: 'Nessuna lista caricata',
-      color: 'warning'
-    })
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('file', files.value[0], 'lista.xlsx');
-  btnDisabled.value = true;
-
-  await axios
-      .post('http://localhost:8000/api/scheduler/clean-list',
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            },
-            responseType: 'blob'
-          })
-      .then((res) => {
-        FileDownload(res.data, `lista_filtrata.xlsx`)
-        btnDisabled.value = false;
-      })
-      .catch((error) => {
-        btnDisabled.value = false;
-        if (error.response.status == 400) {
-          notify({
-            message: 'File non valido',
-            color: 'warning'
-          })
-        }
-        else {
-          notify({
-            message: 'Errore lato server',
-            color: 'danger'
-          })
-        }
-      })
-}
 </script>
 
 <template>
@@ -144,27 +98,6 @@ async function onClean() {
           </VaSwitch>
         </div>
         <div class="flex flex-col gap-4" >
-          <VaCollapse
-              class="min-w-96 gap-4"
-              header="Pulizia lista attesa"
-              icon="cleaning_services"
-          >
-            <span>
-              La lista viene filtrata in modo che contenga solo interventi assegnati alla line di chirurgia robotica.
-              <br>
-              Il filtro è applicato controllando che in almeno una tra le colonne "Blocco" e "Gruppo Lista"
-              compaia l'assegnazione al CMR di chirurgia robotica.
-              <br>
-              La lista viene poi ordinata per "Priorità" e "Due Date" in questo preciso ordine.
-            </span>
-            <br>
-            <div class="flex flex-row gap-4">
-<!--              <VaProgressCircle v-if="btnDisabled" indeterminate size="small" style="margin-top: auto; margin-bottom: auto;"/>-->
-              <VaButton class="my-4 gap-4" @click="onClean" :disabled="btnDisabled" :loading="btnDisabled">
-                Esegui pulizia
-              </VaButton>
-            </div>
-          </VaCollapse>
           <VaFileUpload
               :hidden="!upload"
               v-model="files as VaFile[]"

@@ -49,6 +49,15 @@ const routes: Array<RouteRecordRaw> = [
                 }
             },
             {
+                name: 'cleaner',
+                path: 'cleaner',
+                component: () => import('../pages/cleaner/CleanList.vue'),
+                meta: {
+                    requiresAuth: true,
+                    requiresAdminPrivileges: true
+                }
+            },
+            {
                 name: 'settings',
                 path: 'settings',
                 component: () => import('../pages/settings/Settings.vue'),
