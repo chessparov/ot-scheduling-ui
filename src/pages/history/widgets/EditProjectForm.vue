@@ -64,7 +64,7 @@ const required = (v: string | SelectOption) => !!v || 'This field is required'
       track-by="value"
       value-by="value"
       :options="[
-        { text: 'Testing', value: 'in progress' },
+        { text: 'Test', value: 'in progress' },
         { text: 'Archiviato', value: 'archived' },
         { text: 'In Produzione', value: 'completed' },
       ]"

@@ -40,7 +40,7 @@ export default defineComponent ({
   data () {
     return {
       percent: 0,
-      estimatedTime: 4 + 0.006 * this.mcCycles + this.tabuTime,
+      estimatedTime: 4 + 0.0075 * this.mcCycles + this.tabuTime,
       compTime: 0,
       currentTime: 0,
       btnDisabled: false,
@@ -61,7 +61,6 @@ export default defineComponent ({
       if (this.currentTime < this.compTime) {
         this.percent = Math.round(((this.currentTime) / this.compTime) * 100);
         this.currentTime++;
-
       }
       else if (this.currentTime == this.compTime) {
         this.percent = 99;
