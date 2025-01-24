@@ -21,7 +21,7 @@ const filesSchedule = ref<VaFile[]>([]);
 
 const {init: notify} = useToast();
 const selectedSchedule = ref<Project>();
-const projects = useDataStore().projects as Project[];
+const projects = useDataStore().projects.reverse() as Project[];
 const scheduleSource = ref('archive');
 
 const mcCycles = ref(useGlobalStore().montecarloDefault);
