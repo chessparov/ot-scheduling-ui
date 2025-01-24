@@ -27,6 +27,7 @@ export default {
       tabNames: {"pe": "Pazienti eletti", "pne": "Pazienti non eletti", "nota": "Nota operatoria"},
       colNames: {
         "pe": [
+          {key: "Indice", sortingOptions: ["desc", "asc"], sortable: true,},
           {key: "Data Intervento", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
           {key: "Data Prenot.", label: "Data prenotazione", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
           {key: "due date", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
@@ -43,6 +44,7 @@ export default {
           {key: "ID Percorso", sortable: true, sortingOptions: ["desc", "asc"]},
         ],
         "pne": [
+          {key: "Indice", sortingOptions: ["desc", "asc"], sortable: true,},
           {key: "Data Prenot.", label: "Data prenotazione", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
           {key: "due date", sortable: true, sortingOptions: ["desc", "asc"], displayFormatFn: (date) => date.split("-").reverse().join("/")},
           {key: "Paziente", sortingOptions: ["desc", "asc"], sortable: true,},
