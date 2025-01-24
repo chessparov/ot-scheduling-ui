@@ -93,8 +93,8 @@ export default defineComponent ({
         'optimization': this.optimization,
         'alpha': this.optimization ? useOptParamsStore().optParams[0] : 0,
         'beta': this.optimization ? useOptParamsStore().optParams[1] : 0,
-        'gamma': this.optimization ? useOptParamsStore().optParams[2] : 0,
-        'epsilon': this.optimization ? useOptParamsStore().optParams[3] : 0,
+        'epsilon': this.optimization ? useOptParamsStore().optParams[2] : 0,
+        'theta': this.optimization ? useOptParamsStore().optParams[3] : 0,
         'creationDate': new Date(),
         'computationTime': 0,
         'author': useUserStore().email

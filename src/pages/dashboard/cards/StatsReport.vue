@@ -39,8 +39,8 @@ const riepilogoData = [
     Dettagli: 'Autore', valore_:  props.riepilogo.author},
   {Parametri_: 'Alpha', valore: props.riepilogo.alpha, Dettagli:'', valore_: ''},
   {Parametri_: 'Beta', valore: props.riepilogo.beta, Dettagli:'', valore_: ''},
-  {Parametri_: 'Gamma', valore: props.riepilogo.gamma, Dettagli:'', valore_: ''},
   {Parametri_: 'Epsilon', valore: props.riepilogo.epsilon, Dettagli:'', valore_: ''},
+  {Parametri_: 'Theta', valore: props.riepilogo.theta, Dettagli:'', valore_: ''},
 ]
 
 const columns =  defineVaDataTableColumns([
