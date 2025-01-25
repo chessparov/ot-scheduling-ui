@@ -124,24 +124,6 @@ export default {
       return day1 + " " + month1 + " - " + day2 + " " + month2
 
     },
-    getStyle(itemKey: string) {
-      // console.log(itemKey)
-      // const robot = itemKey.split('_')[1]
-      //
-      // if (robot == 'A') {
-      //   return {'background-color': 'red'}
-      // }
-      // else if (robot == 'B') {
-      //   return {color: 'red'}
-      // }
-      // else if (robot == 'C') {
-      //   return {color: 'red'}
-      // }
-      // else if (robot == 'D') {
-      //   return {color: 'red'}
-      // }
-    //
-    }
   },
   watch: {
     useAdditionalClass: {
@@ -181,9 +163,9 @@ export default {
     </VaTabs>
     <VaDataTable
         class="table-inline va-table"
+        clickable
         :items="items[currentTab]"
         :columns="columns"
-
     >
       <template
           v-for="item in columns"
@@ -191,8 +173,8 @@ export default {
           #[`cell(${item.key})`]="{ value, row }"
 
       >
-        <div class="table-inline__cell" v-bind:style="getStyle(item.key)" style="overflow: hidden;">
-          <VaValue v-slot="doShowInput">
+        <VaValue v-slot="doShowInput">
+          <div class="table-inline__cell" style="overflow: hidden;" @click="userStore.admin ? (item.key == 'day' ? null : doShowInput.value = true) : null">
             <VaInput
                 ref="inputBox"
                 v-if="doShowInput.value"
@@ -208,12 +190,12 @@ export default {
             <span
                 class="table-inline__item"
                 :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-                @click="userStore.admin ? (item.key == 'day' ? null : doShowInput.value = true) : null"
+
             >
               {{ value.toUpperCase() }}
             </span>
-          </VaValue>
-        </div>
+          </div>
+        </VaValue>
       </template>
     </VaDataTable>
 <!--    <div class="va-table-responsive">-->
