@@ -2,22 +2,25 @@
 
 import axios from "axios";
 import FileDownload from "js-file-download";
-import {VaCard, VaCardContent, VaFile, VaFileUpload} from "vuestic-ui";
+import {useToast, VaCard, VaCardContent, VaFile, VaFileUpload} from "vuestic-ui";
 import {ref} from "vue";
 
-const files: VaFile[] = ref([]);
-const btnDisabled = ref(false);
+const { init: notify } = useToast()
 
-function onFileChange(value) {
-  if (value.length > 1) {
-    value.pop(); // Remove additional files if more than one is uploaded
-    notify({
-      message: "Non è possibile caricare più di un file",
-      color: "warning",
-    });
-  }
-  files.value = value; // Update the reactive files list
-}
+const files = defineModel('files',
+    {
+      set(value: VaFile[]) {
+        if (value.length >= 2) {
+          value.pop();
+          notify({
+            message: 'Non è possibile caricare più di un file',
+            color: 'warning',
+          })
+        }
+        return value
+      }
+    })
+const btnDisabled = ref(false);
 
 async function onClean() {
 
@@ -29,7 +32,7 @@ async function onClean() {
     return;
   }
 
-  const formData = new FormData();
+  let formData = new FormData();
   formData.append('file', files.value[0], 'lista.xlsx');
   btnDisabled.value = true;
 
@@ -70,36 +73,36 @@ async function onClean() {
     <section class="flex flex-col gap-2">
       <div class="flex flex-col gap-4">
         <VaCardTitle>Pulizia lista d'attesa</VaCardTitle>
-        <VaCardContent>
-          <div class="flex flex-col gap-2 mx-4">
-            <span>Le operazioni effettuate sono:</span>
-            <VaList>
-              <li style="white-space: pre-line;">
-                La lista viene filtrata in modo che contenga solo interventi assegnati alla linea di chirurgia robotica.
-                <br>
-                <span style="display:block; text-indent: 20px;">Il filtro è applicato controllando che in almeno una tra le colonne "Blocco" e "Gruppo Lista"
-                  compaia l'assegnazione al CMR di chirurgia robotica.</span>
-              </li>
-              <li>
-                La lista viene ordinata per "Priorità" e "Due Date" in questo preciso ordine.
-              </li>
-              <li>
-                Viene aggiunta una colonna "Due Date" nella quale viene calcolata la scadenza dell'intervento in base alla
-                data di prenotazione e alla classe di priorità.
-              </li>
-              <li>
-                Viene aggiunta una colonna "Pne/Pngla" nella quale viene indicata l'appartenenza o meno a una delle classi
-                monitorate.
-              </li>
-            </VaList>
-          </div>
-        </VaCardContent>
+        <VaCard>
+          <VaCardContent>
+            <div class="flex flex-col gap-2 mx-4">
+              <span>Le operazioni effettuate sono:</span>
+              <VaList>
+                <li style="white-space: pre-line;">
+                  La lista viene filtrata in modo che contenga solo interventi assegnati alla linea di chirurgia robotica.
+                  Il filtro è applicato controllando che in almeno una tra le colonne "Blocco" e "Gruppo Lista"
+                    compaia l'assegnazione al CMR di chirurgia robotica.
+                </li>
+                <li>
+                  La lista viene ordinata per "Priorità" e "Due Date" in questo preciso ordine.
+                </li>
+                <li>
+                  Viene aggiunta una colonna "Due Date" nella quale viene calcolata la scadenza dell'intervento in base alla
+                  data di prenotazione e alla classe di priorità.
+                </li>
+                <li>
+                  Viene aggiunta una colonna "Pne/Pngla" nella quale viene indicata l'appartenenza o meno a una delle classi
+                  monitorate.
+                </li>
+              </VaList>
+            </div>
+          </VaCardContent>
+        </VaCard>
         <div class="flex flex-col gap-4 mx-4">
           <VaFileUpload
-              v-model="files as VaFile[]"
+              v-model="files"
               file-types="xlsx,xls"
               uploadButtonText="Carica Lista Attesa"
-              @change="onFileChange"
           />
           <VaButton class="my-4 gap-4" @click="onClean" :disabled="btnDisabled" :loading="btnDisabled">
             Esegui pulizia
