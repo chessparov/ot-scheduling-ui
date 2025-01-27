@@ -2,34 +2,68 @@
 
 import * as d3 from "d3";
 import {useScheduleStore} from "@/stores/global-store";
+import {useColors} from "vuestic-ui";
+
+const scale = defineModel()
 
 const arrPctOnc = useScheduleStore().scheduleReport["pct_oncologici"].map((e: number) => {return e * 100})
-const minPctOnc: number = Math.min(...arrPctOnc) - 2;
+const minPctOnc: number = Math.max(Math.min(...arrPctOnc) - 2, 0);
 const maxPctOnc: number = Math.max(...arrPctOnc) + 2;
 
-const histGenerator = d3.bin()
-    .domain([minPctOnc, maxPctOnc])
-    .thresholds(maxPctOnc - minPctOnc)
+const arrNumOnc = useScheduleStore().scheduleReport["n_oncologici"];
+const minNumOnc: number = Math.max(Math.min(...arrNumOnc) - 2, 0);
+const maxNumOnc: number = Math.max(...arrNumOnc) + 2;
 
-const bins = histGenerator(arrPctOnc);
+const histGenerator = scale.value === 'percentage' ? d3.bin()
+        .domain([minPctOnc, maxPctOnc])
+        .thresholds(maxPctOnc - minPctOnc)
+    : d3.bin()
+        .domain([minNumOnc, maxNumOnc])
+        .thresholds(maxNumOnc - minNumOnc)
+
+const bins = scale.value === 'percentage' ? histGenerator(arrPctOnc) : histGenerator(arrNumOnc);
 const categories = () => {
-  let arrCategories = [];
-  for (let i = Math.round(minPctOnc); i <= maxPctOnc; i++) {
-    arrCategories.push(i + "%");
+  if (scale.value === 'percentage') {
+    let arrCategories = [];
+    for (let i = Math.round(minPctOnc); i <= maxPctOnc; i++) {
+      arrCategories.push(i + "%");
+    }
+    return arrCategories
   }
-  return arrCategories
+  else {
+    let arrCategories = [];
+    for (let i = Math.round(minNumOnc); i <= maxNumOnc; i++) {
+      arrCategories.push(i);
+    }
+    return arrCategories
+  }
 }
 
 const binLength = () => {
-  let arrBinLengths = [];
-  for (let i = 0; i < (maxPctOnc - minPctOnc); i++) {
-    arrBinLengths.push(bins[i].length);
+  if (scale.value === 'percentage') {
+    let arrBinLengths = [];
+    for (let i = 0; i < (maxPctOnc - minPctOnc); i++) {
+      arrBinLengths.push(bins[i].length);
+    }
+    return arrBinLengths
   }
-  return arrBinLengths
+  else {
+    let arrBinLengths = [];
+    for (let i = 0; i < (maxNumOnc - minNumOnc); i++) {
+      arrBinLengths.push(bins[i].length);
+    }
+    return arrBinLengths
+  }
 }
 
+const seriesName = scale.value === 'percentage' ? 'Percentuale di interventi oncologici ' : 'Numero di interventi oncologici'
+const xAxisLabel = scale.value === 'percentage' ? 'Percentuale' : 'Numero interventi'
+const titleLabel = scale.value === 'percentage' ? 'Percentuale di interventi oncologici' : 'Numero di interventi oncologici'
+
+const {currentPresetName, getComputedColor} = useColors();
+
 const series = [{
-  name: 'Percentuale oncologici',
+  name: seriesName,
   data: binLength(),
 }];
 
@@ -39,7 +73,10 @@ const chartOptions = {
     type: 'bar',
   },
   theme: {
-    palette: 'palette5' // upto palette10
+    monochrome: {
+      enabled: true,
+      color: '#00cae4',
+    }
   },
   plotOptions: {
     bar: {
@@ -59,7 +96,11 @@ const chartOptions = {
   },
   xaxis: {
     title: {
-      text: 'Percentuale'
+      text: xAxisLabel,
+      style: {
+        fontWeight: 'normal',
+        fontSize: '14px',
+      }
     },
     categories: categories(),
     position: 'bottom',
@@ -87,7 +128,11 @@ const chartOptions = {
   },
   yaxis: {
     title: {
-      text: 'Numero schedule'
+      text: 'Frequenza',
+      style: {
+        fontWeight: 'normal',
+        fontSize: '14px',
+      }
     },
     axisBorder: {
       show: false
@@ -100,7 +145,7 @@ const chartOptions = {
     }
   },
   title: {
-    text: 'Percentuale oncologi',
+    text: titleLabel,
     floating: true,
     offsetY: 0,
     align: 'center',

@@ -39,7 +39,10 @@ const chartOptions = {
     type: 'bar',
   },
   theme: {
-    palette: 'palette3' // upto palette10
+    monochrome: {
+      enabled: true,
+      color: '#ff826b',
+    }
   },
   plotOptions: {
     bar: {
@@ -59,7 +62,11 @@ const chartOptions = {
   },
   xaxis: {
     title: {
-      text: 'Numero interventi'
+      text: 'Numero interventi',
+      style: {
+        fontWeight: 'normal',
+        fontSize: '14px',
+      }
     },
     categories: categories(),
     position: 'bottom',
@@ -87,7 +94,11 @@ const chartOptions = {
   },
   yaxis: {
     title: {
-      text: 'Numero schedule'
+      text: 'Frequenza',
+      style: {
+        fontWeight: 'normal',
+        fontSize: '14px',
+      }
     },
     axisBorder: {
       show: false
@@ -100,12 +111,13 @@ const chartOptions = {
     }
   },
   title: {
-    text: 'Numero interventi in ritardo',
-    floating: true,
+    text: 'Numero di interventi in ritardo',
+    floating: false,
     offsetY: 0,
     align: 'center',
     style: {
-      color: '#444'
+      color: '#444',
+      fontFamily: 'sans-serif'
     }
   }
 }

@@ -39,7 +39,10 @@ const chartOptions = {
     type: 'bar',
   },
   theme: {
-    palette: 'palette4' // upto palette10
+    monochrome: {
+      enabled: true,
+      color: '#fb5190',
+    }
   },
   plotOptions: {
     bar: {
@@ -59,7 +62,11 @@ const chartOptions = {
   },
   xaxis: {
     title: {
-      text: 'Ritardo medio [Giorni]'
+      text: 'Ritardo medio [giorni]',
+      style: {
+        fontWeight: 'normal',
+        fontSize: '14px',
+      }
     },
     categories: categories(),
     position: 'bottom',
@@ -87,7 +94,11 @@ const chartOptions = {
   },
   yaxis: {
     title: {
-      text: 'Numero schedule'
+      text: 'Frequenza',
+      style: {
+        fontWeight: 'normal',
+        fontSize: '14px',
+      }
     },
     axisBorder: {
       show: false
