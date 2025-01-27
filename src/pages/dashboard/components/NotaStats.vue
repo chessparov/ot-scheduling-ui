@@ -3,12 +3,18 @@
 import {ref} from "vue";
 import GenericPie from "@/components/charts/GenericPie.vue";
 import GenericBar from "@/components/charts/GenericBar.vue";
+import axios, {Axios} from "axios";
+import FileDownload from "js-file-download";
+import {useScheduleStore} from "@/stores/global-store";
+import {useToast} from "vuestic-ui";
 
-const nota = ref('nota1');
+const {notify} = useToast();
+
+const nota = ref(0);
 const optionsNote = [
-  {value: 'nota1', label: 'Nota 1'},
-  {value: 'nota2', label: 'Nota 2'},
-  {value: 'nota3', label: 'Nota 3'}
+  {value: 0, label: 'Nota 1'},
+  {value: 1, label: 'Nota 2'},
+  {value: 2, label: 'Nota 3'}
 ]
 
 const statType = ref('interventiOrario');
@@ -21,6 +27,24 @@ const statList = [
   {value: 'pnglaOrario', text: 'PNGLA in orario'},
 ]
 const palette = ref(['#154ec1', '#00cae4']);
+
+const requestStats = async () => {
+  const { scheduleId } = useScheduleStore();
+  const pk = scheduleId;
+  const index = nota.value;
+  await axios
+      .get(axios.defaults.baseURL + '/api/scheduler/nota-stats/' + pk + '/' + index,)
+      .then((res) => {
+
+      })
+      .catch((error) => {
+          notify({
+            message: 'Errore lato server',
+            color: 'danger'
+          })
+      })
+}
+requestStats();
 </script>
 
 <template>

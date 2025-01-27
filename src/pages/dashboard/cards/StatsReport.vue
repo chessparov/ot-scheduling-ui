@@ -46,6 +46,18 @@ const paramsData = [
   {Parametri_: 'Epsilon', valore: props.riepilogo.epsilon},
   {Parametri_: 'Theta', valore: props.riepilogo.theta},
 ];
+const paramsData2 = [
+  {
+    Parametro: 'VALORE',
+    Corse_Montecarlo: props.riepilogo.mcCycles,
+    Ottimizzazione: props.riepilogo.optimization ? 'Sì' : 'No',
+    Tempo_ottimizzazione: props.riepilogo.tabuTime,
+    Alpha: props.riepilogo.alpha,
+    Beta: props.riepilogo.beta,
+    Epsilon: props.riepilogo.epsilon,
+    Theta: props.riepilogo.theta
+  },
+];
 
 const getMean = (arr: []) => {
   return Number((arr.reduce((a, b) => a + b) / arr.length).toFixed(2))
@@ -75,6 +87,16 @@ const columns2 =  defineVaDataTableColumns([
   { label: 'Statistica', key: 'stats', sortable: false, width: '40%'},
   { label: 'Media', key: 'mean', sortable: false },
   { label: 'Mediana', key: 'median', sortable: false },
+]);
+const columns3 =  defineVaDataTableColumns([
+  { label: '\n', key: 'Parametro', sortable: false, style: 'font-weight: bold; font-size: 10px'},
+  { label: 'Corse Montecarlo', key: 'Corse_Montecarlo', sortable: false },
+  { label: 'Ottimizzazione', key: 'Ottimizzazione', sortable: false },
+  { label: 'Tempo ottimizzazione', key: 'Tempo_ottimizzazione', sortable: false },
+  { label: 'Alpha', key: 'Alpha', sortable: false, width: '150px'},
+  { label: 'Beta', key: 'Beta', sortable: false, width: '150px'},
+  { label: 'Epsilon', key: 'Epsilon', sortable: false, width: '150px'},
+  { label: 'Theta', key: 'Theta', sortable: false, width: '150px'},
 ]);
 
 let firstCollapse = true;
@@ -120,7 +142,7 @@ const optionsOnlyIcons =  [
       </VaCardContent>
     </VaCard>
     <VaCollapse header="Riepilogo" v-model="firstCollapse">
-      <div class="flex flex-col lg:flex-row gap-4 justify-between">
+      <div class="flex flex-col lg:flex-col gap-4 justify-between">
 <!--        <VaCard-->
 <!--            gradient-->
 <!--            class="w-1/2"-->
@@ -140,16 +162,24 @@ const optionsOnlyIcons =  [
         <VaDataTable
             class="table-2"
             style="font-size: 13px;"
+            :columns="columns3"
+            :items="paramsData2"
+            striped
+        />
+        <VaDataTable
+            class="table-2"
+            style="font-size: 13px;"
             :columns="columns2"
             :items="riepilogoData"
             striped
         />
-        <VaDataTable
-            class="table-1"
-            style="font-size: 13px;"
-            :columns="columns1"
-            :items="paramsData"
-        />
+
+<!--        <VaDataTable-->
+<!--            class="table-1"-->
+<!--            style="font-size: 13px;"-->
+<!--            :columns="columns1"-->
+<!--            :items="paramsData"-->
+<!--        />-->
       </div>
     </VaCollapse>
     <VaCollapse header="Statistiche Globali">
@@ -187,16 +217,16 @@ const optionsOnlyIcons =  [
 }
 .table-1 {
   width: 100%;
-  @media (min-width: 1440px) {
-    width: 40%;
-  }
+  //@media (min-width: 1440px) {
+  //  width: 40%;
+  //}
 }
 
 .table-2 {
   width: 100%;
-  @media (min-width: 1440px) {
-    width: 60%;
-  }
+  //@media (min-width: 1440px) {
+  //  width: 60%;
+  //}
   ::v-deep(tr) {
     border-bottom: 1px solid var(--va-background-border);
 
