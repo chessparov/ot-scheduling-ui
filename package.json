@@ -32,6 +32,7 @@
     "d3": "^7.9.0",
     "epic-spinners": "^2.0.0",
     "flag-icons": "^6.15.0",
+    "i": "^0.3.7",
     "ionicons": "^4.6.3",
     "js-file-download": "^0.4.12",
     "medium-editor": "^5.23.3",
@@ -46,7 +47,8 @@
     "vue-i18n": "10.0.5",
     "vue-router": "^4.2.5",
     "vue3-apexcharts": "^1.7.0",
-    "vuestic-ui": "^1.10.3"
+    "vuestic-ui": "^1.10.3",
+    "vuetify": "^3.7.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.13.0",

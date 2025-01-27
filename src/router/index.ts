@@ -84,6 +84,16 @@ const routes: Array<RouteRecordRaw> = [
                     requiresAdminPrivileges: true,
                 }
             },
+            {
+                name: 'pre-schedule',
+                path: 'pre-schedule',
+                props: true,
+                component: () => import('../pages/pre-schedule/DefaultSchedule.vue'),
+                meta: {
+                    requiresAuth: true,
+                    requiresAdminPrivileges: true,
+                }
+            },
         ]
     },
     {

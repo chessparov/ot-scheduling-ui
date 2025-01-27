@@ -226,6 +226,20 @@ const modParams = () => {
       </VaButton>
     </div>
     <VaDivider class="py-4 group-last:hidden" />
+    <div class="flex flex-col md:flex-row justify-between overflow-x-hidden">
+      <div class="flex flex-col" style="margin-bottom: 1rem">
+        <span class="text-regularMedium" style="font-weight: bold">
+          Sale predefinite
+        </span>
+        <span class="text-regularMedium py-2">
+          Costruisci una schedula di partenza assegnando sale a reparti in modo preventivo.
+        </span>
+      </div>
+      <VaButton :to="'pre-schedule'" class="button-left md:button-right">
+        Vai alla schedula
+      </VaButton>
+    </div>
+    <VaDivider class="py-4 group-last:hidden" />
     <UoList />
     <VaDivider class="py-4 group-last:hidden" />
   </div>
