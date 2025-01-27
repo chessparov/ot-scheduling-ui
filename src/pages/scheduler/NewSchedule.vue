@@ -76,7 +76,6 @@ export default defineComponent({
           :tb-time="tabuTime"
       />
     </div>
-    <Constraints/>
     <Launch
         :name="name"
         :start-date="startDate"

@@ -204,6 +204,7 @@ export default {
               {{ rowData.day }}
             </div>
           </template>
+
           <template #cell(ROBOT_A_MAT)="{ rowData }" style="text-align: center">
             <div style="color: green; text-align: center;" @click="changeCell(rowData, 'ROBOT_A_MAT');">
               {{ rowData.ROBOT_A_MAT ? '&#10004' :'&#x274c' }}

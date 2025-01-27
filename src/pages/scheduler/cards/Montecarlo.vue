@@ -2,6 +2,7 @@
 import BindedSlider from "@/components/BindedSlider.vue";
 import {useToast, VaCard, VaCardContent, VaDateInput, VaFile, VaFileUpload, VaInput, VaSwitch} from "vuestic-ui";
 import {ref} from "vue";
+import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 
 const props = defineProps({
   upload: {
@@ -105,6 +106,7 @@ function cyclesNumber(newValue: number) {
               uploadButtonText="Carica Lista Attesa"
           />
         </div>
+        <Constraints/>
       </section>
     </VaCardContent>
   </VaCard>
