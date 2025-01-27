@@ -180,7 +180,7 @@ export default {
                 v-if="doShowInput.value"
                 :model-value="value.toUpperCase()"
                 @change="($event) => {
-                    row.rowData[item.key] = $event.target.value;
+                    row.rowData[item.key] = $event.target.value.toUpperCase();
                     doShowInput.value = false;
                     this.modifiedSchedule = true;
                     $emit('modifiedSchedule', row);
@@ -192,7 +192,7 @@ export default {
                 :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
 
             >
-              {{ value.toUpperCase() }}
+              {{ value }}
             </span>
           </div>
         </VaValue>
@@ -247,16 +247,16 @@ export default {
 }
 
 ::v-deep(.color1) {
-  background-color: rgba(75, 244, 244, 0.06);
+  background-color: rgba(238, 238, 238, 0.4);
 }
 ::v-deep(.color2) {
-  background-color: rgba(243, 90, 153, 0.06);
+  background-color: rgb(255, 255, 255);
 }
 ::v-deep(.color3) {
-  background-color: rgba(167, 248, 81, 0.06);
+  background-color: rgba(238, 238, 238, 0.4);
 }
 ::v-deep(.color4) {
-  background-color: rgba(108, 116, 255, 0.06);
+  background-color: rgb(255, 255, 255);
 }
 
 .table-inline {

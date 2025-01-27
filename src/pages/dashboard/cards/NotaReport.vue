@@ -255,6 +255,7 @@ export default {
           :items="currentTab == 'pe' ? pe_report[currentNota] : pne_report[currentNota]"
           :filter="filter"
           :filter-method="customFilteringFn"
+          virtual-scroller
           sticky-header
           striped
           height="500px"
