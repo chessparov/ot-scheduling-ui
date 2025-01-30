@@ -120,11 +120,11 @@ const modParams = () => {
 <!--      </div>-->
       <div class="flex flex-col md:flex-row justify-between overflow-x-hidden gap-4 ">
         <span class="text-regularMedium">
-          Numero di giorni
+          Numero di giorni di lavoro settimanali
         </span>
         <VaInput class="md:w-[50%]" v-model="formData.n_days" ref="numericInput4" size="small">
           <template #appendInner>
-            <span>N°</span>
+            <span>Giorni</span>
           </template>
         </VaInput>
       </div>
