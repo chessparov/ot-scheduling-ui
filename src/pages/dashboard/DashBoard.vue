@@ -22,6 +22,9 @@ export default {
       isModified: useScheduleStore().modified,
       changesMade: false,
     }
+  },
+  mounted() {
+
   }
 }
 </script>

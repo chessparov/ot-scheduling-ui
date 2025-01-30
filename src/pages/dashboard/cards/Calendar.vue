@@ -2,12 +2,14 @@
 
 import {useScheduleStore} from "@/stores/global-store";
 import {useUserStore} from "@/stores/user-store";
+import {useProjects} from "@/pages/history/composables/useProjects";
 
 export default {
   props: {
     startDate: {type: Date, required: true},
   },
   data() {
+    const {refresh} = useProjects();
     return {
       userStore: useUserStore(),
       modifiedSchedule: false,
@@ -92,6 +94,7 @@ export default {
       ],
       useAdditionalStyle: true,
       useAdditionalClass: true,
+      refresh,
     }
   },
   methods: {
@@ -139,6 +142,9 @@ export default {
       },
       immediate: true,
     },
+  },
+  mounted() {
+    useScheduleStore().fetchData()
   }
 }
 </script>
