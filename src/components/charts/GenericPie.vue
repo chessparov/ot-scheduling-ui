@@ -1,44 +1,50 @@
 <script setup lang="ts">
 
+import {computed} from "vue";
+
 const props = defineProps(['series', 'labels', 'title', 'palette']);
 
-
-const chartOptions = {
+const chartOptions = computed(() => ({
   chart: {
-    width: 350,
     type: 'pie',
-  },
-  theme: {
-
   },
   colors: props.palette,
   labels: props.labels,
-  title: {
-    text: props.title,
-    floating: true,
-    offsetY: 0,
-    align: 'right',
-    style: {
-      color: '#444'
-    }
+  // title: {
+  //   text: props.title,
+  //   // floating: true,
+  //   offsetY: 0,
+  //   align: 'left',
+  //   style: {
+  //     color: '#444'
+  //   }
+  // },
+  pie: {
+    offsetY: 100,
+  },
+  legend: {
+    position: 'bottom',
+    // floating: true,
+    show: true,
   },
   responsive: [{
     breakpoint: 480,
     options: {
       chart: {
-        width: 200
+        width: 350
       },
       legend: {
-        position: 'bottom'
+        position: 'top',
+        floating: true,
       }
     }
   }]
-}
+}))
 
 </script>
 
 <template>
-  <apexchart type="pie" width="350" :options="chartOptions" :series="props.series"></apexchart>
+  <apexchart type="pie" :options="chartOptions" :series="props.series"></apexchart>
 </template>
 
 <style scoped lang="scss">

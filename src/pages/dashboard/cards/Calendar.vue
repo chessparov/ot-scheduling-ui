@@ -171,7 +171,6 @@ export default {
           v-for="item in columns"
           :key="item.key"
           #[`cell(${item.key})`]="{ value, row }"
-
       >
         <VaValue v-slot="doShowInput">
           <div class="table-inline__cell" style="overflow: hidden;" @click="userStore.admin ? (item.key == 'day' ? null : doShowInput.value = true) : null">
@@ -190,7 +189,6 @@ export default {
             <span
                 class="table-inline__item"
                 :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
-
             >
               {{ value }}
             </span>
@@ -231,35 +229,38 @@ export default {
 
 .table {
   ::v-deep(th) {
-    border: 1px solid var(--va-background-border);
+    //border: 1px solid var(--va-background-border);
   }
 
   ::v-deep(tr) {
     border-bottom: 1px solid var(--va-background-border);
 
-    td {
-      height: 4rem;
-      white-space: normal;
-      border: 1px solid;
-
-    }
+    //td {
+    //  height: 4rem;
+    //  white-space: normal;
+    //  border: 1px solid;
+    //
+    //}
   }
 }
 
 ::v-deep(.color1) {
-  background-color: rgba(238, 238, 238, 0.4);
+  background-color: rgba(75, 244, 244, 0.06);
 }
 ::v-deep(.color2) {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(243, 90, 153, 0.06);
 }
 ::v-deep(.color3) {
-  background-color: rgba(238, 238, 238, 0.4);
+  background-color: rgba(167, 248, 81, 0.06);
 }
 ::v-deep(.color4) {
-  background-color: rgb(255, 255, 255);
+  background-color: rgba(108, 116, 255, 0.06);
 }
 
 .table-inline {
+  ::v-deep(tr) {
+    border-bottom: 1px solid var(--va-background-border);
+  }
   &__cell {
     position: relative;
     height: 3rem;

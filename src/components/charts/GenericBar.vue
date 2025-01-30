@@ -1,25 +1,24 @@
 <script setup lang="ts">
 
+import {computed} from "vue";
+
 const props = defineProps(['series', 'labels', 'title', 'palette']);
 
-
-const chartOptions = {
+const chartOptions = computed(() => ({
   chart: {
-    width: 650,
+    height: 650,
     type: 'bar',
     stacked: true,
   },
-  theme: {
-  },
-  title: {
-    text: props.title,
-    floating: true,
-    offsetY: 0,
-    align: 'center',
-    style: {
-      color: '#444'
-    }
-  },
+  // title: {
+  //   text: props.title,
+  //   floating: true,
+  //   offsetY: 0,
+  //   align: 'center',
+  //   style: {
+  //     color: '#444'
+  //   }
+  // },
   colors: props.palette,
   plotOptions: {
     bar: {
@@ -41,6 +40,23 @@ const chartOptions = {
   xaxis: {
     type: 'string',
     categories: props.labels,
+    labels: {
+      rotate: -60,
+      minHeight: 300,
+      trim: false,
+      style: {
+        colors: [],
+        fontSize: '11px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 400,
+        cssClass: 'apexcharts-xaxis-label',
+      },
+    }
+  },
+  legend: {
+    position: 'right',
+    show: true,
+    floating: true,
   },
   responsive: [{
     breakpoint: 480,
@@ -49,16 +65,16 @@ const chartOptions = {
         width: 500
       },
       legend: {
-        position: 'bottom'
+        show: false,
       }
     }
   }]
-}
+}));
 
 </script>
 
 <template>
-  <apexchart type="bar" width="650" :options="chartOptions" :series="props.series"></apexchart>
+  <apexchart type="bar" height="650" :options="chartOptions" :series="props.series"></apexchart>
 </template>
 
 <style scoped lang="scss">

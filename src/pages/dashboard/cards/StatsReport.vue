@@ -23,40 +23,29 @@ const props = defineProps({
     required: true
   }
 })
-
-const nInterventi = useScheduleStore().scheduleReport["n_interventi"]
-const nInterventiRitardo = useScheduleStore().scheduleReport["n_interventi_ritardo"]
-const nInterventiOnc = useScheduleStore().scheduleReport["n_oncologici"]
-const pctInterventiOnc = useScheduleStore().scheduleReport["pct_oncologici"].map((e: number) => {return e * 100})
-const nInterventiOncOrario = useScheduleStore().scheduleReport["n_oncologici_orario"]
-const pctInterventiOncOrario = useScheduleStore().scheduleReport["pct_oncologici_orario"].map((e: number) => {return e * 100})
-const classiA = useScheduleStore().scheduleReport["a"]
-const classiB = useScheduleStore().scheduleReport["b"]
-const classiC = useScheduleStore().scheduleReport["c"]
-const ritMedio = useScheduleStore().scheduleReport["rit_medio"]
-const ritMedioLog = useScheduleStore().scheduleReport["rit_medio_log"]
+const { scheduleReport } = useScheduleStore()
+const nInterventi = scheduleReport["n_interventi"]
+const nInterventiRitardo = scheduleReport["n_interventi_ritardo"]
+const nInterventiOnc = scheduleReport["n_oncologici"]
+const pctInterventiOnc = scheduleReport["pct_oncologici"].map((e: number) => {return e * 100})
+const nInterventiOncOrario = scheduleReport["n_oncologici_orario"]
+const pctInterventiOncOrario = scheduleReport["pct_oncologici_orario"].map((e: number) => {return e * 100})
+const classiA = scheduleReport["a"]
+const classiB = scheduleReport["b"]
+const classiC = scheduleReport["c"]
+const classiD = scheduleReport["d"]
+const ritMedio = scheduleReport["rit_medio"]
+const ritMedioLog = scheduleReport["rit_medio_log"]
 
 
 const paramsData = [
   {Parametri_: 'Corse Montecarlo', valore: props.riepilogo.mcCycles},
   {Parametri_: 'Ottimizzazione', valore: props.riepilogo.optimization ? 'Sì' : 'No'},
   {Parametri_: 'Tempo ottimizzazione [s]', valore: props.riepilogo.tabuTime},
-  {Parametri_: 'Alpha', valore: props.riepilogo.alpha},
-  {Parametri_: 'Beta', valore: props.riepilogo.beta},
-  {Parametri_: 'Epsilon', valore: props.riepilogo.epsilon},
-  {Parametri_: 'Theta', valore: props.riepilogo.theta},
-];
-const paramsData2 = [
-  {
-    Parametro: 'VALORE',
-    Corse_Montecarlo: props.riepilogo.mcCycles,
-    Ottimizzazione: props.riepilogo.optimization ? 'Sì' : 'No',
-    Tempo_ottimizzazione: props.riepilogo.tabuTime,
-    Alpha: props.riepilogo.alpha,
-    Beta: props.riepilogo.beta,
-    Epsilon: props.riepilogo.epsilon,
-    Theta: props.riepilogo.theta
-  },
+  {Parametri_: '\u03B1', valore: props.riepilogo.alpha},
+  {Parametri_: '\u03B2', valore: props.riepilogo.beta},
+  {Parametri_: '\u03B5', valore: props.riepilogo.epsilon},
+  {Parametri_: '\t\u03B8', valore: props.riepilogo.theta},
 ];
 
 const getMean = (arr: []) => {
@@ -77,26 +66,17 @@ const riepilogoData = [
   {stats: 'Numero di classi A', mean: getMean(classiA), median: getMedian(classiA)},
   {stats: 'Numero di classi B', mean: getMean(classiB), median: getMedian(classiB)},
   {stats: 'Numero di classi C', mean: getMean(classiC), median: getMedian(classiC)},
+  {stats: 'Numero di classi D', mean: getMean(classiD), median: getMedian(classiD)},
 ];
 
 const columns1 =  defineVaDataTableColumns([
-  { label: 'Parametro', key: 'Parametri_', sortable: false, width: '40%'},
+  { label: 'Parametro', key: 'Parametri_', sortable: false, },
   { label: 'Valore', key: 'valore', sortable: false },
 ]);
 const columns2 =  defineVaDataTableColumns([
   { label: 'Statistica', key: 'stats', sortable: false, width: '40%'},
   { label: 'Media', key: 'mean', sortable: false },
   { label: 'Mediana', key: 'median', sortable: false },
-]);
-const columns3 =  defineVaDataTableColumns([
-  { label: '\n', key: 'Parametro', sortable: false, style: 'font-weight: bold; font-size: 10px'},
-  { label: 'Corse Montecarlo', key: 'Corse_Montecarlo', sortable: false },
-  { label: 'Ottimizzazione', key: 'Ottimizzazione', sortable: false },
-  { label: 'Tempo ottimizzazione', key: 'Tempo_ottimizzazione', sortable: false },
-  { label: 'Alpha', key: 'Alpha', sortable: false, width: '150px'},
-  { label: 'Beta', key: 'Beta', sortable: false, width: '150px'},
-  { label: 'Epsilon', key: 'Epsilon', sortable: false, width: '150px'},
-  { label: 'Theta', key: 'Theta', sortable: false, width: '150px'},
 ]);
 
 let firstCollapse = true;
@@ -121,51 +101,39 @@ const optionsOnlyIcons =  [
     >
       Attenzione! La schedula è stata modificata, i dati e le statistiche non sono più aggiornati. Ripetere la simulazione.
     </VaAlert>
-    <VaCard
-        tag="a"
-        gradient
-        class="w-1/4"
-    >
-      <VaCardContent>
-        <div class="flex flex-row gap-2" style="font-size: 13px">
-          <div class="flex flex-col w-1/2 gap-2" style="font-weight: bold;">
-            <span>Data Creazione</span>
-            <span>Autore</span>
-            <span>Tempo di calcolo</span>
-          </div>
-          <div class="flex flex-col w-1/2 gap-2">
-            <span>{{dateParser(props.riepilogo.creationDate)}}</span>
-            <span>{{props.riepilogo.author}}</span>
-            <span>{{timeParser(props.riepilogo.computationTime)}}</span>
-          </div>
-        </div>
-      </VaCardContent>
-    </VaCard>
     <VaCollapse header="Riepilogo" v-model="firstCollapse">
-      <div class="flex flex-col lg:flex-col gap-4 justify-between">
-<!--        <VaCard-->
-<!--            gradient-->
-<!--            class="w-1/2"-->
-<!--            color="rgba(238, 238, 238, 0.7)"-->
-<!--        >-->
-<!--          <VaCardContent>-->
-<!--            <div class="flex flex-row gap-2" style="font-size: 13px">-->
-<!--              <div class="flex flex-col w-1/2 gap-2" style="font-weight: bold;">-->
-<!--                <span v-for="item in paramsData">{{ item.Parametri_ }}</span>-->
-<!--              </div>-->
-<!--              <div class="flex flex-col w-1/2 gap-2">-->
-<!--                <span v-for="item in paramsData">{{ item.valore }}</span>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </VaCardContent>-->
-<!--        </VaCard>-->
+      <div class="flex flex-col md:flex-row gap-4 justify-between">
+        <VaCard
+            tag="a"
+            gradient
+            class="md:min-w-[30%]"
+        >
+          <VaCardContent>
+            <div class="flex flex-row gap-2" style="font-size: 13px">
+              <div class="flex flex-col gap-2 card" style="font-weight: bold;">
+                <span>Data Creazione</span>
+                <span>Autore</span>
+                <span>Tempo di calcolo</span>
+              </div>
+              <div class="flex flex-col gap-2 card">
+                <span>{{dateParser(props.riepilogo.creationDate)}}</span>
+                <span>{{props.riepilogo.author}}</span>
+                <span>{{timeParser(props.riepilogo.computationTime)}}</span>
+              </div>
+            </div>
+          </VaCardContent>
+        </VaCard>
         <VaDataTable
-            class="table-2"
+            class="table-1 md:max-w-[60%] md:mr-[1%]"
             style="font-size: 13px;"
-            :columns="columns3"
-            :items="paramsData2"
+            :columns="columns1"
+            :items="paramsData"
             striped
         />
+      </div>
+    </VaCollapse>
+    <VaCollapse header="Statistiche Globali">
+      <div class="flex flex-col overflow-hidden">
         <VaDataTable
             class="table-2"
             style="font-size: 13px;"
@@ -173,17 +141,6 @@ const optionsOnlyIcons =  [
             :items="riepilogoData"
             striped
         />
-
-<!--        <VaDataTable-->
-<!--            class="table-1"-->
-<!--            style="font-size: 13px;"-->
-<!--            :columns="columns1"-->
-<!--            :items="paramsData"-->
-<!--        />-->
-      </div>
-    </VaCollapse>
-    <VaCollapse header="Statistiche Globali">
-      <div class="flex flex-col overflow-hidden">
         <div class="flex flex-col gap-4 md:flex-row" style="min-height: 400px">
           <SurgeriesCountChart class="md:w-1/2"/>
           <LateSurgeriesCount class="md:w-1/2"/>
@@ -205,7 +162,7 @@ const optionsOnlyIcons =  [
         </div>
       </div>
     </VaCollapse>
-    <VaCollapse header="Statistiche Note Operatorie">
+    <VaCollapse header="Statistiche Nota Operatoria">
       <NotaStats/>
     </VaCollapse>
   </div>
@@ -217,21 +174,26 @@ const optionsOnlyIcons =  [
 }
 .table-1 {
   width: 100%;
-  //@media (min-width: 1440px) {
-  //  width: 40%;
-  //}
+  @media (min-width: 1440px) {
+    width: 100%;
+  }
 }
 
 .table-2 {
   width: 100%;
-  //@media (min-width: 1440px) {
-  //  width: 60%;
-  //}
+  padding: 1rem;
+  margin-bottom: 2rem;
+  @media (min-width: 1440px) {
+    width: 100%;
+  }
   ::v-deep(tr) {
     border-bottom: 1px solid var(--va-background-border);
 
     td {
     }
   }
+}
+.card {
+  width: 50%;
 }
 </style>

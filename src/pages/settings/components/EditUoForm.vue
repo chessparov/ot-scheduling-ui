@@ -46,6 +46,7 @@ const onSave = () => {
       <VaCheckbox
           v-model="fixUo"
           label="Imposta reparto come politico"
+          disabled
       />
       <div class="flex w-full">
         <VaDivider />

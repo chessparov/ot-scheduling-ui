@@ -106,7 +106,9 @@ function cyclesNumber(newValue: number) {
               uploadButtonText="Carica Lista Attesa"
           />
         </div>
-        <Constraints/>
+        <div class="flex flex-col gap-4" >
+          <Constraints/>
+        </div>
       </section>
     </VaCardContent>
   </VaCard>

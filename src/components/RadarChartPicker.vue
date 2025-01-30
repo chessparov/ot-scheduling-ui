@@ -14,6 +14,8 @@
     >
       <template #append>
         <VaCounter
+            v-if="showCounter"
+            class="slider"
             v-model="alpha"
             :min="0"
             :step="1"
@@ -21,8 +23,8 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 10rem">
-          Alpha
+        <div class="slider-label">
+          &alpha;
         </div>
       </template>
     </VaSlider>
@@ -34,6 +36,8 @@
     >
       <template #append>
         <VaCounter
+            v-if="showCounter"
+            class="slider"
             v-model="beta"
             :min="0"
             :step="1"
@@ -41,8 +45,8 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 10rem">
-          Beta
+        <div class="slider-label">
+          &beta;
         </div>
       </template>
     </VaSlider>
@@ -54,6 +58,8 @@
     >
       <template #append>
         <VaCounter
+            v-if="showCounter"
+            class="slider"
             v-model="epsilon"
             :min="0"
             :step="1"
@@ -61,8 +67,8 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 10rem">
-          Epsilon
+        <div class="slider-label">
+          &epsilon;
         </div>
       </template>
     </VaSlider>
@@ -74,6 +80,8 @@
     >
       <template #append>
         <VaCounter
+            v-if="showCounter"
+            class="slider"
             v-model="theta"
             :min="0"
             :step="1"
@@ -81,8 +89,8 @@
         />
       </template>
       <template #prepend>
-        <div style="width: 10rem">
-          Theta
+        <div class="slider-label">
+          &theta;
         </div>
       </template>
     </VaSlider>
@@ -94,6 +102,7 @@ import { Chart, registerables } from 'chart.js';
 import {VaCounter, VaSlider, useColors} from "vuestic-ui";
 
 import {useGlobalStore, useOptParamsStore} from "@/stores/global-store";
+import {useWindowSize} from "@vueuse/core";
 Chart.register(...registerables);
 
 
@@ -102,6 +111,7 @@ export default {
   components: {VaSlider, VaCounter},
   chart: null,
   data() {
+    const { width } = useWindowSize()
     return {
       dragging: false,
       activeVertex: null,
@@ -110,6 +120,8 @@ export default {
       epsilon: useGlobalStore().optParams[2],
       theta: useGlobalStore().optParams[3],
       currentPresetName: useColors().currentPresetName,
+      showCounter: width > 400,
+      width,
     };
   },
   mounted() {
@@ -118,6 +130,9 @@ export default {
     });
   },
   watch: {
+    width () {
+      this.showCounter = this.width > 400;
+    },
     alpha() {
       if (this.chart !== null) {
         this.chart.data.datasets[0].data[0] = this.alpha;
@@ -295,8 +310,22 @@ export default {
 
 <style>
 canvas {
-  margin: auto;
-  width: 500px;
-  height: 500px;
+  @media (min-width: 640px) {
+    margin: auto;
+    min-width: 500px;
+    min-height: 500px;
+    max-width: 500px;
+    max-height: 500px;
+    width: 500px;
+    height: 500px;
+  }
+}
+
+.slider-label {
+  width: 3rem;
+  text-align: center;
+}
+.slider {
+
 }
 </style>

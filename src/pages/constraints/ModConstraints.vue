@@ -165,7 +165,7 @@ export default {
   <VaCard>
     <div class="flex flex-col gap-4">
       <div class="flex flex-col md:flex-row gap-4 m-4">
-        <h1 class="va-title w-2/3" style="font-size: 1.25rem; align-content: center; text-align: center">
+        <h1 class="va-title w-2/3" style="font-size: 1.1rem; align-content: center; text-align: center">
           {{ this.selectedOption }}
         </h1>
         <VaSelect

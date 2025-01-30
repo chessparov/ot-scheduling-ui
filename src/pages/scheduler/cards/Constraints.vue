@@ -18,10 +18,10 @@ export default  {
 </script>
 
 <template>
-  <VaCard class="w-full sm:w-[100%]">
+  <VaCard class="">
     <VaCollapse
         header="Modifica Vincoli"
-        class="min-w-96"
+        class=""
         v-model="collapsed"
         icon="subdirectory_arrow_right"
     >

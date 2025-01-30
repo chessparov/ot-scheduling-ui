@@ -39,7 +39,13 @@ export default {
             if (error.response.status == 404) {
               this.init.notify({
                 message: 'Richiesta non valida. Schedula inesistente',
-                color: 'warning'
+                color: 'danger'
+              })
+            }
+            else if (error.response.status == 403) {
+              this.init.notify({
+                message: `L'unità operativa ${error.response.data} non esiste.`,
+                color: 'danger'
               })
             }
             else {
@@ -72,6 +78,12 @@ export default {
               this.init.notify({
                 message: 'Richiesta non valida. Schedula inesistente',
                 color: 'warning'
+              })
+            }
+            else if (error.response.status == 403) {
+              this.init.notify({
+                message: `L'unità operativa ${error.response.data} non esiste.`,
+                color: 'danger'
               })
             }
             else {

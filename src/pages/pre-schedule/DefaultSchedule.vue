@@ -34,49 +34,49 @@ export default {
           key: 'ROBOT_A_MAT',
           tdClass: '',
           tdStyle: '',
-          width: '150px',
+          // width: '150px',
         },
         {
           key: 'ROBOT_A_POM',
           tdClass: '',
           tdStyle: '',
-          width: '150px',
+          // width: '150px',
         },
         {
           key: 'ROBOT_B_MAT',
           tdClass: '',
           tdStyle: '',
-          width: '150px'
+          // width: '150px'
         },
         {
           key: 'ROBOT_B_POM',
           tdClass: '',
           tdStyle: '',
-          width: '150px'
+          // width: '150px'
         },
         {
           key: 'ROBOT_C_MAT',
           tdClass: '',
           tdStyle: '',
-          width: '150px'
+          // width: '150px'
         },
         {
           key: 'ROBOT_C_POM',
           tdClass: '',
           tdStyle: '',
-          width: '150px'
+          // width: '150px'
         },
         {
           key: 'ROBOT_D_MAT',
           tdClass: '',
           tdStyle: '',
-          width: '150px'
+          // width: '150px'
         },
         {
           key: 'ROBOT_D_POM',
           tdClass: '',
           tdStyle: '',
-          width: '150px'
+          // width: '150px'
         }
       ],
       items: {},
@@ -162,9 +162,6 @@ export default {
             })
           })
     },
-    autoComplete(input: string) {
-      return "Mike"
-    }
   },
   created() {
     this.getUos();
@@ -210,7 +207,7 @@ export default {
           </template>
         </VaTabs>
         <VaDataTable
-            class="table-inline table"
+            class="table-inline table va-table"
             clickable
             :items="items[currentTab]"
             :columns="columns"

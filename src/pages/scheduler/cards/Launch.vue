@@ -143,7 +143,8 @@ export default defineComponent ({
             .catch(error => {
               this.btnDisabled = false;
               if (error.response.status === 400) {
-                this.toast.init({ message: `File non valido:\n${error.response.data}`, color: "danger" })
+                this.toast.init({ message: `File non valido:\n${error.response.data}`, color: "danger" });
+
               }
               else {
                 this.toast.init({ message: "Errore lato server", color: "danger" })
@@ -151,6 +152,7 @@ export default defineComponent ({
               clearInterval(progressBarTimeOut);
               this.currentTime = 0;
               this.percent = 0;
+              this.btnDisabled = false;
             })
         }
       else {
@@ -193,6 +195,7 @@ export default defineComponent ({
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
                 this.percent = 0;
+                this.btnDisabled = false;
               })
           }
         else if (this.filesSchedule.length === 1) {
@@ -235,6 +238,7 @@ export default defineComponent ({
                 clearInterval(progressBarTimeOut);
                 this.currentTime = 0;
                 this.percent = 0;
+                this.btnDisabled = false;
               })
         }
         else {
@@ -242,6 +246,7 @@ export default defineComponent ({
           clearInterval(progressBarTimeOut);
           this.currentTime = 0;
           this.percent = 0;
+          this.btnDisabled = false;
         }
       }
     }
