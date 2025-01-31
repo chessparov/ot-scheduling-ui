@@ -1,6 +1,7 @@
 <script setup lang="ts">
 
 import {computed} from "vue";
+import {max} from "d3";
 
 const props = defineProps(['series', 'labels', 'title', 'palette']);
 
@@ -24,8 +25,8 @@ const chartOptions = computed(() => ({
     bar: {
       horizontal: false,
       borderRadius: 2,
-      borderRadiusApplication: 'end', // 'around', 'end'
-      borderRadiusWhenStacked: 'last', // 'all', 'last'
+      borderRadiusApplication: 'end',
+      borderRadiusWhenStacked: 'last',
       dataLabels: {
         total: {
           enabled: true,
@@ -36,6 +37,17 @@ const chartOptions = computed(() => ({
         }
       }
     },
+  },
+  yaxis: {
+    min: 0,
+    max: function(max) { return max + 3 },
+    tickAmount: 6,
+    forceNiceScale: true,
+    labels: {
+      formatter: function(value: number) {
+        return Number(value).toFixed(0);
+      }
+    }
   },
   xaxis: {
     type: 'string',
@@ -54,7 +66,7 @@ const chartOptions = computed(() => ({
     }
   },
   legend: {
-    position: 'right',
+    position: 'top',
     show: true,
     floating: true,
   },

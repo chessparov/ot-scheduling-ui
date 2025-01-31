@@ -2,7 +2,7 @@
 
 import {computed} from "vue";
 
-const props = defineProps(['series', 'labels', 'title', 'palette']);
+const props = defineProps(['series', 'labels', 'title', 'palette', 'legendPosition']);
 
 const chartOptions = computed(() => ({
   chart: {
@@ -20,12 +20,23 @@ const chartOptions = computed(() => ({
   //   }
   // },
   pie: {
-    offsetY: 100,
+    // offsetY: 100,
+    height: 400
+
   },
   legend: {
-    position: 'bottom',
+    position: props.legendPosition > 1640 ? 'bottom' : 'right',
     // floating: true,
     show: true,
+    height: props.legendPosition > 1640 ? 75 : undefined,
+  },
+  plotOptions: {
+    pie: {
+      customScale: 1,
+      dataLabels: {
+        minAngleToShowLabel: 10
+      }
+    }
   },
   responsive: [{
     breakpoint: 480,

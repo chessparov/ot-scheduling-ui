@@ -6,8 +6,10 @@ import GenericBar from "@/components/charts/GenericBar.vue";
 import axios from "axios";
 import {useScheduleStore} from "@/stores/global-store";
 import {defineVaDataTableColumns, useToast, VaCollapse, VaDataTable} from "vuestic-ui";
+import {useWindowSize} from "@vueuse/core";
 
 const {notify} = useToast();
+const {width} = useWindowSize();
 
 const loading = ref(true);
 const nota = ref('nota1');
@@ -24,8 +26,9 @@ const statList = [
   {value: 'interventiOnc', text: 'Interventi oncologici'},
   {value: 'interventiOncOrario', text: 'Interventi oncologici in orario'},
   {value: 'classe', text: 'Classe di priorità'},
-  {value: 'pngla', text: 'PNE/PNGLA'},
-  {value: 'pnglaOrario', text: 'PNE/PNGLA in orario'},
+  {value: 'pnglaPerK', text: 'Interventi PNE/PNGLA'},
+  {value: 'pngla', text: 'PNE/PNGLA per U.O.'},
+  {value: 'pnglaOrario', text: 'PNE/PNGLA per U.O. in orario'},
 ];
 const columns =  defineVaDataTableColumns([
   { label: 'Statistica', key: 'stats', sortable: false, style: "color: black", width: '70%' },
@@ -36,13 +39,35 @@ const titleOptions = {
   'interventiOnc': 'Interventi oncologici',
   'interventiOncOrario': 'Interventi oncologici in orario',
   'classe': 'Interventi per classe di priorità',
-  'pngla': 'Interventi PNE/PNGLA',
-  'pnglaOrario': 'Interventi PNE/PNGLA in orario'
+  'pngla': 'Interventi PNE/PNGLA per U.O.',
+  'pnglaOrario': 'Interventi PNE/PNGLA per U.O. in orario',
+  'pnglaPerK': 'Interventi PNE/PNGLA',
 }
 ;
 
 const riepilogoData = ref([]);
-const palette = ref(['#154ec1', '#00cae4', '#50eca6', '#c050ec']);
+// const palette = ref(['#154ec1', '#00cae4', '#50eca6', '#c050ec']);
+const palette = ref([
+  '#FF5733',
+  '#33A1FF',
+  '#FFC300',
+  '#DA33FF',
+  '#ff8f89',
+  '#24cdad',
+  '#4eaff6',
+  '#E67E22',
+  '#1ABC9C',
+  '#bb78d6',
+  '#2ECC71',
+  '#E74C3C',
+  '#5DADE2',
+  '#F1C40F',
+  '#52BE80',
+  '#2980B9',
+  '#F39C12',
+  '#27AE60',
+  '#D35400',
+]);
 
 const getMean = (arr: []) => {
   return Number((arr.reduce((a, b) => a + b) / arr.length).toFixed(2))
@@ -96,24 +121,35 @@ const getCellBind = (cell, row, column) => {
     }
   }
 }
-const labelsPie = {
+let labelsPie = {
   'interventiOrario': ["Interventi in ritardo", "Interventi in orario"],
   'interventiOnc': ["Interventi oncologici", "Interventi non oncologici"],
   'interventiOncOrario': ["Interventi oncologici in ritardo", "Interventi oncologici in orario"],
   'classe': ["A", "B", "C", "D"],
   'pngla': ["Interventi PNE/PNGLA", "Interventi non PNE/PNGLA"],
-  'pnglaOrario': ["Interventi PNE/PNGLA in ritardo", "Interventi PNE/PNGLA in orario"]
+  'pnglaOrario': ["Interventi PNE/PNGLA in ritardo", "Interventi PNE/PNGLA in orario"],
+  'pnglaPerK': []
 };
 const dictSeriesPie = ref([]);
 const labelsBar = ref([]);
 const dictSeriesBar = ref([]);
 
 const unpackDict = (dictionary) => {
+  // delete dictionary.TOTALE;
   const values: [] = Object.keys(dictionary).map(function(key) {
     return dictionary[key];
   })
   return values
 };
+
+const cleanNullValues = (dictionary) => {
+  for (const item of Object.keys(dictionary)) {
+    if (dictionary[item] == 0) {
+      delete dictionary[item]
+    }
+  }
+  return dictionary;
+}
 
 const computedSeriesPie = computed(() =>
     statType.value && dictSeriesPie.value[statType.value] ? dictSeriesPie.value[statType.value] : []
@@ -155,6 +191,7 @@ const requestStats = async () => {
           {stats: 'Numero di interventi di classe C', value_: res.data.c},
           {stats: 'Numero di interventi di classe D', value_: res.data.d},
         ];
+        labelsPie.pnglaPerK = Object.keys(cleanNullValues(res.data.interventi_per_PNGLA));
         dictSeriesPie.value = {
           'interventiOrario': [res.data.n_interventi_ritardo, res.data.n_interventi - res.data.n_interventi_ritardo],
           'interventiOnc': [res.data.n_oncologici, res.data.n_interventi - res.data.n_oncologici],
@@ -168,6 +205,7 @@ const requestStats = async () => {
               unpackDict(res.data.interventi_pngla_ritardo).reduce((a, b) => a + b, 0),
               unpackDict(res.data.interventi_pngla_orario).reduce((a, b) => a + b, 0)
           ],
+          'pnglaPerK': unpackDict(cleanNullValues(res.data.interventi_per_PNGLA)),
         };
         labelsBar.value = {
           'interventiOrario': Object.keys(res.data.interventi_per_reparto_orario),
@@ -175,7 +213,8 @@ const requestStats = async () => {
           'interventiOncOrario': Object.keys(res.data.interventi_onc_per_reparto_ritardo),
           'classe': Object.keys(res.data.interventi_a_per_reparto),
           'pngla': Object.keys(res.data.interventi_pngla),
-          'pnglaOrario': Object.keys(res.data.interventi_pngla_orario)
+          'pnglaOrario': Object.keys(res.data.interventi_pngla_orario),
+          'pnglaPerK': Object.keys(res.data.interventi_per_PNGLA_orario)
         }
         dictSeriesBar.value = {
           'interventiOrario': [
@@ -203,6 +242,10 @@ const requestStats = async () => {
           'pnglaOrario': [
             {name: "Interventi PNE/PNGLA in ritardo", data: unpackDict(res.data.interventi_pngla_ritardo)},
             {name: "Interventi PNE/PNGLA in orario", data: unpackDict(res.data.interventi_pngla_orario)}
+          ],
+          'pnglaPerK': [
+            {name: "Interventi in ritardo", data: unpackDict(res.data.interventi_per_PNGLA_ritardo)},
+            {name: "Interventi in orario", data: unpackDict(res.data.interventi_per_PNGLA_orario)}
           ],
         };
         loading.value = false;
@@ -246,25 +289,27 @@ onMounted(() => {requestStats();});
       />
     </VaCollapse>
     <VaCardTitle style="font-size: 1rem; margin: 0 auto auto;">{{computedTitle}}</VaCardTitle>
-    <div class="flex flex-col stat-wrapper gap-0" >
-      <div class="flex flex-row pie-wrapper" >
-        <VaOptionList
-            v-model="statType"
-            :options="statList"
-            value-by="value"
-            type="radio"
-            style="--va-option-list-line-height: 3rem; font-weight: bold;"
-        />
-        <VaInnerLoading class="pie" :loading="loading">
-          <GenericPie v-if="computedSeriesPie.length" :series="computedSeriesPie" :labels="computedLabelsPie" :title="computedTitle" :palette="palette"/>
-        </VaInnerLoading>
+    <VaInnerLoading :loading="loading">
+      <div class="flex flex-col stat-wrapper gap-4 lg:gap-0" >
+        <div class="flex flex-row pie-wrapper py-2 lg:py-0" >
+          <VaOptionList
+              v-model="statType"
+              :options="statList"
+              value-by="value"
+              type="radio"
+              style="--va-option-list-line-height: 3rem; font-size: 13px;font-weight: bold; max-width: 40%"
+          />
+          <VaInnerLoading class="pie">
+            <GenericPie v-if="computedSeriesPie.length" :series="computedSeriesPie" :labels="computedLabelsPie" :legend-position="width" :title="computedTitle" :palette="palette"/>
+          </VaInnerLoading>
+        </div>
+        <div class="flex bar" style="margin: auto" >
+          <VaInnerLoading>
+            <GenericBar v-if="computedSeriesBar.length" :series="computedSeriesBar" :labels="computedLabelsBar" :title="computedTitle" :palette="palette"/>
+          </VaInnerLoading>
+        </div>
       </div>
-      <div class="flex bar" style="margin: auto" >
-        <VaInnerLoading :loading="loading">
-          <GenericBar v-if="computedSeriesBar.length" :series="computedSeriesBar" :labels="computedLabelsBar" :title="computedTitle" :palette="palette"/>
-        </VaInnerLoading>
-      </div>
-    </div>
+    </VaInnerLoading>
   </div>
 </template>
 
@@ -272,28 +317,29 @@ onMounted(() => {requestStats();});
 
 .stat-wrapper {
   flex-direction: column;
-  @media (min-width: 1400px) {
+  @media (min-width: 1640px) {
     flex-direction: row;
   }
 }
 .bar {
   width: 100%;
-  @media (min-width: 1400px) {
+  @media (min-width: 1640px) {
     width: 50%;
   }
 }
 .pie {
   margin: auto;
-  max-width: 400px;
-  @media (min-width: 1400px) {
+  max-width: 500px;
+  @media (min-width: 1640px) {
     width: 100%;
-    margin: revert;
-    margin-top: 1rem;
+    margin: 0 auto 0 auto;
+    min-width: 400px;
   }
 }
 .pie-wrapper {
   width: 100%;
-  @media (min-width: 1400px) {
+  margin: auto;
+  @media (min-width: 1640px) {
     width: 50%;
     margin-top: 3rem;
   }
