@@ -77,7 +77,7 @@ export default {
             if (error.response.status == 404) {
               this.init.notify({
                 message: 'Richiesta non valida. Schedula inesistente',
-                color: 'warning'
+                color: 'danger'
               })
             }
             else if (error.response.status == 403) {

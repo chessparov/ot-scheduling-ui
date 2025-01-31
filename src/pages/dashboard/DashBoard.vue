@@ -23,9 +23,6 @@ export default {
       changesMade: false,
     }
   },
-  mounted() {
-
-  }
 }
 </script>
 
