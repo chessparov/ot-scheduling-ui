@@ -3,7 +3,7 @@
     <h1 class="font-semibold text-4xl mb-4">Log in</h1>
     <p class="text-base mb-4 leading-5">
       Non hai ancora un account?
-      <a href="mailto:francesca.daga@ao-pisa.toscana.it?subject=Richiesta%20credenziali%20schedulatore&body=Vorrei%20creare%20un%20account"
+      <a href="mailto:francesca.daga@ao-pisa.toscana.it?subject=Richiesta%20credenziali%20OR%20SCHEDULER&body=Vorrei%20richiedere%20un%20account.%0A%0ANome:%0ACognome:%0AE-Mail:"
         class="font-semibold text-primary"
         >Richiedilo</a
       >

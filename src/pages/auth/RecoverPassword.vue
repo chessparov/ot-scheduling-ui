@@ -4,7 +4,7 @@
     <p class="text-base mb-4 leading-5">
       Richiedi una nuova password inviando una mail a
       <a
-          href="mailto:francesca.daga@ao-pisa.toscana.it?subject=Recupero%20password%20schedulatore&body=Ho%20dimenticato%20la%20password"
+          href="mailto:francesca.daga@ao-pisa.toscana.it?subject=Recupero%20password%20OR%20SCHEDULER&body=Ho%20dimenticato%20la%20password.%20La%20mia%20mail%20è:%20"
           class="font-semibold text-primary"
       >
         francesca.daga@ao-pisa.toscana.it
