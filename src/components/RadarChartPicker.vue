@@ -103,6 +103,7 @@ import {VaCounter, VaSlider, useColors} from "vuestic-ui";
 
 import {useGlobalStore, useOptParamsStore} from "@/stores/global-store";
 import {useWindowSize} from "@vueuse/core";
+import {ref} from "vue";
 Chart.register(...registerables);
 
 
@@ -120,18 +121,19 @@ export default {
       epsilon: useGlobalStore().optParams[2],
       theta: useGlobalStore().optParams[3],
       currentPresetName: useColors().currentPresetName,
-      showCounter: width > 400,
+      showCounter: ref(width > 400),
       width,
     };
   },
   mounted() {
+    this.showCounter = this.width > 400;
     this.$nextTick(() => {
       this.initChart();
     });
   },
   watch: {
-    width () {
-      this.showCounter = this.width > 400;
+    width (newWidth, oldWidth) {
+      this.showCounter = newWidth > 400;
     },
     alpha() {
       if (this.chart !== null) {
@@ -325,7 +327,5 @@ canvas {
   width: 3rem;
   text-align: center;
 }
-.slider {
 
-}
 </style>
