@@ -74,7 +74,7 @@ const columns1 =  defineVaDataTableColumns([
   { label: 'Valore', key: 'valore', sortable: false },
 ]);
 const columns2 =  defineVaDataTableColumns([
-  { label: 'Statistica', key: 'stats', sortable: false, width: '40%'},
+  { label: 'Indicatore', key: 'stats', sortable: false, width: '40%'},
   { label: 'Media', key: 'mean', sortable: false },
   { label: 'Mediana', key: 'median', sortable: false },
 ]);

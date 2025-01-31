@@ -150,10 +150,10 @@ const requestStats = async () => {
           {stats: 'Percentuale di interventi oncologici', value_: (res.data.pct_oncologici * 100).toFixed(2) + "%"},
           {stats: 'Numero di interventi oncologici in orario', value_: res.data.n_oncologici_orario},
           {stats: 'Percentuale di interventi oncologici in orario', value_: (res.data.pct_oncologici_orario * 100).toFixed(2) + "%"},
-          {stats: 'Numero di classi A', value_: res.data.a},
-          {stats: 'Numero di classi B', value_: res.data.b},
-          {stats: 'Numero di classi C', value_: res.data.c},
-          {stats: 'Numero di classi D', value_: res.data.d},
+          {stats: 'Numero di interventi di classe A', value_: res.data.a},
+          {stats: 'Numero di interventi di classe B', value_: res.data.b},
+          {stats: 'Numero di interventi di classe C', value_: res.data.c},
+          {stats: 'Numero di interventi di classe D', value_: res.data.d},
         ];
         dictSeriesPie.value = {
           'interventiOrario': [res.data.n_interventi_ritardo, res.data.n_interventi - res.data.n_interventi_ritardo],
@@ -246,7 +246,7 @@ onMounted(() => {requestStats();});
       />
     </VaCollapse>
     <VaCardTitle style="font-size: 1rem; margin: 0 auto auto;">{{computedTitle}}</VaCardTitle>
-    <div class="flex flex-col stat-wrapper gap-4" >
+    <div class="flex flex-col stat-wrapper gap-0" >
       <div class="flex flex-row pie-wrapper" >
         <VaOptionList
             v-model="statType"
@@ -272,28 +272,29 @@ onMounted(() => {requestStats();});
 
 .stat-wrapper {
   flex-direction: column;
-  @media (min-width: 1920px) {
+  @media (min-width: 1400px) {
     flex-direction: row;
   }
 }
 .bar {
   width: 100%;
-  @media (min-width: 1920px) {
-    width: 60%;
+  @media (min-width: 1400px) {
+    width: 50%;
   }
 }
 .pie {
   margin: auto;
   max-width: 400px;
-  @media (min-width: 1920px) {
+  @media (min-width: 1400px) {
     width: 100%;
     margin: revert;
+    margin-top: 1rem;
   }
 }
 .pie-wrapper {
   width: 100%;
-  @media (min-width: 1920px) {
-    width: 40%;
+  @media (min-width: 1400px) {
+    width: 50%;
     margin-top: 3rem;
   }
 }
