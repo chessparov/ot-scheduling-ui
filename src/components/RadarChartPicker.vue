@@ -98,13 +98,14 @@
 </template>
 
 <script>
-import { Chart, registerables } from 'chart.js';
+import {Chart, Colors, registerables} from 'chart.js';
 import {VaCounter, VaSlider, useColors} from "vuestic-ui";
 
 import {useGlobalStore, useOptParamsStore} from "@/stores/global-store";
 import {useWindowSize} from "@vueuse/core";
 import {ref} from "vue";
 Chart.register(...registerables);
+Chart.register(Colors);
 
 
 export default {
@@ -174,7 +175,7 @@ export default {
       this.chart = new Chart(ctx, {
         type: "radar",
         data: {
-          labels: ["Numero interventi", "Ritardo medio", "Oncologici in orario", "Percentuale oncologici"],
+          labels: ["Numero interventi (\u03B1)", "Ritardo medio (\u03B2)", "Oncologici in orario (\u03B5)", "Percentuale oncologici (\u03B8)"],
           datasets: [
             {
               label: "Valore parametro",
@@ -191,21 +192,24 @@ export default {
           responsive: true,
           scales: {
             r: {
+              pointLabels: {
+                color: this.currentPresetName === 'light' ? "rgba(0,0,0,0.8)" : "rgba(253,253,253,0.73)",
+              },
               min: 0,
               max: 5,
               grid: {
                 circular: true, // Makes the gridlines circular
-                color: this.currentPresetName === 'light' ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.35)",
+                color: this.currentPresetName === 'light' ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.47)",
               },
               ticks: {
                 stepSize: 1,
                 display: true, // Show values on the radial scale
                 backdropColor: "transparent", // Remove tick background
-                color: this.currentPresetName === 'light' ? "rgba(0,0,0,0.65)" : "rgba(255,255,255,0.84)",
+                color: this.currentPresetName === 'light' ? "rgba(0, 0, 0, 0.8)" : "rgba(255,255,255,0.73)",
               },
               angleLines: {
                 display: true, // Show angle lines (spokes)
-                color: "rgba(221,221,221,0.51)",
+                color: this.currentPresetName === 'light' ? "rgba(0, 0, 0, 0.2)" : "rgba(255, 255, 255, 0.47)",
               },
             },
           },
