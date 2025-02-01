@@ -42,10 +42,19 @@ const addUo = async(newUo: string, fixed: boolean) => {
         uos.push(res.data);
         dataStore.fetchUos();
         currentUo.value = res.data;
-        notify({message: `L'unità operativa "${newUo}" è stata creata con successo!`})
+        notify({message: `L'unità operativa "${newUo}" è stata creata con successo!`, color: 'success'})
       })
       .catch((err) => {
-        notify({message: `Errore lato server: "${err.response.message}"`})
+        if (err.response.status === 403) {
+          notify({message: `L'unità operativa "${newUo}" esiste già nel database`, color: 'danger'},)
+        }
+        else if (err.response.status === 400) {
+          notify({message: `Errore nella creazione di "${newUo}".`, color: 'danger'},)
+        }
+        else {
+          notify({message: `Errore lato server`, color: 'danger'},)
+
+        }
       })
 }
 
@@ -79,14 +88,14 @@ const modifyUo = async(newUo: string, fixed: boolean) => {
         uos.push(res.data);
         dataStore.fetchUos();
         currentUo.value = res.data;
-        notify({message: `L'unità operativa "${currentUo.value.title}" è stata modificata con successo!`})
+        notify({message: `L'unità operativa "${currentUo.value.title}" è stata modificata con successo!`, color: 'success'})
       })
       .catch((err) => {
         if (err.response.status === 404) {
-          notify({message: `L'unità operativa "${currentUo.value.title}" non è stata trovata`})
+          notify({message: `L'unità operativa "${currentUo.value.title}" non è stata trovata`, color: 'danger'})
         }
         else {
-          notify({message: `Errore lato server: "${err.response.message}"`})
+          notify({message: `Errore lato server: "${err.response.message}"`, color: 'danger'})
         }
       })
 
@@ -118,14 +127,14 @@ const deleteUO = async (uo: Uo) => {
         const index = uos.indexOf(uo);
         uos.splice(index, 1);
         dataStore.fetchUos();
-        notify({message: `L'unità operativa "${uo.title}" è stata eliminata con successo!`})
+        notify({message: `L'unità operativa "${uo.title}" è stata eliminata con successo!`, color: 'success'})
       })
       .catch((err) => {
         if (err.response.status === 404) {
-          notify({message: `L'unità operativa "${uo.title}" non è stata trovata`})
+          notify({message: `L'unità operativa "${uo.title}" non è stata trovata`, color: 'danger'},)
         }
         else {
-          notify({message: `Errore lato server: "${err.response.message}"`})
+          notify({message: `Errore lato server: "${err.response.message}"`, color: 'danger'})
         }
       })
 
