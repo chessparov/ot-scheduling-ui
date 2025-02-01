@@ -90,6 +90,8 @@ export const updateUser = async (user: User) => {
           }
       )
       .then((res) => {
+        const index = users.findIndex((u) => u.id === user.id)
+        users[index] = user
         notify({
           message: `${user.first_name} ${user.last_name} modificato con successo`,
           color: 'success',
@@ -97,15 +99,16 @@ export const updateUser = async (user: User) => {
         useDataStore().fetchUsers();
       })
       .catch((err) => {
-          if (err.response.status === 400) {
-              notify({message: 'L\' utente non esiste', color: 'danger'});
+          if (err.response.status === 404) {
+              notify({message: 'L\' utente non esiste nel Database.', color: 'danger'});
+          }
+          else if (err.response.status === 403) {
+              notify({message: 'Attenzione! Si sta cercando di modificare l\'utente attualmente connesso.', color: 'warning'});
           }
           else {
-              notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
+              notify({message: `Errore lato server`, color: 'danger'});
           }
       })
-  const index = users.findIndex((u) => u.id === user.id)
-  users[index] = user
 }
 
 export const resetPassword = async (formData: resetPasswordForm) => {
@@ -119,31 +122,35 @@ export const resetPassword = async (formData: resetPasswordForm) => {
           }
       )
       .then((res) => {
+          const index = users.findIndex((u) => u.id === formData.user.id)
+          users[index] = formData.user
         notify({
-          message: `Password dell'utente "${formData.user.first_name} ${formData.user.last_name}" ripristinata con successo`,
+          message: `Password dell'utente "${formData.user.first_name} ${formData.user.last_name}" ripristinata con successo.`,
           color: 'success',
         })
         useDataStore().fetchUsers();
       })
       .catch((err) => {
-        if (err.response.status === 400) {
-          notify({message: 'L\' utente non esiste', color: 'danger'});
+        if (err.response.status === 404) {
+          notify({message: 'L\' utente non esiste nel Database', color: 'danger'});
         }
         else if (err.response.status === 403) {
           notify({message: 'Le password non coincidono', color: 'danger'});
         }
         else {
-          notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
+          notify({message: `Errore lato server`, color: 'danger'});
         }
       })
-  const index = users.findIndex((u) => u.id === formData.user.id)
-  users[index] = formData.user
 }
 
 export const removeUser = async (user: User) => {
   await axios
       .delete('http://localhost:8000/api/scheduler/delete-user/' + user.email)
       .then((res) => {
+          users.splice(
+              users.findIndex((u) => u.id === user.id),
+              1,
+          )
         notify({
           message: `${user.first_name} ${user.last_name} è stato eliminato`,
           color: 'success',
@@ -151,15 +158,15 @@ export const removeUser = async (user: User) => {
         useDataStore().fetchUsers();
       })
       .catch((err) => {
-        if (err.response.status === 400) {
-          notify({message: 'L\' utente non esiste', color: 'danger'});
+        if (err.response.status === 404) {
+          notify({message: 'L\' utente non esiste nel database.', color: 'danger'});
+        }
+        else if (err.response.status === 403) {
+            notify({message: 'Attenzione! Si sta cercando di rimuovere l\'utente attualmente connesso.', color: 'danger'});
         }
         else {
-          notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
+          notify({message: `Errore lato server`, color: 'danger'});
         }
       })
-  users.splice(
-    users.findIndex((u) => u.id === user.id),
-    1,
-  )
+
 }

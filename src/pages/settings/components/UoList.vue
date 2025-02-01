@@ -92,10 +92,10 @@ const modifyUo = async(newUo: string, fixed: boolean) => {
       })
       .catch((err) => {
         if (err.response.status === 404) {
-          notify({message: `L'unità operativa "${currentUo.value.title}" non è stata trovata`, color: 'danger'})
+          notify({message: `${err.response.data}`, color: 'danger'})
         }
         else {
-          notify({message: `Errore lato server: "${err.response.message}"`, color: 'danger'})
+          notify({message: `Errore lato server`, color: 'danger'})
         }
       })
 
@@ -134,7 +134,7 @@ const deleteUO = async (uo: Uo) => {
           notify({message: `L'unità operativa "${uo.title}" non è stata trovata`, color: 'danger'},)
         }
         else {
-          notify({message: `Errore lato server: "${err.response.message}"`, color: 'danger'})
+          notify({message: `Errore lato server`, color: 'danger'})
         }
       })
 
