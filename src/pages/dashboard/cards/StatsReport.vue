@@ -1,7 +1,7 @@
 <script setup lang="ts">
 
 import {defineVaDataTableColumns, VaCollapse, VaDataTable} from "vuestic-ui";
-import {PropType, ref, toRaw} from "vue";
+import {PropType, ref} from "vue";
 import {dateParser, timeParser} from "@/services/utils";
 import {useScheduleStore} from "@/stores/global-store";
 import SurgeriesCountChart from "@/components/charts/SurgeriesCountChart.vue";
@@ -9,9 +9,8 @@ import LateSurgeriesCount from "@/components/charts/LateSurgeriesCount.vue";
 import DelayCountChart from "@/components/charts/MeanDelayChart.vue";
 import OncPercentageCharts from "@/components/charts/OncPercentageCharts.vue";
 import OncPercentageOnTimeChart from "@/components/charts/OncPercentageOnTimeChart.vue";
-import OncCountChart from "@/components/charts/OncCountChart.vue";
 import NotaStats from "@/pages/dashboard/components/NotaStats.vue";
-import {time} from "ionicons/icons";
+import {useUserStore} from "@/stores/user-store";
 
 const props = defineProps({
   riepilogo: {
@@ -23,6 +22,9 @@ const props = defineProps({
     required: true
   }
 })
+
+const {admin} = useUserStore();
+
 const { scheduleReport } = useScheduleStore()
 const nInterventi = scheduleReport["n_interventi"]
 const nInterventiRitardo = scheduleReport["n_interventi_ritardo"]
@@ -79,7 +81,8 @@ const columns2 =  defineVaDataTableColumns([
   { label: 'Mediana', key: 'median', sortable: false },
 ]);
 
-let firstCollapse = true;
+const firstCollapse = ref(true);
+const secondCollapse = ref(!admin);
 
 const percent = ref('numeric');
 const optionsOnlyIcons =  [
@@ -132,7 +135,7 @@ const optionsOnlyIcons =  [
         />
       </div>
     </VaCollapse>
-    <VaCollapse header="Statistiche Globali">
+    <VaCollapse header="Statistiche Globali" v-model="secondCollapse">
       <div class="flex flex-col overflow-hidden">
         <VaDataTable
             class="table-2"
@@ -162,7 +165,7 @@ const optionsOnlyIcons =  [
         </div>
       </div>
     </VaCollapse>
-    <VaCollapse header="Statistiche Nota Operatoria">
+    <VaCollapse header="Statistiche Nota Operatoria" v-if="admin">
       <NotaStats/>
     </VaCollapse>
   </div>

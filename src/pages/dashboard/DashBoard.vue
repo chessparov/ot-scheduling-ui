@@ -7,10 +7,13 @@ import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
 import {useScheduleStore} from "@/stores/global-store";
 import NotaReport from "@/pages/dashboard/cards/NotaReport.vue";
+import {useDataStore} from "@/stores/data-store";
+import {useUserStore} from "@/stores/user-store";
 
 export default {
   components: {NotaReport, VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
   data() {
+    const {admin} = useUserStore();
     return {
       menuCurrentTab: 'SCHEDULA',
       menuTabs: ['SCHEDULA', 'NOTA', 'STATISTICHE'],
@@ -21,6 +24,16 @@ export default {
       startDate: new Date(useScheduleStore().scheduleStartDate),
       isModified: useScheduleStore().modified,
       changesMade: false,
+      options: admin ? [
+            {label: 'Schedula', icon: 'calendar_month', value: 'SCHEDULA'},
+            {label: 'Nota', icon: 'library_books', value: 'NOTA'},
+            {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'},
+          ] :
+          [
+            {label: 'Schedula', icon: 'calendar_month', value: 'SCHEDULA'},
+            {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'},
+          ],
+      admin,
     }
   },
 }
@@ -36,11 +49,7 @@ export default {
         </label>
         <VaButtonToggle
             v-model="menuCurrentTab"
-            :options="[
-                  {label: 'Schedula', icon: 'calendar_month', value: 'SCHEDULA'},
-                  {label: 'Nota', icon: 'library_books', value: 'NOTA'},
-                  {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'},
-                ]"
+            :options="this.options"
         />
       </div>
       <section v-if="menuCurrentTab === 'SCHEDULA'" class="flex flex-col gap-4">
