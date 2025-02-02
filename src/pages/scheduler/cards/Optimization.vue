@@ -49,8 +49,8 @@ export default defineComponent({
         <BindedSlider
             :disabled="!optimization"
             :slider-label="'Tempo di ottimizzazione'"
-            :slider-min="1"
-            :slider-max="1000"
+            :slider-min="0"
+            :slider-max="300"
             :slider-value="optTime"
             :input-message="timeConversion()"
             :input-inner-label="'Secondi'"
