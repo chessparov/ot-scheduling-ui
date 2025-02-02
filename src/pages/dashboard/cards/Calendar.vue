@@ -246,16 +246,20 @@ export default {
 }
 
 ::v-deep(.color1) {
-  background-color: rgba(75, 244, 244, 0.06);
+  //background-color: rgba(75, 244, 244, 0.06);
+  background-color: rgba(72, 202, 228, 0.12);
 }
 ::v-deep(.color2) {
-  background-color: rgba(243, 90, 153, 0.06);
+  //background-color: rgba(243, 90, 153, 0.06);
+  background-color: rgba(244, 143, 177, 0.12);
 }
 ::v-deep(.color3) {
-  background-color: rgba(167, 248, 81, 0.06);
+  background-color: rgba(171, 235, 198, 0.12);
+  //background-color: rgba(167, 248, 81, 0.06);
 }
 ::v-deep(.color4) {
-  background-color: rgba(108, 116, 255, 0.06);
+  background-color: rgba(129, 140, 248, 0.12);
+  //background-color: rgba(108, 116, 255, 0.06);
 }
 
 .table-inline {
