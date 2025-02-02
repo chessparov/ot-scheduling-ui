@@ -1,15 +1,17 @@
 <script setup lang="ts">
 
-import {computed, onBeforeMount, onMounted, ref, toRaw, watch} from "vue";
+import {computed, onMounted, ref, watch} from "vue";
 import GenericPie from "@/components/charts/GenericPie.vue";
 import GenericBar from "@/components/charts/GenericBar.vue";
 import axios from "axios";
 import {useScheduleStore} from "@/stores/global-store";
-import {defineVaDataTableColumns, useToast, VaCollapse, VaDataTable} from "vuestic-ui";
+import {defineVaDataTableColumns, useColors, useToast, VaCollapse, VaDataTable} from "vuestic-ui";
 import {useWindowSize} from "@vueuse/core";
+import api from "../../../../axios";
 
 const {notify} = useToast();
 const {width} = useWindowSize();
+const {currentPresetName} = useColors();
 
 const loading = ref(true);
 const nota = ref('nota1');
@@ -88,14 +90,14 @@ const meanData = {
   'Percentuale di interventi oncologici in orario': getMean(scheduleReport["pct_oncologici_orario"].map((e: number) => {
       return e * 100
     })),
-  'Numero di classi A': getMean(scheduleReport["a"]),
-  'Numero di classi B': getMean(scheduleReport["b"]),
-  'Numero di classi C': getMean(scheduleReport["c"]),
-  'Numero di classi D': getMean(scheduleReport["d"]),
+  'Numero di interventi di classe A': getMean(scheduleReport["a"]),
+  'Numero di interventi di classe B': getMean(scheduleReport["b"]),
+  'Numero di interventi di classe C': getMean(scheduleReport["c"]),
+  'Numero di interventi di classe D': getMean(scheduleReport["d"]),
 };
 
 
-const getCellBind = (cell, row, column) => {
+const getCellBind = (cell, row) => {
   let name = row.stats;
   let value = row.value_;
   let target = meanData[name];
@@ -108,17 +110,24 @@ const getCellBind = (cell, row, column) => {
   }
   if (target < value) {
       return {
-        style: {color: "#107810"},
+        style: {color: "green"},
       };
   }
   else if (target > value) {
     return {
-      style: {color: "#f30404"},
+      style: {color: "red"},
     }
   }
-  else if (target == value) {
-    return {
-      style: {color: "#000000"},
+  else {
+    if (currentPresetName.value === 'light') {
+      return {
+        style: {color: "rgb(0,0,0)"},
+      }
+    }
+    else {
+      return {
+        style: {color: "rgba(255,255,255,0.91)"},
+      }
     }
   }
 }
@@ -175,7 +184,7 @@ const requestStats = async () => {
   const index = nota.value;
   loading.value = true;
 
-  await axios
+  await api
       .get(axios.defaults.baseURL + '/api/scheduler/nota-stats/' + pk + '/' + index)
       .then((res) => {
         riepilogoData.value = [
@@ -280,7 +289,6 @@ onMounted(() => {requestStats();});
     />
     <VaCollapse header="Riepilogo nota">
       <VaDataTable
-          class=""
           style="font-size: 13px;"
           :columns="columns"
           :items="riepilogoData"
