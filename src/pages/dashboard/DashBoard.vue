@@ -7,7 +7,6 @@ import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
 import {useScheduleStore} from "@/stores/global-store";
 import NotaReport from "@/pages/dashboard/cards/NotaReport.vue";
-import {useDataStore} from "@/stores/data-store";
 import {useUserStore} from "@/stores/user-store";
 
 export default {

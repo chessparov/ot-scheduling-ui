@@ -4,6 +4,7 @@ import axios from "axios";
 import FileDownload from "js-file-download";
 import {useToast, VaCard, VaCardContent, VaFile, VaFileUpload} from "vuestic-ui";
 import {ref} from "vue";
+import api from "../../../axios";
 
 const { init: notify } = useToast()
 
@@ -36,8 +37,8 @@ async function onClean() {
   formData.append('file', files.value[0], 'lista.xlsx');
   btnDisabled.value = true;
 
-  await axios
-      .post('http://localhost:8000/api/scheduler/clean-list',
+  await api
+      .post(axios.defaults.baseURL + '/api/scheduler/clean-list',
           formData,
           {
             headers: {

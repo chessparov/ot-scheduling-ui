@@ -1,9 +1,8 @@
 <script lang="ts">
 
 import {useToast, VaButton, VaCard, VaCheckbox, VaSelect} from "vuestic-ui";
-import {watch} from "vue";
 import axios from "axios";
-import {useDataStore} from "@/stores/data-store";
+import api from "../../../axios";
 
 export default {
   components: {VaButton, VaCheckbox, VaSelect},
@@ -78,8 +77,8 @@ export default {
       this.items[this.currentTab][idx][key] = (!cellValue ? 1 : 0)
     },
     async getConstraints() {
-      await axios
-          .get('http://localhost:8000/api/scheduler/get-constraint/' + this.selectedOption.toString())
+      await api
+          .get(axios.defaults.baseURL + '/api/scheduler/get-constraint/' + this.selectedOption.toString())
           .then((res) => {
             this.items = res.data.calendar;
           })
@@ -100,8 +99,8 @@ export default {
           })
     },
     async getUos() {
-      await axios
-          .get('http://localhost:8000/api/scheduler/uos')
+      await api
+          .get(axios.defaults.baseURL + '/api/scheduler/uos')
           .then((res) => {
             let newOptions = [];
             for (const row of res.data) {
@@ -117,8 +116,8 @@ export default {
           })
     },
     async updateConstraint() {
-      await axios
-          .put('http://localhost:8000/api/scheduler/mod-constraint/' + this.selectedOption.toString(),
+      await api
+          .put(axios.defaults.baseURL + '/api/scheduler/mod-constraint/' + this.selectedOption.toString(),
               this.items,
               {
                 headers: {

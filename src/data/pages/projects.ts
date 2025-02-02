@@ -4,6 +4,7 @@ import {users} from "./users";
 import axios from "axios";
 import {useToast} from "vuestic-ui";
 import {useUserStore} from "../../stores/user-store";
+import api from "../../../axios";
 
 // Simulate API calls
 export type Pagination = {
@@ -106,8 +107,8 @@ export const addProject = async (project: {
 }
 
 export const updateProject = async (project: (Project[])[number]) => {
-  await axios
-      .put('http://localhost:8000/api/scheduler/update-project/' + project.id,
+  await api
+      .put(axios.defaults.baseURL + '/api/scheduler/update-project/' + project.id,
           {title: project.title,
                 status: project.status,
                 modified: false},
@@ -139,8 +140,8 @@ export const updateProject = async (project: (Project[])[number]) => {
 }
 
 export const removeProject = async (project: (Project[])[number]) => {
-  await axios
-      .delete('http://localhost:8000/api/scheduler/delete-project/' + project.id)
+  await api
+      .delete(axios.defaults.baseURL + '/api/scheduler/delete-project/' + project.id)
       .then((res) => {
         notify({
           message: `Elemento "${project.title}" eliminato con successo`,

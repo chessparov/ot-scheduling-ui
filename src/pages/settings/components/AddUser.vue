@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {PropType, reactive} from 'vue'
+import {reactive} from 'vue'
 import {useForm, useToast} from "vuestic-ui";
 import axios from "axios";
 import {useDataStore} from "@/stores/data-store";
 import {User} from "@/pages/settings/types";
+import api from "../../../../axios";
 
 const emit = defineEmits(['render', 'save'])
 const form = useForm('formRef');
@@ -20,8 +21,8 @@ const { init: notify } = useToast()
 
 const addUser = async () => {
   let newUser: User
-  await axios
-      .post('http://localhost:8000/api/scheduler/add-user',
+  await api
+      .post(axios.defaults.baseURL + '/api/scheduler/add-user',
           formData,
           {
             headers: {

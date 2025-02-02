@@ -4,6 +4,7 @@ import AuthLayout from '../layouts/AuthLayout.vue';
 import AppLayout from "../layouts/AppLayout.vue";
 import axios from "axios";
 import {useUserStore} from "../stores/user-store";
+import api from "../../axios";
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -137,8 +138,8 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
     const userStore = useUserStore();
     if (to.name == 'login' || to.name == 'signup' || to.name == 'recover-password' || to.name == 'recover-password-email') {
-        axios
-            .get('http://localhost:8000/api/scheduler/logout')
+        api
+            .get(axios.defaults.baseURL + '/api/scheduler/logout')
             .then((res) => {
                 userStore.loggedIn = false;
             })

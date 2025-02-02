@@ -62,6 +62,7 @@ import { useForm, useToast } from "vuestic-ui";
 import { validators } from "@/services/utils";
 import axios from "axios";
 import {useUserStore} from "@/stores/user-store";
+import api from "../../../axios";
 
 const { validate } = useForm("form");
 const { push } = useRouter();
@@ -76,8 +77,8 @@ const formData = reactive({
 const submit = () => {
   const userStore = useUserStore();
   if (validate()) {
-    axios
-        .post('http://localhost:8000/api/scheduler/login',
+    api
+        .post(axios.defaults.baseURL + '/api/scheduler/login',
             formData,
             {
               headers: {

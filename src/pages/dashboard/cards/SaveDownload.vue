@@ -5,6 +5,7 @@ import {useScheduleStore} from "@/stores/global-store";
 import FileDownload from 'js-file-download'
 import {useToast} from "vuestic-ui";
 import axios from "axios";
+import api from "../../../../axios";
 
 export default {
   props: {
@@ -27,8 +28,8 @@ export default {
   },
   methods: {
     async onDownload(){
-      await axios
-          .get('http://localhost:8000/api/scheduler/download-schedule/' + this.scheduleStore.scheduleId.toString(),
+      await api
+          .get(axios.defaults.baseURL + '/api/scheduler/download-schedule/' + this.scheduleStore.scheduleId.toString(),
               {
                 responseType: 'blob'
               })
@@ -57,8 +58,8 @@ export default {
           })
     },
     async onUpdate() {
-      await axios
-          .put('http://localhost:8000/api/scheduler/update-project/' + this.scheduleStore.scheduleId.toString(),
+      await api
+          .put(axios.defaults.baseURL + '/api/scheduler/update-project/' + this.scheduleStore.scheduleId.toString(),
               {schedule_data: this.scheduleStore.scheduleData, modified: true},
               {
                 headers: {

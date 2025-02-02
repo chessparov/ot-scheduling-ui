@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import axios from "axios";
+import api from "../../axios";
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
@@ -53,8 +54,8 @@ export const useGlobalStore = defineStore('global', {
       this.optParams = optParams;
     },
     async fetchData() {
-      await axios
-          .get('http://localhost:8000/api/scheduler/mod-simparams')
+      await api
+          .get(axios.defaults.baseURL + '/api/scheduler/mod-simparams')
           .then((res) => {
             this.updateGlobal(
                 res.data.mc_cycles,
@@ -85,8 +86,8 @@ export const useScheduleStore = defineStore('scheduleStore', {
   },
   actions: {
     async fetchData() {
-      await axios
-          .get('http://localhost:8000/api/scheduler/new-schedule')
+      await api
+          .get(axios.defaults.baseURL + '/api/scheduler/new-schedule')
           .then((res) => {
             this.scheduleId = res.data.id;
             this.scheduleName = res.data.title;

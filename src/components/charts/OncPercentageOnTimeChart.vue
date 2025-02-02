@@ -2,7 +2,6 @@
 
 import * as d3 from "d3";
 import {useScheduleStore} from "@/stores/global-store";
-import {ref} from "vue";
 import {useColors} from "vuestic-ui";
 
 const scale = defineModel()

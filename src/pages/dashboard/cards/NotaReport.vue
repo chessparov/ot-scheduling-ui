@@ -4,6 +4,7 @@ import {useScheduleStore} from "@/stores/global-store";
 import axios from "axios";
 import FileDownload from "js-file-download";
 import {useToast} from "vuestic-ui";
+import api from "../../../../axios";
 
 
 export default {
@@ -108,8 +109,8 @@ export default {
       const robot = this.currentRobot.value.toString();
 
       if (this.currentTab == "pe") {
-        await axios
-            .get('http://localhost:8000/api/scheduler/download-pe/' + pk + '/' + index,
+        await api
+            .get(axios.defaults.baseURL + '/api/scheduler/download-pe/' + pk + '/' + index,
                 {
                   responseType: 'blob'
                 })
@@ -138,8 +139,8 @@ export default {
             })
       }
       else if (this.currentTab == "pne") {
-        await axios
-            .get('http://localhost:8000/api/scheduler/download-pne/' + pk + '/' + index,
+        await api
+            .get(axios.defaults.baseURL + '/api/scheduler/download-pne/' + pk + '/' + index,
                 {
                   responseType: 'blob'
                 })
@@ -169,8 +170,8 @@ export default {
             })
       }
       else {
-        await axios
-            .get('http://localhost:8000/api/scheduler/download-nota/' + pk + '/' + index + '/' + robot,
+        await api
+            .get(axios.defaults.baseURL + '/api/scheduler/download-nota/' + pk + '/' + index + '/' + robot,
                 {
                   responseType: 'blob'
                 })

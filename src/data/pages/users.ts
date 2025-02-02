@@ -5,6 +5,7 @@ import axios from "axios";
 import {resetPasswordForm} from "../../pages/settings/components/ResetPassword.vue";
 import {useToast} from "vuestic-ui";
 import {fetchedProjects} from "./projects";
+import api from "../../../axios";
 
 export const users = useDataStore().users as User[]
 
@@ -80,8 +81,8 @@ export const addUser = async (user: User) => {
 }
 
 export const updateUser = async (user: User) => {
-  await axios
-      .post('http://localhost:8000/api/scheduler/update-user',
+  await api
+      .post(axios.defaults.baseURL + '/api/scheduler/update-user',
           user,
           {
             headers: {
@@ -89,7 +90,7 @@ export const updateUser = async (user: User) => {
             }
           }
       )
-      .then((res) => {
+      .then(() => {
         const index = users.findIndex((u) => u.id === user.id)
         users[index] = user
         notify({
@@ -112,8 +113,8 @@ export const updateUser = async (user: User) => {
 }
 
 export const resetPassword = async (formData: resetPasswordForm) => {
-  await axios
-      .post('http://localhost:8000/api/scheduler/reset-password',
+  await api
+      .post(axios.defaults.baseURL + '/api/scheduler/reset-password',
           formData,
           {
             headers: {
@@ -121,7 +122,7 @@ export const resetPassword = async (formData: resetPasswordForm) => {
             }
           }
       )
-      .then((res) => {
+      .then(() => {
           const index = users.findIndex((u) => u.id === formData.user.id)
           users[index] = formData.user
         notify({
@@ -144,9 +145,9 @@ export const resetPassword = async (formData: resetPasswordForm) => {
 }
 
 export const removeUser = async (user: User) => {
-  await axios
-      .delete('http://localhost:8000/api/scheduler/delete-user/' + user.email)
-      .then((res) => {
+  await api
+      .delete(axios.defaults.baseURL + '/api/scheduler/delete-user/' + user.email)
+      .then(() => {
           users.splice(
               users.findIndex((u) => u.id === user.id),
               1,

@@ -13,7 +13,8 @@ import router from "./router";
 import axios from "axios";
 import {createVuetify} from "vuetify";
 
-
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+axios.defaults.xsrfCookieName = "csrftoken";
 axios.defaults.withCredentials = true;
 axios.defaults.baseURL = "http://localhost:8000";
 

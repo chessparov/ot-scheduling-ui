@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import axios from "axios";
 import {Uo, User} from "../pages/settings/types";
 import {Project} from "../pages/history/types";
+import api from "../../axios";
 
 
 export const useDataStore = defineStore('data', {
@@ -14,8 +15,8 @@ export const useDataStore = defineStore('data', {
     },
     actions: {
         async fetchUsers() {
-            await axios
-                .get('http://localhost:8000/api/scheduler/users')
+            await api
+                .get(axios.defaults.baseURL + '/api/scheduler/users')
                 .then((res) => {
                     this.users = res.data;
                 })
@@ -23,8 +24,8 @@ export const useDataStore = defineStore('data', {
                 })
         },
         async fetchProjects() {
-            await axios
-                .get('http://localhost:8000/api/scheduler/projects')
+            await api
+                .get(axios.defaults.baseURL + '/api/scheduler/projects')
                 .then((res) => {
                     this.projects = res.data;
                 })
@@ -32,8 +33,8 @@ export const useDataStore = defineStore('data', {
                 })
         },
         async fetchUos() {
-            await axios
-                .get('http://localhost:8000/api/scheduler/uos')
+            await api
+                .get(axios.defaults.baseURL + '/api/scheduler/uos')
                 .then((res) => {
                     this.uos = res.data;
                 })

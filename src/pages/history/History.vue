@@ -12,6 +12,7 @@ import axios from "axios";
 import {useScheduleStore} from "@/stores/global-store";
 import {useDataStore} from "@/stores/data-store";
 import {useRouter} from "vue-router";
+import api from "../../../axios";
 
 const doShowAsCards = useLocalStorage('projects-view', true)
 
@@ -71,8 +72,8 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
 }
 
 const viewSchedule = async(scheduleId: number) => {
-  await axios
-      .get('http://localhost:8000/api/scheduler/get-schedule/' + scheduleId.toString())
+  await api
+      .get(axios.defaults.baseURL + '/api/scheduler/get-schedule/' + scheduleId.toString())
       .then((res) => {
         let scheduleStore = useScheduleStore();
         scheduleStore.scheduleData = res.data.schedule_data;

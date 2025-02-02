@@ -2,6 +2,7 @@
 
 import {useToast, VaButton, VaCheckbox, VaSelect} from "vuestic-ui";
 import axios from "axios";
+import api from "../../../axios";
 
 export default {
   components: {VaButton, VaCheckbox, VaSelect},
@@ -88,8 +89,8 @@ export default {
   },
   methods: {
     async getDefaultSchedule() {
-      await axios
-          .get('http://localhost:8000/api/scheduler/get-default-schedule')
+      await api
+          .get(axios.defaults.baseURL + '/api/scheduler/get-default-schedule')
           .then((res) => {
             this.items = res.data.schedule;
           })
@@ -110,8 +111,8 @@ export default {
           })
     },
     async updateDefaultSchedule() {
-      await axios
-          .put('http://localhost:8000/api/scheduler/mod-default-schedule',
+      await api
+          .put(axios.defaults.baseURL + '/api/scheduler/mod-default-schedule',
               this.items,
               {
                 headers: {
@@ -146,7 +147,7 @@ export default {
           })
     },
     async getUos() {
-      await axios
+      await api
           .get(axios.defaults.baseURL + '/api/scheduler/uos')
           .then((res) => {
             let newOptions = [];

@@ -53,6 +53,7 @@ import { useUserStore } from "@/stores/user-store";
 
 import { useToast } from "vuestic-ui";
 import axios from "axios";
+import api from "../../../../axios";
 
 const store = useUserStore();
 
@@ -75,8 +76,8 @@ const submitMods = () => {
     if (!Name.value || Name.value === store.name) {
       return emits("cancel");
     }
-    axios
-        .put('http://localhost:8000/api/scheduler/mod-name/' + store.email.toString(),
+    api
+        .put(axios.defaults.baseURL + '/api/scheduler/mod-name/' + store.email.toString(),
             {
               name: Name.value,
               admin: store.admin,
@@ -100,8 +101,8 @@ const submitMods = () => {
     if (!Surname.value || Surname.value === store.surname) {
       return emits("cancel");
     }
-    axios
-        .put('http://localhost:8000/api/scheduler/mod-surname/' + store.email.toString(),
+    api
+        .put(axios.defaults.baseURL + '/api/scheduler/mod-surname/' + store.email.toString(),
             {
               surname: Surname.value,
               admin: store.admin,

@@ -56,6 +56,7 @@ import {reactive, ref} from 'vue'
 import { useForm, useToast } from 'vuestic-ui'
 import axios from "axios";
 import {useUserStore} from "@/stores/user-store";
+import api from "../../../../axios";
 
 const buttonStyles = {
   '--va-button-font-size': '14px',
@@ -77,8 +78,8 @@ const userStore = useUserStore()
 
 const submit = () => {
   if (validate()) {
-    axios
-        .put('http://localhost:8000/api/scheduler/mod-password/' + userStore.email.toString(),
+    api
+        .put(axios.defaults.baseURL + '/api/scheduler/mod-password/' + userStore.email.toString(),
             {
               oldPassword: formData.oldPassword,
               newPassword: formData.newPassword,

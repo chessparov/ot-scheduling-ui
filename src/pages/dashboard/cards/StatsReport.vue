@@ -105,11 +105,11 @@ const optionsOnlyIcons =  [
       Attenzione! La schedula è stata modificata, i dati e le statistiche non sono più aggiornati. Ripetere la simulazione.
     </VaAlert>
     <VaCollapse header="Riepilogo" v-model="firstCollapse">
-      <div class="flex flex-col md:flex-row gap-4 justify-between">
+      <div class="flex flex-col lg:flex-row gap-4 justify-between">
         <VaCard
             tag="a"
             gradient
-            class="md:min-w-[30%]"
+            class="lg:min-w-[30%]"
         >
           <VaCardContent>
             <div class="flex flex-row gap-2" style="font-size: 13px">
@@ -127,7 +127,7 @@ const optionsOnlyIcons =  [
           </VaCardContent>
         </VaCard>
         <VaDataTable
-            class="table-1 md:max-w-[60%] md:mr-[1%]"
+            class="table-1 lg:max-w-[60%] lg:mr-[1%]"
             style="font-size: 13px;"
             :columns="columns1"
             :items="paramsData"
@@ -144,9 +144,9 @@ const optionsOnlyIcons =  [
             :items="riepilogoData"
             striped
         />
-        <div class="flex flex-col gap-4 md:flex-row" style="min-height: 400px">
-          <SurgeriesCountChart class="md:w-1/2"/>
-          <LateSurgeriesCount class="md:w-1/2"/>
+        <div class="flex flex-col gap-4 lg:flex-row" style="min-height: 400px">
+          <SurgeriesCountChart class="lg:w-1/2"/>
+          <LateSurgeriesCount class="lg:w-1/2"/>
         </div>
         <div style="min-height: 400px">
           <DelayCountChart/>
@@ -159,9 +159,9 @@ const optionsOnlyIcons =  [
             v-model="percent"
             :options="optionsOnlyIcons"
         />
-        <div class="flex flex-col gap-4 md:flex-row" style="min-height: 400px" :key="percent">
-          <OncPercentageCharts class="md:w-1/2" v-model="percent"/>
-          <OncPercentageOnTimeChart class="md:w-1/2" v-model="percent"/>
+        <div class="flex flex-col gap-4 lg:flex-row" style="min-height: 400px" :key="percent">
+          <OncPercentageCharts class="lg:w-1/2" v-model="percent"/>
+          <OncPercentageOnTimeChart class="lg:w-1/2" v-model="percent"/>
         </div>
       </div>
     </VaCollapse>

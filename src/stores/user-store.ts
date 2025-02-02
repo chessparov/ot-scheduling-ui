@@ -1,5 +1,6 @@
 import { defineStore } from "pinia";
 import axios from "axios";
+import api from "../../axios";
 
 export const useUserStore = defineStore("user", {
   state: () => {
@@ -25,8 +26,8 @@ export const useUserStore = defineStore("user", {
     },
     async fetchData() {
         if (this.loggedIn) {
-            await axios
-                .get('http://localhost:8000/api/scheduler/login', )
+            await api
+                .get(axios.defaults.baseURL + '/api/scheduler/login', )
                 .then((res) => {
                     this.name = res.data.first_name;
                     this.surname = res.data.last_name;

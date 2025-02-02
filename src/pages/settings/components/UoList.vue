@@ -5,6 +5,7 @@ import EditUoForm from "@/pages/settings/components/EditUoForm.vue";
 import {useDataStore} from "@/stores/data-store";
 import {Uo} from "@/pages/settings/types";
 import axios from "axios";
+import api from "../../../../axios";
 
 let defaultUo: Uo = {
   id: -1,
@@ -28,8 +29,8 @@ function onAdd() {
 }
 
 const addUo = async(newUo: string, fixed: boolean) => {
-  await axios
-      .post('http://localhost:8000/api/scheduler/add-uo',
+  await api
+      .post(axios.defaults.baseURL + '/api/scheduler/add-uo',
           {title: newUo,
             fixed_schedule: fixed,},
           {
@@ -73,8 +74,8 @@ const modifyUo = async(newUo: string, fixed: boolean) => {
     title: newUo,
     fixed_schedule: fixed,
   })
-  await axios
-      .put('http://localhost:8000/api/scheduler/update-uo/' + currentUo.value.id,
+  await api
+      .put(axios.defaults.baseURL + '/api/scheduler/update-uo/' + currentUo.value.id,
           json,
           {
             headers: {
@@ -121,9 +122,9 @@ const onUoDelete = async (uo: Uo) => {
 }
 
 const deleteUO = async (uo: Uo) => {
-  await axios
-      .delete('http://localhost:8000/api/scheduler/delete-uo/' + uo.id)
-      .then((res) => {
+  await api
+      .delete(axios.defaults.baseURL + '/api/scheduler/delete-uo/' + uo.id)
+      .then(() => {
         const index = uos.indexOf(uo);
         uos.splice(index, 1);
         dataStore.fetchUos();

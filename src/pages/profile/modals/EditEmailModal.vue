@@ -68,8 +68,8 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user-store";
 
 import { useToast, VaValue } from "vuestic-ui";
-import { validators } from "@/services/utils";
 import axios from "axios";
+import api from "../../../../axios";
 
 const store = useUserStore();
 
@@ -94,8 +94,9 @@ const submit = () => {
   formData.append("newEmail", Email.value);
   formData.append("password", inputPassword.value);
   formData.append("admin", store.admin)
-  axios
-      .put('http://localhost:8000/api/scheduler/mod-email/' + store.email.toString(),
+
+  api
+      .put(axios.defaults.baseURL + '/api/scheduler/mod-email/' + store.email.toString(),
           {
             newEmail: Email.value,
             password: inputPassword.value,

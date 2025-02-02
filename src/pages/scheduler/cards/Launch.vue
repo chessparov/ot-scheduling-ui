@@ -8,6 +8,7 @@ import {useGlobalStore, useOptParamsStore, useScheduleStore} from "@/stores/glob
 import {Project} from "@/pages/history/types";
 import {useDataStore} from "@/stores/data-store";
 import { useProjects } from '../../history/composables/useProjects'
+import api from "../../../../axios";
 
 
 export default defineComponent ({
@@ -114,8 +115,8 @@ export default defineComponent ({
 
       const scheduleStore = useScheduleStore();
       if (!this.analyzer) {
-        axios
-            .post('http://localhost:8000/api/scheduler/new-schedule',
+        api
+            .post(axios.defaults.baseURL + '/api/scheduler/new-schedule',
                 formData,
                 {
                   headers: {
@@ -158,8 +159,8 @@ export default defineComponent ({
       else {
         if (this.filesSchedule?.length === 0) {
           formData.append('scheduleId', this.selectedSchedule?.id);
-          axios
-              .post('http://localhost:8000/api/scheduler/analyze',
+          api
+              .post(axios.defaults.baseURL + '/api/scheduler/analyze',
                   formData,
                   {
                     headers: {
@@ -200,8 +201,8 @@ export default defineComponent ({
           }
         else if (this.filesSchedule.length === 1) {
           formData.append('schedule', this.filesSchedule[0], 'schedula.xlsx');
-          axios
-              .post('http://localhost:8000/api/scheduler/analyze',
+          api
+              .post(axios.defaults.baseURL + '/api/scheduler/analyze',
                   formData,
                   {
                     headers: {

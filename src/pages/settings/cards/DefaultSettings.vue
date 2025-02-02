@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import {defineComponent, reactive, ref} from 'vue'
+import {reactive, ref} from 'vue'
 import {useGlobalStore} from "@/stores/global-store";
 import UoList from "@/pages/settings/components/UoList.vue";
 import {createNumeralMask, useInputMask, useToast, VaButton, VaDivider, VaInput} from "vuestic-ui";
 import axios from "axios";
+import api from "../../../../axios";
 
 const { init } = useToast();
 const globalStore = useGlobalStore();
@@ -47,8 +48,8 @@ useInputMask(createNumeralMask(), numericInput10);
 useInputMask(createNumeralMask(), numericInput11);
 
 const modParams = () => {
-  axios
-      .post('http://localhost:8000/api/scheduler/mod-simparams',
+  api
+      .post(axios.defaults.baseURL + '/api/scheduler/mod-simparams',
           formData,
           {
             headers: {
