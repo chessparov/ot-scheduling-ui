@@ -113,7 +113,8 @@ export default {
   components: {VaSlider, VaCounter},
   chart: null,
   data() {
-    const { width } = useWindowSize()
+    const { width } = useWindowSize();
+    const {currentPresetName} = useColors();
     return {
       dragging: false,
       activeVertex: null,
@@ -121,9 +122,9 @@ export default {
       beta: useGlobalStore().optParams[1],
       epsilon: useGlobalStore().optParams[2],
       theta: useGlobalStore().optParams[3],
-      currentPresetName: useColors().currentPresetName,
       showCounter: ref(width > 400),
       width,
+      currentPresetName,
     };
   },
   mounted() {
@@ -170,7 +171,13 @@ export default {
       useOptParamsStore().optParams = [this.alpha, this.beta, this.epsilon, this.theta];
     },
     initChart() {
-      const ctx = this.$refs.chart.getContext("2d");
+      const canvas = this.$refs.chart;
+      const ctx = canvas.getContext("2d");
+
+      const dpr = window.devicePixelRatio || 1;
+      canvas.width = canvas.clientWidth * dpr;
+      canvas.height = canvas.clientHeight * dpr;
+      ctx.scale(dpr, dpr);
 
       this.chart = new Chart(ctx, {
         type: "radar",
