@@ -1,9 +1,11 @@
 <script setup lang="ts">
 
 import {computed} from "vue";
-import {max} from "d3";
+import {useColors} from "vuestic-ui";
 
 const props = defineProps(['series', 'labels', 'title', 'palette']);
+
+const {currentPresetName} = useColors();
 
 const chartOptions = computed(() => ({
   chart: {
@@ -31,8 +33,9 @@ const chartOptions = computed(() => ({
         total: {
           enabled: true,
           style: {
-            fontSize: '12px',
-            fontWeight: 900
+            // fontSize: '12px',
+            // fontWeight: 900,
+            color: currentPresetName.value === 'light' ? undefined : 'rgba(255,255,255,0.82)'
           }
         }
       }
@@ -44,10 +47,13 @@ const chartOptions = computed(() => ({
     tickAmount: 6,
     forceNiceScale: true,
     labels: {
+      style: {
+        colors: currentPresetName.value === 'light' ? undefined : ['rgba(255,255,255,0.68)'],
+      },
       formatter: function(value: number) {
         return Number(value).toFixed(0);
       }
-    }
+    },
   },
   xaxis: {
     type: 'string',
@@ -57,7 +63,7 @@ const chartOptions = computed(() => ({
       minHeight: 300,
       trim: false,
       style: {
-        colors: [],
+        colors: currentPresetName.value === 'light' ? undefined : 'rgba(255,255,255,0.94)',
         fontSize: '11px',
         fontFamily: 'Helvetica, Arial, sans-serif',
         fontWeight: 400,
@@ -69,6 +75,9 @@ const chartOptions = computed(() => ({
     position: 'top',
     show: true,
     floating: true,
+    labels: {
+      colors: currentPresetName.value === 'light' ? undefined : 'rgba(255,255,255,0.81)',
+    }
   },
   responsive: [{
     breakpoint: 480,

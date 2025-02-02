@@ -71,8 +71,10 @@ const chartOptions = {
   chart: {
     height: 350,
     type: 'bar',
+    background: 'rgba(0, 0, 0, 0)',
   },
   theme: {
+    mode: currentPresetName.value,
     monochrome: {
       enabled: true,
       color: '#00cae4',
@@ -91,7 +93,7 @@ const chartOptions = {
     offsetY: -20,
     style: {
       fontSize: '12px',
-      colors: ["#304758"]
+      colors: currentPresetName.value === 'light' ? ["#304758"] : [undefined]
     }
   },
   xaxis: {
@@ -127,6 +129,8 @@ const chartOptions = {
     }
   },
   yaxis: {
+    min: 0,
+    max: function(max) { return max + 50 },
     title: {
       text: 'Frequenza',
       style: {
@@ -150,7 +154,7 @@ const chartOptions = {
     offsetY: 0,
     align: 'center',
     style: {
-      color: '#444'
+      // color: '#444'
     }
   }
 }

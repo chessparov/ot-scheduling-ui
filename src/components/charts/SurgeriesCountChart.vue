@@ -2,6 +2,9 @@
 
 import * as d3 from "d3";
 import {useScheduleStore} from "@/stores/global-store";
+import {useColors} from "vuestic-ui";
+
+const {currentPresetName} = useColors();
 
 const arrNumInterventi = useScheduleStore().scheduleReport["n_interventi"]
 const minNumInterventi: number = Math.min(...arrNumInterventi);
@@ -37,8 +40,10 @@ const chartOptions = {
   chart: {
     height: 350,
     type: 'bar',
+    background: 'rgba(0,0,0,0)',
   },
   theme: {
+    mode: currentPresetName.value,
     monochrome: {
       enabled: true,
       color: '#ffbe57',
@@ -57,7 +62,7 @@ const chartOptions = {
     offsetY: -20,
     style: {
       fontSize: '12px',
-      colors: ["#304758"]
+      colors: currentPresetName.value === 'light' ? ["#304758"] : [undefined]
     }
   },
   xaxis: {
@@ -93,6 +98,8 @@ const chartOptions = {
     }
   },
   yaxis: {
+    min: 0,
+    max: function(max) { return max + 30 },
     title: {
       text: 'Frequenza',
       style: {
@@ -116,7 +123,7 @@ const chartOptions = {
     offsetY: 0,
     align: 'center',
     style: {
-      color: '#444'
+      // color: '#444'
     }
   }
 }
