@@ -35,49 +35,49 @@ export default {
           key: 'ROBOT_A_MAT',
           tdClass: '',
           tdStyle: '',
-          // width: '150px',
+          width: '400px',
         },
         {
           key: 'ROBOT_A_POM',
           tdClass: '',
           tdStyle: '',
-          // width: '150px',
+          width: '400px',
         },
         {
           key: 'ROBOT_B_MAT',
           tdClass: '',
           tdStyle: '',
-          // width: '150px'
+          width: '400px'
         },
         {
           key: 'ROBOT_B_POM',
           tdClass: '',
           tdStyle: '',
-          // width: '150px'
+          width: '400px'
         },
         {
           key: 'ROBOT_C_MAT',
           tdClass: '',
           tdStyle: '',
-          // width: '150px'
+          width: '400px'
         },
         {
           key: 'ROBOT_C_POM',
           tdClass: '',
           tdStyle: '',
-          // width: '150px'
+          width: '400px'
         },
         {
           key: 'ROBOT_D_MAT',
           tdClass: '',
           tdStyle: '',
-          // width: '150px'
+          width: '400px'
         },
         {
           key: 'ROBOT_D_POM',
           tdClass: '',
           tdStyle: '',
-          // width: '150px'
+          width: '400px'
         }
       ],
       items: {},
@@ -163,6 +163,12 @@ export default {
             })
           })
     },
+    handleSelection(selectedValue, row, key, doShowInput) {
+      if (selectedValue) {
+        row.rowData[key] = selectedValue.toUpperCase(); // Store selected value
+      }
+      doShowInput.value = false;
+    }
   },
   created() {
     this.getUos();
@@ -189,72 +195,85 @@ export default {
 <template>
   <h1 class="va-h3">Schedula predefinita</h1>
   <VaCard>
-    <div class="flex flex-col gap-4">
-      <div class="flex flex-col gap-4 m-4">
-        <VaTabs
-            v-model="currentTab"
-            stateful
-            grow
-            style="margin-bottom: 0.75rem;"
-        >
-          <template #tabs>
-            <VaTab
-                v-for="tab in weeks"
-                :key="tab"
-                :name="tab"
-            >
-              {{ tab }}
-            </VaTab>
-          </template>
-        </VaTabs>
-        <VaDataTable
-            class="table-inline table va-table"
-            clickable
-            :items="items[currentTab]"
-            :columns="columns"
-        >
-          <template
-              v-for="item in columns"
-              :key="item.key"
-              #[`cell(${item.key})`]="{ value, row }"
+    <section>
+      <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 m-4">
+          <VaTabs
+              v-model="currentTab"
+              stateful
+              grow
+              style="margin-bottom: 0.75rem;"
           >
-            <VaValue v-slot="doShowInput">
-              <div class="table-inline__cell"
-                   style="overflow: hidden;"
-                   @click="(item.key == 'day' ? null : doShowInput.value = true)"
+            <template #tabs>
+              <VaTab
+                  v-for="tab in weeks"
+                  :key="tab"
+                  :name="tab"
               >
-                <VaInput
-                    ref="inputBox"
-                    v-if="doShowInput.value"
-                    :model-value="value.toUpperCase()"
-                    @change="($event) => {
-                    row.rowData[item.key] = $event.target.value.toUpperCase();
-                    doShowInput.value = false;
-                  }"
-                    @blur="doShowInput.value = false"
-                />
-<!--                <VAutocomplete-->
-<!--                    dense-->
-<!--                    outlined-->
-<!---->
-<!--                />-->
-                <span
-                    class="table-inline__item"
-                    :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
+                {{ tab }}
+              </VaTab>
+            </template>
+          </VaTabs>
+          <VaDataTable
+              class="table-inline va-table"
+              clickable
+              :items="items[currentTab]"
+              :columns="columns"
+          >
+            <template
+                v-for="item in columns"
+                :key="item.key"
+                #[`cell(${item.key})`]="{ value, row }"
+            >
+              <VaValue v-slot="doShowInput">
+                <div class="table-inline__cell"
+                     @click="(item.key == 'day' ? null : doShowInput.value = true)"
                 >
-                  {{ value }}
-                </span>
-              </div>
-            </VaValue>
-          </template>
-        </VaDataTable>
-        <div class="m-2 gap-4">
-          <VaButton icon="check" @click="updateDefaultSchedule">
-            Salva Modifiche
-          </VaButton>
+  <!--                <VaInput-->
+  <!--                    ref="inputBox"-->
+  <!--                    v-if="doShowInput.value"-->
+  <!--                    :model-value="value.toUpperCase()"-->
+  <!--                    @input="($event) => {-->
+  <!--                      console.log($event.target.value.toUpperCase());-->
+  <!--                      }"-->
+  <!--                    @change="($event) => {-->
+  <!--                      row.rowData[item.key] = $event.target.value.toUpperCase();-->
+  <!--                      doShowInput.value = false;-->
+  <!--                      }"-->
+  <!--                    @blur="doShowInput.value = false"-->
+  <!--                />-->
+                  <VaSelect
+                      autocomplete
+                      searchable
+                      v-if="doShowInput.value"
+                      v-model="row.rowData[item.key]"
+                      :options="options"
+                      :clearable="true"
+                      :close-on-click-outside="true"
+                      @update:modelValue="(selectedValue) => handleSelection(selectedValue, row, item.key, doShowInput)"
+                      @blur="doShowInput.value = false"
+                      @keydown.esc="doShowInput.value = false"
+                      style="margin: auto"
+                  />
+                  <span
+                      v-if="!doShowInput.value"
+                      class="table-inline__item"
+                      :class="doShowInput.value ? 'table-inline__item--hidden' : ''"
+                  >
+                    {{ value }}
+                  </span>
+                </div>
+              </VaValue>
+            </template>
+          </VaDataTable>
+          <div class="m-2 gap-4">
+            <VaButton icon="check" @click="updateDefaultSchedule">
+              Salva Modifiche
+            </VaButton>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   </VaCard>
 </template>
 
@@ -269,21 +288,33 @@ export default {
     }
   }
 }
+.column-1 { background-color: rgba(244, 67, 54, 0.12) }
+.column-2 { background-color: rgba(33, 150, 243, 0.12) }
+.column-3 { background-color: rgba(76, 175, 80, 0.12) }
+.column-4 { background-color: rgba(255, 193, 7, 0.12) }
 
 ::v-deep(.color1) {
-  background-color: rgba(75, 244, 244, 0.06);
+  //background-color: rgba(75, 244, 244, 0.12);
+  background-color: rgba(244, 67, 54, 0.12)
+;
 }
 ::v-deep(.color2) {
-  background-color: rgba(243, 90, 153, 0.06);
+  //background-color: rgba(243, 90, 153, 0.12);
+  background-color: rgba(33, 150, 243, 0.12);
 }
 ::v-deep(.color3) {
-  background-color: rgba(167, 248, 81, 0.06);
+  //background-color: rgba(167, 248, 81, 0.12);
+  background-color: rgba(76, 175, 80, 0.12);
 }
 ::v-deep(.color4) {
-  background-color: rgba(108, 116, 255, 0.06);
+  //background-color: rgba(108, 116, 255, 0.12);
+  background-color: rgba(255, 193, 7, 0.12);
 }
 
 .table-inline {
+  ::v-deep(tr) {
+    border-bottom: 1px solid var(--va-background-border);
+  }
   &__cell {
     position: relative;
     height: 3rem;
@@ -308,6 +339,5 @@ export default {
     width: 100%;
   }
 }
-
 
 </style>
