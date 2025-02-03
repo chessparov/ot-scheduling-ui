@@ -1,66 +1,144 @@
 <script setup lang="ts">
-import {useModal} from "vuestic-ui";
+import {useModal, useToast, VaCollapse, VaModal} from "vuestic-ui";
 import {ref} from "vue";
 import EditUoForm from "@/pages/settings/components/EditUoForm.vue";
+import {useDataStore} from "@/stores/data-store";
+import {Uo} from "@/pages/settings/types";
+import axios from "axios";
+import api from "../../../../axios";
 
-let uos = [
-  'Chirurgia generale',
-  'Endocrinochirurgia',
-  'Urologia 1',
-  'Urologia 2',
-  'Ginecologia 1',
-  'Ginecologia 2',
-  'Chirurgia toracica'
-];
+let defaultUo: Uo = {
+  id: -1,
+  title: '',
+  creation_date: new Date,
+  fixed_schedule: false,
+}
+const currentUo = ref<Uo>(defaultUo);
+const uoToEdit = ref<string>('');
 
-let currentUo = ref('');
-let uoToEdit = '';
+const {init: notify} = useToast();
+const dataStore = useDataStore();
+let uos = dataStore.uos as Uo[];
 const doShowEditUoModal = ref(false);
 const editFormRef = ref();
-
 const { confirm } = useModal();
 
 function onAdd() {
-  doShowEditUoModal.value = true
-  uoToEdit = ''
+  uoToEdit.value = '';
+  doShowEditUoModal.value = true;
 }
+
+const addUo = async(newUo: string, fixed: boolean) => {
+  await api
+      .post(axios.defaults.baseURL + '/api/scheduler/add-uo',
+          {title: newUo,
+            fixed_schedule: fixed,},
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            }
+          }
+      )
+      .then((res) => {
+        uos.push(res.data);
+        dataStore.fetchUos();
+        currentUo.value = res.data;
+        notify({message: `L'unità operativa "${newUo}" è stata creata con successo!`, color: 'success'})
+      })
+      .catch((err) => {
+        if (err.response.status === 403) {
+          notify({message: `L'unità operativa "${newUo}" esiste già nel database`, color: 'danger'},)
+        }
+        else if (err.response.status === 400) {
+          notify({message: `Errore nella creazione di "${newUo}".`, color: 'danger'},)
+        }
+        else {
+          notify({message: `Errore lato server`, color: 'danger'},)
+
+        }
+      })
+}
+
 function onModify() {
-  if (currentUo.value !== '') {
+  if (currentUo.value === undefined) {
+    return
+  }
+  if (currentUo.value.title !== '') {
     doShowEditUoModal.value = true
-    uoToEdit = currentUo.value
+    uoToEdit.value = currentUo.value.title
   }
 }
 
-function modifyUo(newUo: string) {
-  const index = uos.indexOf(currentUo.value);
-  uos.splice(index, 1);
-  uos.push(newUo);
-  currentUo.value = newUo;
-}
-function deleteUO(uo: string) {
-  const index = uos.indexOf(uo);
-  uos.splice(index, 1);
-}
-function addUo(newUo: string) {
-  uos.push(newUo);
-  currentUo.value = newUo
-}
-
-const onUoDelete = async (uo: string) => {
-  const agreed = await confirm({
-    title: 'Elimina unità operativa',
-    message: `Eliminare in modo definitivo la seguente unità operativa \"${ uo }\"?`,
-    okText: 'Elimina',
-    cancelText: 'Annulla',
-    size: 'small',
-    maxWidth: '380px',
+const modifyUo = async(newUo: string, fixed: boolean) => {
+  const json = JSON.stringify({
+    title: newUo,
+    fixed_schedule: fixed,
   })
+  await api
+      .put(axios.defaults.baseURL + '/api/scheduler/update-uo/' + currentUo.value.id,
+          json,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          }
+      )
+      .then((res) => {
+        const index = uos.indexOf(currentUo.value);
+        uos.splice(index, 1);
+        uos.push(res.data);
+        dataStore.fetchUos();
+        currentUo.value = res.data;
+        notify({message: `L'unità operativa "${currentUo.value.title}" è stata modificata con successo!`, color: 'success'})
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          notify({message: `${err.response.data}`, color: 'danger'})
+        }
+        else {
+          notify({message: `Errore lato server`, color: 'danger'})
+        }
+      })
 
-  if (agreed) {
-    const index = uos.indexOf(uo);
-    currentUo.value = uos[index + 1];
-    deleteUO(uo);
+}
+
+const onUoDelete = async (uo: Uo) => {
+  if (uo.id !== -1) {
+    const agreed = await confirm({
+      title: 'Elimina unità operativa',
+      message: `Eliminare in modo definitivo la seguente unità operativa \"${ uo.title }\"?`,
+      okText: 'Elimina',
+      cancelText: 'Annulla',
+      size: 'small',
+      maxWidth: '380px',
+    })
+
+    if (agreed) {
+      const index = uos.indexOf(uo);
+      currentUo.value = uos[index + 1];
+      await deleteUO(uo);
+    }
   }
+}
+
+const deleteUO = async (uo: Uo) => {
+  await api
+      .delete(axios.defaults.baseURL + '/api/scheduler/delete-uo/' + uo.id)
+      .then(() => {
+        const index = uos.indexOf(uo);
+        uos.splice(index, 1);
+        dataStore.fetchUos();
+        notify({message: `L'unità operativa "${uo.title}" è stata eliminata con successo!`, color: 'success'})
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          notify({message: `L'unità operativa "${uo.title}" non è stata trovata`, color: 'danger'},)
+        }
+        else {
+          notify({message: `Errore lato server`, color: 'danger'})
+        }
+      })
+
 }
 
 </script>
@@ -90,8 +168,9 @@ const onUoDelete = async (uo: string) => {
           label="Lista unità operative"
           placeholder="Seleziona un'unità operativa"
           :options="uos"
+          :text-by="(option: Uo) => option.title"
       />
-      <div class="flex flex-row gap-2">
+      <div class="flex flex-col sm:flex-row gap-2">
         <VaButton
             icon="add"
             @click="onAdd"
@@ -132,11 +211,12 @@ const onUoDelete = async (uo: string) => {
         />
         <EditUoForm
             ref="editFormRef"
-            :uo="uoToEdit"
-            :save-button-label="uoToEdit ? 'Salva' : 'Aggiungi'"
+            :ifEdit="uoToEdit"
+            :uo="currentUo"
+            :save-button-label="(uoToEdit !== '') ? 'Salva' : 'Aggiungi'"
             @close="cancel"
-            @save="(uo) => {
-                  (uoToEdit != '') ? modifyUo(uo): addUo(uo)
+            @save="(uoTitle: string, uoFixed: boolean) => {
+                  (uoToEdit != '') ? modifyUo(uoTitle, uoFixed): addUo(uoTitle, uoFixed)
                   ok()
                 }
               "

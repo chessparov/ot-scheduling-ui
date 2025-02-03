@@ -1,19 +1,22 @@
 import { defineStore } from "pinia";
+import axios from "axios";
+import api from "../../axios";
 
 export const useUserStore = defineStore("user", {
   state: () => {
     return {
-      userName: "Mimmo",
-      surname: "Albano",
-      email: "mc@gmail.com",
-      memberSince: "24/10/2024",
-      password: "passwordsicura",
+      name: "",
+      surname: "",
+      email: "",
+      memberSince: "",
+      admin: false,
+      loggedIn: false,
     };
   },
 
   actions: {
     changeUserName(userName: string) {
-      this.userName = userName;
+      this.name = userName;
     },
     changeUserSurname(userSurname: string) {
       this.surname = userSurname;
@@ -21,8 +24,24 @@ export const useUserStore = defineStore("user", {
     changeUserEmail(userEmail: string) {
       this.email = userEmail;
     },
-    checkPassword(inputPassword: string) {
-      return this.password === inputPassword;
-    },
+    async fetchData() {
+        if (this.loggedIn) {
+            await api
+                .get(axios.defaults.baseURL + '/api/scheduler/login', )
+                .then((res) => {
+                    this.name = res.data.first_name;
+                    this.surname = res.data.last_name;
+                    this.email = res.data.email;
+                    this.admin = res.data.is_admin;
+
+                    let dateJoined = res.data.date_joined;
+                    dateJoined = dateJoined.toString().split('T')[0].split('-');
+                    this.memberSince = dateJoined[2] + '/' + dateJoined[1] + '/' + dateJoined[0];
+
+                })
+                .catch((err) => {
+                })
+        }
+    }
   },
 });

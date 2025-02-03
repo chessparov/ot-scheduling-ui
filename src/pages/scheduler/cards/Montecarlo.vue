@@ -1,55 +1,77 @@
-<script lang="ts">
-import {defineComponent} from 'vue'
-import {VaCardContent, VaFileUploadList, VaFileUploadListItem} from "vuestic-ui";
+<script setup lang="ts">
 import BindedSlider from "@/components/BindedSlider.vue";
+import {useToast, VaCard, VaCardContent, VaDateInput, VaFile, VaFileUpload, VaInput, VaSwitch} from "vuestic-ui";
+import {ref} from "vue";
+import Constraints from "@/pages/scheduler/cards/Constraints.vue";
 
-export default defineComponent({
-  name: "Montecarlo",
-  components: {VaFileUploadListItem, VaFileUploadList, BindedSlider, VaCardContent},
-  props: {
-    upload: Boolean,
-    toggleOptimization: Boolean,
+const props = defineProps({
+  upload: {
+    type: Boolean,
+    required: true,
   },
-  data() {
-    return {
-      scheduleName: "",
-      cycles: 1000,
-      date: new Date(),
-      files: [],
-      optimization: false,
-      visibility: this.toggleOptimization ? 'visible' : 'hidden',
-      display: this.toggleOptimization ? 'flex' : 'none',
-    }
+  cycles: {
+    type: Number,
+    required: true,
   },
-  methods: {
-    optimizationStatus() {
-      this.$emit("toggle-status", this.optimization);
-    },
-    cyclesNumber(newValue: number) {
-      this.cycles = newValue;
-      this.$emit("mc-cycles", this.cycles);
-    },
-    allowSingleFile() {
-      if (this.files.length > 1) {
-        this.files = this.files.pop();
-      }
-    },
-  },
+  showToggle: {
+    type: Boolean,
+    default: false,
+  }
 })
+
+const { init: notify } = useToast()
+
+const emit = defineEmits<{
+  (e: 'toggle-status', value: boolean): void
+  (e: 'mc-cycles', value: number): void
+}>()
+
+const name = defineModel('name')
+const startDate = defineModel('startDate')
+const optimization = defineModel('optimization')
+const [files, modifiers] = defineModel('files',
+    {
+  set(value: VaFile[]) {
+    if (modifiers.allowSingleFile) {
+      if (value.length >= 2) {
+        value.pop();
+        notify({
+          message: 'Non è possibile caricare più di un file',
+          color: 'warning',
+        })
+      }
+      return value
+    }
+  }
+})
+
+let cycles = ref(props.cycles)
+let visibility = props.upload ? 'visible' : 'hidden';
+let display = props.showToggle ? 'flex' : 'none';
+
+
+function cyclesNumber(newValue: number) {
+  cycles.value = newValue;
+  emit("mc-cycles", cycles.value);
+}
+
 </script>
 
 <template>
-  <VaCard class="w-full sm:w-[55%]">
+  <VaCard>
     <VaCardContent>
       <section class="flex flex-col gap-4">
         <VaInput
-            v-model="scheduleName"
+            v-model="name"
             placeholder="Inserisci il nome della schedula"
             label="Nome schedula"
         />
         <VaDateInput
             label="Data inizio schedulazione"
-            v-model="date" />
+            first-weekday="Monday"
+            highlight-weekend
+            v-model="startDate"
+        />
         <div class="flex flex-col gap-2" >
           <BindedSlider
               :slider-label="'Montecarlo'"
@@ -68,7 +90,6 @@ export default defineComponent({
             class="mt-4"
             v-model="optimization"
             style="font-size: 1rem; visibility: v-bind(visibility);"
-            @input="optimizationStatus"
             left-label
             size="small"
           >
@@ -77,13 +98,17 @@ export default defineComponent({
           </span>
           </VaSwitch>
         </div>
+        <div class="flex flex-col gap-4" >
           <VaFileUpload
               :hidden="!upload"
-              v-model="files"
+              v-model="files as VaFile[]"
               file-types="xlsx,xls"
               uploadButtonText="Carica Lista Attesa"
-              @file-added="allowSingleFile"
           />
+        </div>
+        <div class="flex flex-col gap-4" >
+          <Constraints/>
+        </div>
       </section>
     </VaCardContent>
   </VaCard>

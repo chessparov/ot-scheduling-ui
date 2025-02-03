@@ -1,6 +1,10 @@
-import { sleep } from '../../services/utils'
-import projectsDb from './projects-db.json'
-import usersDb from './users-db.json'
+import {useDataStore} from "../../stores/data-store";
+import {Project} from "../../pages/history/types";
+import {users} from "./users";
+import axios from "axios";
+import {useToast} from "vuestic-ui";
+import {useUserStore} from "../../stores/user-store";
+import api from "../../../axios";
 
 // Simulate API calls
 export type Pagination = {
@@ -10,17 +14,32 @@ export type Pagination = {
 }
 
 export type Sorting = {
-  sortBy: keyof (typeof projectsDb)[number] | undefined
+  sortBy: keyof (Project[])[number] | undefined
   sortingOrder: 'asc' | 'desc' | null
 }
 
-const getSortItem = (obj: any, sortBy: keyof (typeof projectsDb)[number]) => {
-  if (sortBy === 'project_owner') {
-    return obj.project_owner.name
-  }
+export type Filters = {
+  search: string
+}
 
-  if (sortBy === 'team') {
-    return obj.team.map((user: any) => user.name).join(', ')
+// export const fetchedProjects = ref(useDataStore().projects);
+export const fetchedProjects = (): Project[] => {
+
+  let projects: Project[] = useDataStore().projects;
+  if (useUserStore().admin) {
+    return projects as Project[]
+  }
+  else {
+    projects = projects.filter((project) => project.status === "completed")
+    return projects as Project[]
+  }
+}
+
+const {init: notify} = useToast();
+
+const getSortItem = (obj: any, sortBy: keyof (Project[])[number]) => {
+  if (sortBy === 'author') {
+    return obj.author
   }
 
   if (sortBy === 'creation_date') {
@@ -30,73 +49,116 @@ const getSortItem = (obj: any, sortBy: keyof (typeof projectsDb)[number]) => {
   return obj[sortBy]
 }
 
-export const getProjects = async (options: Sorting & Pagination) => {
-  await sleep(1000)
+export const getProjects = async (filters: Partial<Filters & Pagination & Sorting>) => {
+  const {  search, sortBy, sortingOrder } = filters
 
-  const projects = projectsDb.map((project) => ({
+  let projects: Project[] = fetchedProjects();
+
+  if (search) {
+    projects = projects.filter((project) => project.title.toLowerCase().includes(search.toLowerCase()))
+  }
+  projects = projects.map((project) => ({
     ...project,
-    project_owner: usersDb.find((user) => user.id === project.project_owner)! as (typeof usersDb)[number],
-    team: usersDb.filter((user) => project.team.includes(user.id)) as (typeof usersDb)[number][],
+    author: users.find((user) => user.email === project.author)?.email! as string,
   }))
 
-  if (options.sortBy && options.sortingOrder) {
+  if (sortBy && sortingOrder) {
     projects.sort((a, b) => {
-      a = getSortItem(a, options.sortBy!)
-      b = getSortItem(b, options.sortBy!)
+      a = getSortItem(a, sortBy!)
+      b = getSortItem(b, sortBy!)
       if (a < b) {
-        return options.sortingOrder === 'asc' ? -1 : 1
+        return sortingOrder === 'asc' ? -1 : 1
       }
       if (a > b) {
-        return options.sortingOrder === 'asc' ? 1 : -1
+        return sortingOrder === 'asc' ? 1 : -1
       }
       return 0
     })
   }
+  const { page = 1, perPage = 10 } = filters || {}
 
-  const normalizedProjects = projects.slice((options.page - 1) * options.perPage, options.page * options.perPage)
+  const normalizedProjects: Project[] = projects.slice((page - 1) * perPage, page * perPage)
 
   return {
     data: normalizedProjects,
     pagination: {
-      page: options.page,
-      perPage: options.perPage,
-      total: projectsDb.length,
+      page: page,
+      perPage: perPage,
+      total: projects.length,
     },
   }
 }
 
-export const addProject = async (project: Omit<(typeof projectsDb)[number], 'id' | 'creation_date'>) => {
-  await sleep(1000)
+export const addProject = async (project: {
+    schedule_stats: JSON;
+    author: string;
+    schedule_data: JSON;
+    title: string;
+    status: "completed" | "archived" | "in progress"
+    modified: boolean
+    note: JSON
+    mc_results: JSON
+}) => {
 
-  const newProject = {
-    ...project,
-    id: projectsDb.length + 1,
-    creation_date: new Date().toLocaleDateString('gb', { day: 'numeric', month: 'short', year: 'numeric' }),
-  }
 
-  projectsDb.push(newProject)
-
-  return {
-    ...newProject,
-    project_owner: usersDb.find((user) => user.id === project.project_owner)! as (typeof usersDb)[number],
-    team: usersDb.filter((user) => project.team.includes(user.id)) as (typeof usersDb)[number][],
-  }
-}
-
-export const updateProject = async (project: (typeof projectsDb)[number]) => {
-  await sleep(1000)
-
-  const index = projectsDb.findIndex((p) => p.id === project.id)
-  projectsDb[index] = project
+  fetchedProjects().push(project as Project)
 
   return project
 }
 
-export const removeProject = async (project: (typeof projectsDb)[number]) => {
-  await sleep(1000)
+export const updateProject = async (project: (Project[])[number]) => {
+  await api
+      .put(axios.defaults.baseURL + '/api/scheduler/update-project/' + project.id,
+          {title: project.title,
+                status: project.status,
+                modified: false},
+          {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          }
+      )
+      .then((res) => {
+        notify({
+          message: `Elemento "${project.title}" modificata con successo`,
+          color: 'success',
+        })
+        useDataStore().fetchProjects();
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          notify({message: 'La schedula non esiste', color: 'danger'});
+        }
+        else {
+          notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
+        }
+      })
+  const index = fetchedProjects().findIndex((p) => p.id === project.id)
+  fetchedProjects()[index] = project
 
-  const index = projectsDb.findIndex((p) => p.id === project.id)
-  projectsDb.splice(index, 1)
+  return project
+}
+
+export const removeProject = async (project: (Project[])[number]) => {
+  await api
+      .delete(axios.defaults.baseURL + '/api/scheduler/delete-project/' + project.id)
+      .then((res) => {
+        notify({
+          message: `Elemento "${project.title}" eliminato con successo`,
+          color: 'success',
+        })
+        useDataStore().fetchProjects();
+      })
+      .catch((err) => {
+        if (err.response.status === 400) {
+          notify({message: 'La schedula non esiste', color: 'danger'});
+        }
+        else {
+          notify({message: `Errore lato server: ${err.message}`, color: 'danger'});
+        }
+      })
+  const index = fetchedProjects().findIndex((p) => p.id === project.id)
+  fetchedProjects().splice(index, 1)
 
   return project
 }

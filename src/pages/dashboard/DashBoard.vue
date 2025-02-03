@@ -5,16 +5,34 @@ import SaveDownload from "@/pages/dashboard/cards/SaveDownload.vue";
 import DashboardMenu from "@/pages/dashboard/cards/DashboardMenu.vue";
 import StatsReport from "@/pages/dashboard/cards/StatsReport.vue";
 import {VaButtonToggle, VaCard} from "vuestic-ui";
+import {useScheduleStore} from "@/stores/global-store";
+import NotaReport from "@/pages/dashboard/cards/NotaReport.vue";
+import {useUserStore} from "@/stores/user-store";
 
 export default {
-  components: {VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
+  components: {NotaReport, VaCard, VaButtonToggle, StatsReport, DashboardMenu, SaveDownload, Calendar},
   data() {
+    const {admin} = useUserStore();
     return {
-      modifiedSchedule: false,
       menuCurrentTab: 'SCHEDULA',
-      menuTabs: ['SCHEDULA', 'STATISTICHE'],
+      menuTabs: ['SCHEDULA', 'NOTA', 'STATISTICHE'],
       currentTab: 'SETTIMANA 1',
       weeks: ['SETTIMANA 1', 'SETTIMANA 2', 'SETTIMANA 3', 'SETTIMANA 4'],
+      scheduleTitle: useScheduleStore().scheduleName,
+      scheduleStats: useScheduleStore().scheduleStats,
+      startDate: new Date(useScheduleStore().scheduleStartDate),
+      isModified: useScheduleStore().modified,
+      changesMade: false,
+      options: admin ? [
+            {label: 'Schedula', icon: 'calendar_month', value: 'SCHEDULA'},
+            {label: 'Nota', icon: 'library_books', value: 'NOTA'},
+            {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'},
+          ] :
+          [
+            {label: 'Schedula', icon: 'calendar_month', value: 'SCHEDULA'},
+            {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'},
+          ],
+      admin,
     }
   },
 }
@@ -22,26 +40,26 @@ export default {
 
 <template>
   <h1 class="h1">Dashboard</h1>
-  <VaCard style="padding: 1.5rem">
-    <div class="flex flex-col gap-4 ">
-      <div class="flex flex-row gap-4 justify-between" style="padding-bottom: 1.25rem">
-        <label class="va-title" style="font-size: 1.1rem; padding: 0.25rem">
-          Schedula 20 Ottobre 2024
+  <VaCard>
+    <div class="flex flex-col gap-4 " style="padding: 1.5rem">
+      <div class="flex flex-col sm:flex-row gap-4 justify-between" style="padding-bottom: 1.25rem">
+        <label class="va-title" style="font-size: 1rem; padding: 0.25rem">
+          {{ scheduleTitle }}
         </label>
         <VaButtonToggle
             v-model="menuCurrentTab"
-            :options="[
-                {label: 'Schedula', icon: 'calendar_month', value: 'SCHEDULA'},
-                {label: 'Statistiche', icon: 'show_chart', value: 'STATISTICHE'}
-                ]"
+            :options="this.options"
         />
       </div>
       <section v-if="menuCurrentTab === 'SCHEDULA'" class="flex flex-col gap-4">
-        <Calendar @modifiedSchedule="this.modifiedSchedule = true"/>
-        <SaveDownload :modified-schedule="this.modifiedSchedule"/>
+        <Calendar @modifiedSchedule="this.isModified = true; changesMade = true;" :start-date="startDate"/>
+        <SaveDownload :changesMade="this.changesMade" @changes-saved="this.changesMade = false"/>
+      </section>
+      <section v-else-if="menuCurrentTab === 'NOTA'" class="flex flex-col gap-4">
+        <NotaReport :modified="this.isModified"/>
       </section>
       <section v-else class="flex flex-col gap-4">
-        <StatsReport/>
+        <StatsReport :riepilogo="this.scheduleStats" :modified="this.isModified"/>
       </section>
     </div>
   </VaCard>

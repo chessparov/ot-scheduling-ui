@@ -1,20 +1,24 @@
 <script setup lang="ts">
 import { PropType, computed } from 'vue'
-import { defineVaDataTableColumns } from 'vuestic-ui'
+import {defineVaDataTableColumns, useToast} from 'vuestic-ui'
 import { Project } from '../types'
 import ProjectStatusBadge from '../components/ProjectStatusBadge.vue'
 import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
+import Stores from "@/stores";
+import {dateParser} from "../../../services/utils";
+
 
 const columns = defineVaDataTableColumns([
-  { label: 'Nome', key: 'project_name', sortable: true },
-  { label: 'Autore', key: 'project_owner', sortable: true },
+  { label: 'Nome', key: 'title', sortable: true },
+  { label: 'Autore', key: 'author', sortable: true },
   { label: 'Stato', key: 'status', sortable: true },
   { label: 'Data Creazione', key: 'creation_date', sortable: true },
   { label: ' ', key: 'actions' },
 ])
 
 const props = defineProps({
+  userStore: Stores,
   projects: {
     type: Array as PropType<Project[]>,
     required: true,
@@ -24,30 +28,35 @@ const props = defineProps({
     required: true,
   },
   sortBy: {
-    type: Object as PropType<Sorting['sortBy']>,
+    type: String,
     required: true,
   },
   sortingOrder: {
-    type: Object as PropType<Sorting['sortingOrder']>,
+    type: [String, null],
     required: true,
   },
   pagination: {
     type: Object as PropType<Pagination>,
     required: true,
   },
+  input: {
+    type: String,
+    required: true,
+  }
 })
 
 const emit = defineEmits<{
   (event: 'edit', project: Project): void
   (event: 'delete', project: Project): void
+  (event: 'view', projectId: number): void
+  (event: 'update:sortBy', sortBy: Sorting['sortBy']): void
+  (event: 'update:sortingOrder', sortingOrder: Sorting['sortingOrder']): void
 }>()
-
 
 const sortByVModel = useVModel(props, 'sortBy', emit)
 const sortingOrderVModel = useVModel(props, 'sortingOrder', emit)
 
 const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagination.perPage))
-
 
 </script>
 
@@ -60,15 +69,16 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
       :items="projects"
       :columns="columns"
       :loading="loading"
+      :filter="props.input"
     >
-      <template #cell(project_name)="{ rowData }">
-        <div class="ellipsis max-w-[230px] lg:max-w-[450px]">
-          {{ rowData.project_name }}
+      <template #cell(title)="{ rowData }">
+        <div class="ellipsis max-w-[230px] lg:max-w-[450px]" @click="$emit('view', rowData.id)">
+          {{ rowData.title }}
         </div>
       </template>
-      <template #cell(project_owner)="{ rowData }">
-        <div class="flex items-center gap-2 ellipsis max-w-[230px]">
-          {{ rowData.project_owner.name }}
+      <template #cell(author)="{ rowData }">
+        <div class="flex items-center gap-2 ellipsis max-w-[230px]" @click="$emit('view', rowData.id)">
+          {{ rowData.author }}
         </div>
       </template>
 
@@ -76,17 +86,33 @@ const totalPages = computed(() => Math.ceil(props.pagination.total / props.pagin
         <ProjectStatusBadge :status="project.status" />
       </template>
 
+      <template #cell(creation_date)="{ rowData }">
+        <div class="flex items-center gap-2 ellipsis max-w-[230px]">
+          {{ dateParser(rowData.creation_date) }}
+        </div>
+      </template>
+
       <template #cell(actions)="{ rowData: project }">
         <div class="flex gap-2 justify-end">
           <VaButton
-            preset="primary"
-            size="small"
-            color="primary"
-            icon="mso-edit"
-            aria-label="Edit project"
-            @click="$emit('edit', project as Project)"
+              preset="primary"
+              size="small"
+              color="primary"
+              icon="mso-visibility"
+              aria-label="View project"
+              @click="$emit('view', project.id as number)"
           />
           <VaButton
+              v-if="userStore.admin"
+              preset="primary"
+              size="small"
+              color="secondary"
+              icon="mso-edit"
+              aria-label="Edit project"
+              @click="$emit('edit', project as Project)"
+          />
+          <VaButton
+            v-if="userStore.admin"
             preset="primary"
             size="small"
             icon="mso-delete"

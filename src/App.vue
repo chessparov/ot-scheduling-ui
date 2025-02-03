@@ -1,4 +1,23 @@
-<script setup></script>
+<script setup>
+
+import {useUserStore} from "@/stores/user-store";
+import {useGlobalStore} from "@/stores/global-store";
+import {useScheduleStore} from "@/stores/global-store";
+import {useDataStore} from "@/stores/data-store";
+
+const userStore = useUserStore()
+const globalStore = useGlobalStore()
+const scheduleStore = useScheduleStore()
+const dataStore = useDataStore()
+
+userStore.fetchData()
+scheduleStore.fetchData()
+globalStore.fetchData()
+dataStore.fetchUsers()
+dataStore.fetchProjects()
+dataStore.fetchUos()
+
+</script>
 
 <template>
   <RouterView />

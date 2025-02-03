@@ -1,7 +1,7 @@
 <script lang="ts">
 import {defineComponent} from 'vue'
 import BindedSlider from "@/components/BindedSlider.vue";
-import RadarChart from "@/components/RadarChart.vue";
+import RadarChart from "@/components/RadarChartPicker.vue";
 
 
 export default defineComponent({
@@ -9,10 +9,11 @@ export default defineComponent({
   components: {RadarChart, BindedSlider},
   props: {
     optimization: Boolean,
+    tbTime: Number,
   },
   data() {
     return {
-      optTime: 60 * 2,
+      optTime: this.tbTime,
     }
   },
   methods: {
@@ -27,7 +28,7 @@ export default defineComponent({
       const minutes = Math.floor(this.optTime / 60).toString();
       const seconds = (this.optTime % 60).toString();
 
-      return minutes + ' min ' + seconds + ' secondi';
+      return minutes !== '0' ? minutes + ' min ' + seconds + ' secondi' : seconds + ' secondi';
     }
   },
   mounted() {
@@ -39,7 +40,7 @@ export default defineComponent({
 </script>
 
 <template>
-  <VaCard class="w-full sm:w-[45%]" :disabled="!optimization">
+  <VaCard :disabled="!optimization">
     <VaCardContent>
       <section class="flex flex-col gap-4" >
         <label class="va-title" style="color: #154EC1; font-size: 16px">
@@ -49,14 +50,14 @@ export default defineComponent({
             :disabled="!optimization"
             :slider-label="'Tempo di ottimizzazione'"
             :slider-min="0"
-            :slider-max="1000"
+            :slider-max="300"
             :slider-value="optTime"
             :input-message="timeConversion()"
             :input-inner-label="'Secondi'"
             @update="getUpdatedValue"
         />
         <span>
-          Tempo consigliato: 120 secondi
+          Tempo consigliato: 15 secondi
         </span>
         <RadarChart/>
       </section>

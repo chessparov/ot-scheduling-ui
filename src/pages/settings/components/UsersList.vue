@@ -1,18 +1,18 @@
 <script setup lang="ts">
-import ProjectStatusBadge from "@/pages/history/components/ProjectStatusBadge.vue";
-import {PropType, computed, toRef} from 'vue'
+import {PropType, computed, toRef, onUpdated} from 'vue'
 import {defineVaDataTableColumns, useModal} from 'vuestic-ui'
-import { Pagination, Sorting } from '@/data/pages/projects'
 import { useVModel } from '@vueuse/core'
 import {User, UserRole} from "@/pages/settings/types";
 import UserPrivilegesBadge from "@/pages/settings/components/UserPrivilegesBadge.vue";
+import {dateParser} from "../../../services/utils";
+import {Pagination, Sorting} from "@/data/pages/users";
 
 const columns = defineVaDataTableColumns([
-  { label: 'Nome', key: 'name', sortable: true },
-  { label: 'Cognome', key: 'surname', sortable: true },
+  { label: 'Nome', key: 'first_name', sortable: true },
+  { label: 'Cognome', key: 'last_name', sortable: true },
   { label: 'Email', key: 'email', sortable: true },
   { label: 'Privilegi', key: 'privileges', sortable: true },
-  { label: 'Data Creazione', key: 'creation_date', sortable: true },
+  { label: 'Data Creazione', key: 'date_joined', sortable: true },
   { label: ' ', key: 'actions' },
 ])
 
@@ -24,12 +24,13 @@ const props = defineProps({
   loading: { type: Boolean, default: false },
   pagination: { type: Object as PropType<Pagination>, required: true },
   sortBy: { type: String as PropType<Sorting['sortBy']>, required: true },
-  sortingOrder: { type: String as PropType<Sorting['sortingOrder']>, required: true },
+  sortingOrder: { type: [String as PropType<Sorting['sortingOrder']>, null], required: true },
 })
 
 const emit = defineEmits<{
   (event: 'edit-user', user: User): void
   (event: 'delete-user', user: User): void
+  (event: 'reset-password', user: User): void
   (event: 'update:sortBy', sortBy: Sorting['sortBy']): void
   (event: 'update:sortingOrder', sortingOrder: Sorting['sortingOrder']): void
 }>()
@@ -50,7 +51,7 @@ const { confirm } = useModal()
 const onUserDelete = async (user: User) => {
   const agreed = await confirm({
     title: 'Elimina utente',
-    message: `Eliminare in modo definitivo l'utente \"${user.name} ${user.surname}\"?`,
+    message: `Eliminare in modo definitivo l'utente \"${user.first_name} ${user.last_name}\"?`,
     okText: 'Elimina',
     cancelText: 'Annulla',
     size: 'small',
@@ -67,19 +68,21 @@ const onUserDelete = async (user: User) => {
 <template>
   <div>
     <VaDataTable
+        v-model:sort-by="sortByVModel"
+        v-model:sorting-order="sortingOrderVModel"
         class="va-table--clickable"
         :items="users"
         :columns="columns"
         :loading="loading"
     >
-      <template #cell(name)="{ rowData }">
+      <template #cell(first_name)="{ rowData }">
         <div class="ellipsis max-w-[230px] lg:max-w-[450px]">
-          {{ rowData.name }}
+          {{ rowData.first_name }}
         </div>
       </template>
-      <template #cell(surname)="{ rowData }">
+      <template #cell(last_name)="{ rowData }">
         <div class="flex items-center gap-2 ellipsis max-w-[230px]">
-          {{ rowData.surname }}
+          {{ rowData.last_name }}
         </div>
       </template>
       <template #cell(email)="{ rowData }">
@@ -87,9 +90,14 @@ const onUserDelete = async (user: User) => {
           {{ rowData.email }}
         </div>
       </template>
+      <template #cell(date_joined)="{ rowData }">
+        <div class="flex items-center gap-2 ellipsis max-w-[230px]">
+          {{ dateParser(rowData.date_joined) }}
+        </div>
+      </template>
 
       <template #cell(privileges)="{ rowData: user }">
-        <UserPrivilegesBadge :privileges="user.privileges" />
+        <UserPrivilegesBadge :privileges="user.is_admin ? 'admin' : 'viewer'" />
       </template>
 
       <template #cell(actions)="{ rowData: user }">
@@ -101,6 +109,14 @@ const onUserDelete = async (user: User) => {
               icon="mso-edit"
               aria-label="Edit project"
               @click="$emit('edit-user', user as User)"
+          />
+          <VaButton
+              preset="primary"
+              size="small"
+              color="warning"
+              icon="vpn_key"
+              aria-label="Reset Password"
+              @click="$emit('reset-password', user as User)"
           />
           <VaButton
               preset="primary"

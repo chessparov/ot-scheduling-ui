@@ -1,4 +1,4 @@
-import { Ref, ref, unref } from 'vue'
+import {Ref, ref, unref, watch} from 'vue'
 import {
   getProjects,
   addProject,
@@ -6,22 +6,29 @@ import {
   removeProject,
   Sorting,
   Pagination,
+  type Filters,
 } from '../../../data/pages/projects'
 import { Project } from '../types'
 import { watchIgnorable } from '@vueuse/core'
 
 const makePaginationRef = () => ref<Pagination>({ page: 1, perPage: 10, total: 0 })
 const makeSortingRef = () => ref<Sorting>({ sortBy: 'creation_date', sortingOrder: 'desc' })
+const makeFiltersRef = () => ref<Partial<Filters>>({ search: '' })
 
-export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref<Pagination> }) => {
+export const useProjects = (options?: {
+  sorting?: Ref<Sorting>;
+  pagination?: Ref<Pagination>
+  filters?: Ref<Partial<Filters>>
+}) => {
   const isLoading = ref(false)
   const projects = ref<Project[]>([])
 
-  const { sorting = makeSortingRef(), pagination = makePaginationRef() } = options ?? {}
+  const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options ?? {}
 
   const fetch = async () => {
     isLoading.value = true
     const { data, pagination: newPagination } = await getProjects({
+      ...unref(filters),
       ...unref(sorting),
       ...unref(pagination),
     })
@@ -36,10 +43,36 @@ export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref
 
   const { ignoreUpdates } = watchIgnorable([pagination, sorting], fetch, { deep: true })
 
+  watch(
+      filters,
+      () => {
+        // Reset pagination to first page when filters changed
+        pagination.value.page = 1
+        fetch()
+      },
+      { deep: true },
+  )
+
+  watch(
+      // Necessary for avoiding getting no objects in the case you switch perPage, but there are no sufficient objects
+      // no more in this page. For e.g there are 75 rows in the table, I'm on page 3 and then I switch to 50 items per
+      // page. Now I'm still at page 3, but there aren't obviously sufficient items, so I get a blank table.
+      () => pagination.value.perPage,
+      (newPagination, oldPagination) => {
+        pagination.value.page = 1
+        fetch()
+      },
+  )
+
+
   fetch()
 
   return {
     isLoading,
+
+    filters,
+    sorting,
+    pagination,
 
     projects,
 
@@ -49,8 +82,7 @@ export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref
       isLoading.value = true
       await addProject({
         ...project,
-        project_owner: project.project_owner.id,
-        team: project.team.map((user) => user.id),
+        author: project.author,
       })
       await fetch()
       isLoading.value = false
@@ -60,8 +92,7 @@ export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref
       isLoading.value = true
       await updateProject({
         ...project,
-        project_owner: project.project_owner.id,
-        team: project.team.map((user) => user.id),
+        author: project.author,
       })
       await fetch()
       isLoading.value = false
@@ -71,14 +102,15 @@ export const useProjects = (options?: { sorting?: Ref<Sorting>; pagination?: Ref
       isLoading.value = true
       await removeProject({
         ...project,
-        project_owner: project.project_owner.id,
-        team: project.team.map((user) => user.id),
+        author: project.author,
       })
       await fetch()
       isLoading.value = false
     },
-
-    pagination,
-    sorting,
+    async refresh() {
+      isLoading.value = true
+      await fetch()
+      isLoading.value = false
+    },
   }
 }

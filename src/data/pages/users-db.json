@@ -6,7 +6,8 @@
     "email": "magicpan@example.gg",
     "privileges": "viewer",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "13 Sept 2021",
+    "password": "asdasd"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "email": "megamimmo@mimmo.gg",
     "privileges": "admin",
     "avatar": "😍",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "9 Sept 2023",
+    "password": "asdasd"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "email": "ebrown@gmail.com",
     "privileges": "viewer",
     "avatar": "https://randomuser.me/api/portraits/men/1.jpg",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "9 Oct 2022",
+    "password": "asdasd"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "email": "magicpan@example.gg",
     "privileges": "viewer",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "14 Sept 2023",
+    "password": "asdasd"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "email": "magicpan@example.gg",
     "privileges": "viewer",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "23 Sept 2023",
+    "password": "asdasd"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "email": "mimm@example.gg",
     "privileges": "viewer",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "20 Jan 2023",
+    "password": "asdasd"
   },
   {
     "id": 7,
@@ -60,7 +66,8 @@
     "email": "magicpan@example.gg",
     "privileges": "viewer",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "19 Sept 2013",
+    "password": "asdasd"
   },
   {
     "id": 8,
@@ -69,16 +76,18 @@
     "email": "magicpan@example.gg",
     "privileges": "viewer",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "15 June 2024",
+    "password": "asdasd"
   },
   {
-    "id": 1,
+    "id": 9,
     "name": "Mimmus",
     "surname": "capo",
     "email": "magicpan@example.gg",
     "privileges": "admin",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "1 Nov 2020",
+    "password": "asdasd"
   },
   {
     "id": 10,
@@ -87,6 +96,17 @@
     "email": "asdas@example.gg",
     "privileges": "viewer",
     "avatar": "",
-    "creation_date": "9 Sept 2023"
+    "creation_date": "4 Feb 2021",
+    "password": "asdasd"
+  },
+  {
+    "id": 11,
+    "name": "MimmoRonaldo",
+    "surname": "Cr7",
+    "email": "nike@gmail.gg",
+    "privileges": "viewer",
+    "avatar": "",
+    "creation_date": "7 Feb 2007",
+    "password": "asdasd"
   }
 ]

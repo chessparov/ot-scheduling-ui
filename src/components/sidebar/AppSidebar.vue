@@ -2,7 +2,7 @@
   <VaSidebar v-model="writableVisible" :width="sidebarWidth" :color="color" minimized-width="0">
     <VaAccordion v-model="value" multiple>
       <div id="collapse-wrapper" v-for="(route, index) in navigationRoutes.routes" :key="index" >
-        <VaCollapse v-if="route.display">
+        <VaCollapse v-if="route.display ? (route.requiresAdminPrivileges ? (userStore.admin) : true) : false">
           <template #header="{ value: isCollapsed }">
             <VaSidebarItem
               :to="route.children ? undefined : { name: route.name }"
@@ -58,6 +58,8 @@ import { useRoute } from 'vue-router'
 import { useColors } from 'vuestic-ui'
 
 import navigationRoutes, { type INavigationRoute } from './NavigationRoutes'
+import {useUserStore} from "@/stores/user-store";
+
 
 export default defineComponent({
   name: 'Sidebar',
@@ -72,6 +74,7 @@ export default defineComponent({
     const route = useRoute()
 
     const value = ref<boolean[]>([])
+    const userStore = useUserStore()
 
     const writableVisible = computed({
       get: () => props.visible,
@@ -113,6 +116,7 @@ export default defineComponent({
       iconColor,
       textColor,
       arrowDirection,
+      userStore
     }
   },
 })
