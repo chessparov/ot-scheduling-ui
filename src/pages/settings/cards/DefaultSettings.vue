@@ -75,7 +75,7 @@ const modParams = () => {
 
       })
       .catch(err => {
-        if (err.response.status === 400) {
+        if (err.response.status === 403) {
           init({ message: "Parametri non validi", color: "danger" })
         }
         else {
