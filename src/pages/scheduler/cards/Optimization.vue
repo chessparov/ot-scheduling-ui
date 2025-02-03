@@ -57,7 +57,7 @@ export default defineComponent({
             @update="getUpdatedValue"
         />
         <span>
-          Tempo consigliato: 120 secondi
+          Tempo consigliato: 15 secondi
         </span>
         <RadarChart/>
       </section>

@@ -41,7 +41,7 @@ export default defineComponent ({
   data () {
     return {
       percent: 0,
-      estimatedTime: 4 + 0.0075 * this.mcCycles + this.tabuTime,
+      estimatedTime: 5 + 0.0075 * this.mcCycles + this.tabuTime,
       compTime: 0,
       currentTime: 0,
       btnDisabled: false,
