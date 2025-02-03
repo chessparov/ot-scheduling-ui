@@ -58,7 +58,7 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { useForm, useToast } from "vuestic-ui";
+import {useColors, useForm, useToast} from "vuestic-ui";
 import { validators } from "@/services/utils";
 import axios from "axios";
 import {useUserStore} from "@/stores/user-store";
@@ -67,6 +67,7 @@ import api from "../../../axios";
 const { validate } = useForm("form");
 const { push } = useRouter();
 const { init } = useToast();
+const {applyPreset} = useColors();
 
 const formData = reactive({
   email: "",
@@ -95,6 +96,8 @@ const submit = () => {
           let dateJoined = res.data.date_joined;
           dateJoined = dateJoined.toString().split('T')[0].split('-');
           userStore.memberSince = dateJoined[2] + '/' + dateJoined[1] + '/' + dateJoined[0];
+
+          res.data.theme ? applyPreset('dark') : applyPreset('light');
 
           init({message: "Login effettuato con successo", color: "success"});
           push({
