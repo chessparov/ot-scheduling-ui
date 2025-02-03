@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, ref} from 'vue'
+import {computed, onMounted, onUpdated, ref, setDevtoolsHook} from 'vue'
 import { useLocalStorage } from '@vueuse/core'
 import { useProjects } from './composables/useProjects'
 import ProjectCards from './widgets/ProjectCards.vue'
@@ -7,11 +7,16 @@ import ProjectTable from './widgets/ProjectsTable.vue'
 import EditProjectForm from './widgets/EditProjectForm.vue'
 import { Project } from './types'
 import {useModal, useToast} from 'vuestic-ui'
-import router from "@/router";
+import {useUserStore} from "@/stores/user-store";
+import axios from "axios";
+import {useScheduleStore} from "@/stores/global-store";
+import {useDataStore} from "@/stores/data-store";
+import {useRouter} from "vue-router";
+import api from "../../../axios";
 
 const doShowAsCards = useLocalStorage('projects-view', true)
 
-const { projects, update, add, isLoading, remove, pagination, sorting } = useProjects()
+const { projects, update, add, isLoading, refresh, remove, pagination, sorting, filters } = useProjects()
 
 const projectToEdit = ref<Project | null>(null)
 const doShowProjectFormModal = ref(false)
@@ -22,22 +27,11 @@ const editProject = (project: Project) => {
 }
 
 const { init: notify } = useToast()
+const router = useRouter();
 
 const onProjectSaved = async (project: Project) => {
   doShowProjectFormModal.value = false
-  if ('id' in project) {
-    await update(project as Project)
-    notify({
-      message: 'Schedula modificata',
-      color: 'success',
-    })
-  } else {
-    await add(project as Project)
-    notify({
-      message: 'Schedula creata',
-      color: 'success',
-    })
-  }
+  await update(project as Project)
 }
 
 const { confirm } = useModal()
@@ -45,7 +39,7 @@ const { confirm } = useModal()
 const onProjectDeleted = async (project: Project) => {
   const response = await confirm({
     title: 'Elimina schedula',
-    message: `Sei sicuro di voler eliminare la schedula "${project.project_name}"?`,
+    message: `Sei sicuro di voler eliminare la schedula "${project.title}"?`,
     okText: 'Elimina',
     size: 'small',
     maxWidth: '380px',
@@ -56,13 +50,11 @@ const onProjectDeleted = async (project: Project) => {
   }
 
   await remove(project)
-  notify({
-    message: 'Schedula eliminata',
-    color: 'success',
-  })
 }
 
+const input = ref('')
 const editFormRef = ref()
+const userStore = useUserStore()
 
 const beforeEditFormModalClose = async (hide: () => unknown) => {
   if (editFormRef.value.isFormHasUnsavedChanges) {
@@ -78,13 +70,46 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
     hide()
   }
 }
+
+const viewSchedule = async(scheduleId: number) => {
+  await api
+      .get(axios.defaults.baseURL + '/api/scheduler/get-schedule/' + scheduleId.toString())
+      .then((res) => {
+        let scheduleStore = useScheduleStore();
+        scheduleStore.scheduleData = res.data.schedule_data;
+        scheduleStore.scheduleName = res.data.title;
+        scheduleStore.scheduleId = res.data.id;
+        scheduleStore.scheduleStats = res.data.schedule_stats;
+        scheduleStore.scheduleNote = res.data.note;
+        scheduleStore.scheduleReport = res.data.mc_results;
+        scheduleStore.scheduleStartDate = res.data.start_date;
+        scheduleStore.modified = res.data.modified;
+        router.push({name: 'dashboard'});
+      })
+      .catch((err) => {
+        if (err.response.status === 404) {
+          notify({message: 'La schedula non è stata trovata'})
+        }
+        else {
+          notify({message: 'Errore lato server'})
+        }
+      })
+}
+
+onMounted(
+    () => {
+      useDataStore().fetchProjects();
+      refresh();
+    }
+)
+
 </script>
 
 <template>
   <h1 class="h1">Storico schedule</h1>
   <VaCard>
     <VaCardContent>
-      <div class="flex flex-col md:flex-row gap-2 mb-2 justify-between">
+      <div class="flex flex-col md:flex-row gap-6 mb-6 justify-between">
         <div class="flex flex-col md:flex-row gap-2 justify-start">
           <VaButtonToggle
               v-model="doShowAsCards"
@@ -94,32 +119,41 @@ const beforeEditFormModalClose = async (hide: () => unknown) => {
               { label: 'Elenco', value: false },
             ]"
           />
-          <VaInput placeholder="Search">
+          <VaInput v-model="filters.search" placeholder="Cerca...">
             <template #prependInner>
               <VaIcon name="manage_search" color="secondary" size="small" />
             </template>
           </VaInput>
 <!--          <VaSelectOptionList -->
         </div>
-        <VaButton icon="add" @click="router.push({ name: 'schedule'})">Schedula</VaButton>
+        <VaButton v-if="userStore.admin" icon="add" @click="router.push({ name: 'schedule'})">Schedula</VaButton>
       </div>
 
       <ProjectCards
           v-if="doShowAsCards"
+          v-model:sort-by="sorting.sortBy"
+          v-model:sorting-order="sorting.sortingOrder"
+          :user-store="userStore"
           :projects="projects"
           :loading="isLoading"
+          :pagination="pagination"
+          :input="input"
           @edit="editProject"
           @delete="onProjectDeleted"
+          @view="projectId => {viewSchedule(projectId)}"
       />
       <ProjectTable
           v-else
           v-model:sort-by="sorting.sortBy"
           v-model:sorting-order="sorting.sortingOrder"
-          v-model:pagination="pagination"
+          :pagination="pagination"
+          :user-store="userStore"
           :projects="projects"
           :loading="isLoading"
+          :input="input"
           @edit="editProject"
           @delete="onProjectDeleted"
+          @view="(projectId: number) => {viewSchedule(projectId)}"
       />
     </VaCardContent>
 

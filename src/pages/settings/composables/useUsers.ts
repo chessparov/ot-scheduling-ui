@@ -1,11 +1,21 @@
 import { Ref, ref, unref, watch } from 'vue'
-import { getUsers, updateUser, addUser, removeUser, type Filters, Pagination, Sorting } from '../../../data/pages/users'
+import {
+  getUsers,
+  updateUser,
+  addUser,
+  removeUser,
+  type Filters,
+  Pagination,
+  Sorting,
+  resetPassword
+} from '../../../data/pages/users'
 import { User } from '../types'
 import { watchIgnorable } from '@vueuse/core'
+import {resetPasswordForm} from "../components/ResetPassword.vue";
 
 const makePaginationRef = () => ref<Pagination>({ page: 1, perPage: 10, total: 0 })
-const makeSortingRef = () => ref<Sorting>({ sortBy: 'name', sortingOrder: null })
-const makeFiltersRef = () => ref<Partial<Filters>>({ isActive: true, search: '' })
+const makeSortingRef = () => ref<Sorting>({ sortBy: 'first_name', sortingOrder: null })
+const makeFiltersRef = () => ref<Partial<Filters>>({ search: '' })
 
 export const useUsers = (options?: {
   pagination?: Ref<Pagination>
@@ -17,7 +27,7 @@ export const useUsers = (options?: {
 
   const { filters = makeFiltersRef(), sorting = makeSortingRef(), pagination = makePaginationRef() } = options || {}
 
-  const fetch = async () => {
+  const fetchUsers = async () => {
     isLoading.value = true
     const { data, pagination: newPagination } = await getUsers({
       ...unref(filters),
@@ -29,23 +39,22 @@ export const useUsers = (options?: {
     ignoreUpdates(() => {
       pagination.value = newPagination
     })
-
     isLoading.value = false
   }
 
-  const { ignoreUpdates } = watchIgnorable([pagination, sorting], fetch, { deep: true })
+  const { ignoreUpdates } = watchIgnorable([pagination, sorting], fetchUsers, { deep: true })
 
   watch(
     filters,
     () => {
       // Reset pagination to first page when filters changed
       pagination.value.page = 1
-      fetch()
+      fetchUsers()
     },
     { deep: true },
   )
 
-  fetch()
+  fetchUsers()
 
   return {
     isLoading,
@@ -56,26 +65,32 @@ export const useUsers = (options?: {
 
     users,
 
-    fetch,
+    fetchUsers,
 
     async add(user: User) {
       isLoading.value = true
       await addUser(user)
-      await fetch()
+      await fetchUsers()
       isLoading.value = false
     },
 
     async update(user: User) {
       isLoading.value = true
       await updateUser(user)
-      await fetch()
+      await fetchUsers()
+      isLoading.value = false
+    },
+    async resetPassword(formData: resetPasswordForm) {
+      isLoading.value = true
+      await resetPassword(formData)
+      await fetchUsers()
       isLoading.value = false
     },
 
     async remove(user: User) {
       isLoading.value = true
       await removeUser(user)
-      await fetch()
+      await fetchUsers()
       isLoading.value = false
     },
   }

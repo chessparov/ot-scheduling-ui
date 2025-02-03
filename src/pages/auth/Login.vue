@@ -3,8 +3,9 @@
     <h1 class="font-semibold text-4xl mb-4">Log in</h1>
     <p class="text-base mb-4 leading-5">
       Non hai ancora un account?
-      <RouterLink :to="{ name: 'signup' }" class="font-semibold text-primary"
-        >Registrati</RouterLink
+      <a href="mailto:francesca.daga@ao-pisa.toscana.it?subject=Richiesta%20credenziali%20OR%20SCHEDULER&body=Vorrei%20richiedere%20un%20account.%0A%0ANome:%0ACognome:%0AE-Mail:"
+        class="font-semibold text-primary"
+        >Richiedilo</a
       >
     </p>
     <VaInput
@@ -57,12 +58,16 @@
 <script lang="ts" setup>
 import { reactive } from "vue";
 import { useRouter } from "vue-router";
-import { useForm, useToast } from "vuestic-ui";
+import {useColors, useForm, useToast} from "vuestic-ui";
 import { validators } from "@/services/utils";
+import axios from "axios";
+import {useUserStore} from "@/stores/user-store";
+import api from "../../../axios";
 
 const { validate } = useForm("form");
 const { push } = useRouter();
 const { init } = useToast();
+const {applyPreset} = useColors();
 
 const formData = reactive({
   email: "",
@@ -71,12 +76,43 @@ const formData = reactive({
 });
 
 const submit = () => {
+  const userStore = useUserStore();
   if (validate()) {
-    init({ message: "Login effettuato con successo", color: "success" });
-    push({
-      name: "dashboard",
-      params: { user: formData.email },
-    });
+    api
+        .post(axios.defaults.baseURL + '/api/scheduler/login',
+            formData,
+            {
+              headers: {
+                'Content-Type': 'multipart/form-data'
+              }
+            })
+        .then(res => {
+          userStore.name = res.data.first_name;
+          userStore.surname = res.data.last_name;
+          userStore.email = res.data.email;
+          userStore.admin = res.data.is_admin;
+          userStore.loggedIn = true;
+
+          let dateJoined = res.data.date_joined;
+          dateJoined = dateJoined.toString().split('T')[0].split('-');
+          userStore.memberSince = dateJoined[2] + '/' + dateJoined[1] + '/' + dateJoined[0];
+
+          res.data.theme ? applyPreset('dark') : applyPreset('light');
+
+          init({message: "Login effettuato con successo", color: "success"});
+          push({
+            name: "dashboard",
+          })
+        })
+        .catch(error => {
+          if (error.response.status === 401) {
+            init({message: "E-mail o password errata", color: "danger"});
+          }
+          else {
+            init({message: "Errore lato server", color: "danger"});
+          }
+        })
   }
-};
+}
+
 </script>

@@ -11,7 +11,7 @@
         aria-label="Visit homepage"
       >
         <div class="aoup-wrapper">
-          <h1 id="ot-scheduler" class="va-h3" style="text-align: center">OT SCHEDULER</h1>
+          <h1 id="ot-scheduler" class="va-h3" style="text-align: center">OR SCHEDULER</h1>
           <br />
           <h1 class="va-h6" style="font-size: 1.25rem; text-align: center; color: rgba(255, 255, 255, 0.86)">
             U.O. Innovazione Sviluppo e Analisi dei Processi

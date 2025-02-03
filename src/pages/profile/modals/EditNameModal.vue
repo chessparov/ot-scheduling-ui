@@ -9,7 +9,7 @@
     @update:modelValue="emits('cancel')"
   >
     <h1 class="va-h5 mb-4">Modifica {{ props.field }}</h1>
-    <VaForm ref="form" @submit.prevent="submit">
+    <VaForm ref="form">
       <VaInput
         v-if="props.field === 'Nome'"
         v-model="Name"
@@ -39,7 +39,7 @@
           :style="buttonStyles"
           class="mb-4 md:mb-0"
           type="submit"
-          @click="submit"
+          @click="submitMods"
         >
           Conferma</VaButton
         >
@@ -52,6 +52,8 @@ import { ref } from "vue";
 import { useUserStore } from "@/stores/user-store";
 
 import { useToast } from "vuestic-ui";
+import axios from "axios";
+import api from "../../../../axios";
 
 const store = useUserStore();
 
@@ -65,25 +67,60 @@ const { init } = useToast();
 const emits = defineEmits(["cancel"]);
 const props = defineProps(["field"]);
 
-const Name = ref<string>(store.userName);
+const Name = ref<string>(store.name);
 const Surname = ref<string>(store.surname);
 const Email = ref<string>(store.email);
 
-const submit = () => {
+const submitMods = () => {
   if (props.field === "Nome") {
-    if (!Name.value || Name.value === store.userName) {
+    if (!Name.value || Name.value === store.name) {
       return emits("cancel");
     }
-    store.changeUserName(Name.value);
-    init({ message: "Nome aggiornato con successo", color: "success" });
-    emits("cancel");
+    api
+        .put(axios.defaults.baseURL + '/api/scheduler/mod-name/' + store.email.toString(),
+            {
+              name: Name.value,
+              admin: store.admin,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+        )
+        .then((res) => {
+          store.changeUserName(Name.value);
+          init({ message: "Nome aggiornato con successo", color: "success" });
+          emits("cancel");
+        })
+        .catch((error) => {
+            init({message: "Errore lato server", color: "danger"});
+        })
+
   } else {
     if (!Surname.value || Surname.value === store.surname) {
       return emits("cancel");
     }
-    store.changeUserSurname(Surname.value);
-    init({ message: "Cognome aggiornato con successo", color: "success" });
-    emits("cancel");
+    api
+        .put(axios.defaults.baseURL + '/api/scheduler/mod-surname/' + store.email.toString(),
+            {
+              surname: Surname.value,
+              admin: store.admin,
+            },
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+        )
+        .then((res) => {
+          store.changeUserSurname(Surname.value);
+          init({ message: "Cognome aggiornato con successo", color: "success" });
+          emits("cancel");
+        })
+        .catch((error) => {
+            init({message: "Errore lato server", color: "danger"});
+        })
   }
 };
 </script>

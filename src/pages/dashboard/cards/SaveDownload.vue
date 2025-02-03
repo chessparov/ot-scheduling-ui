@@ -1,15 +1,99 @@
 <script lang="ts">
 
+import {useUserStore} from "@/stores/user-store";
+import {useScheduleStore} from "@/stores/global-store";
+import FileDownload from 'js-file-download'
+import {useToast} from "vuestic-ui";
+import axios from "axios";
+import api from "../../../../axios";
+
 export default {
   props: {
-    modifiedSchedule: {
+    changesMade: {
       default: false,
       type: Boolean,
     },
   },
+  emits: {
+    changesSaved: {
+
+    }
+  },
   data() {
     return {
-      saveBtnStatus: false,
+      userStore: useUserStore(),
+      scheduleStore: useScheduleStore(),
+      init: useToast(),
+    }
+  },
+  methods: {
+    async onDownload(){
+      await api
+          .get(axios.defaults.baseURL + '/api/scheduler/download-schedule/' + this.scheduleStore.scheduleId.toString(),
+              {
+                responseType: 'blob'
+              })
+          .then((res) => {
+            FileDownload(res.data, `${this.scheduleStore.scheduleName}.xlsx`)
+          })
+          .catch((error) => {
+            if (error.response.status == 404) {
+              this.init.notify({
+                message: 'Richiesta non valida. Schedula inesistente',
+                color: 'danger'
+              })
+            }
+            else if (error.response.status == 403) {
+              this.init.notify({
+                message: `L'unità operativa ${error.response.data} non esiste.`,
+                color: 'danger'
+              })
+            }
+            else {
+              this.init.notify({
+                message: 'Errore lato server',
+                color: 'danger'
+              })
+            }
+          })
+    },
+    async onUpdate() {
+      await api
+          .put(axios.defaults.baseURL + '/api/scheduler/update-project/' + this.scheduleStore.scheduleId.toString(),
+              {schedule_data: this.scheduleStore.scheduleData, modified: true},
+              {
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              })
+          .then(() => {
+            this.init.notify({
+              message: 'Schedula modificata con successo',
+              color: 'success'
+            })
+            // After the schedule has been saved, turn off the save button until new changes are made
+            this.$emit('changesSaved');
+          })
+          .catch((error) => {
+            if (error.response.status == 404) {
+              this.init.notify({
+                message: 'Richiesta non valida. Schedula inesistente',
+                color: 'danger'
+              })
+            }
+            else if (error.response.status == 403) {
+              this.init.notify({
+                message: `L'unità operativa ${error.response.data} non esiste.`,
+                color: 'danger'
+              })
+            }
+            else {
+              this.init.notify({
+                message: 'Errore lato server',
+                color: 'danger'
+              })
+            }
+          })
     }
   }
 }
@@ -18,26 +102,28 @@ export default {
 <template>
   <VaCard>
     <div class="flex flex-col md:flex-row gap-2" style="justify-content: space-between">
-      <div class="flex flex-col md:flex-row gap-2">
+      <div class="flex flex-col md:flex-row gap-2" v-if="userStore.admin">
         <VaButton
-            :disabled="!modifiedSchedule"
+            :disabled="!changesMade"
             icon="check"
             class="calendar-button"
+            @click="onUpdate"
         >
           Salva Modifiche
         </VaButton>
-        <VaButton
-            icon="delete"
-            color="danger"
-            class="calendar-button"
-        >
-          Elimina
-        </VaButton>
+<!--        <VaButton-->
+<!--            icon="delete"-->
+<!--            color="danger"-->
+<!--            class="calendar-button"-->
+<!--        >-->
+<!--          Elimina-->
+<!--        </VaButton>-->
       </div>
       <div class="flex flex-col md:flex-row gap-2">
         <VaButton
             icon="download"
             class="calendar-button"
+            @click="onDownload"
         >
           Download
         </VaButton>

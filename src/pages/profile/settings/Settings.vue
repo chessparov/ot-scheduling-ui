@@ -5,7 +5,7 @@
     <p class="font-bold w-[200px]">Nome</p>
     <div class="flex-1">
       <div class="max-w-[748px]">
-        {{ store.userName }}
+        {{ store.name }}
       </div>
     </div>
     <VaButton

@@ -3,7 +3,6 @@
     "id": 0,
     "project_name": "Schedula ottobre",
     "project_owner": 2,
-    "team": [5],
     "status": "in progress",
     "creation_date": "20 Nov 2023"
   },
@@ -11,7 +10,6 @@
     "id": 1,
     "project_name": "Schedula prova",
     "project_owner": 1,
-    "team": [4],
     "status": "completed",
     "creation_date": "16 Oct 2023"
   },
@@ -19,7 +17,6 @@
     "id": 2,
     "project_name": "Test",
     "project_owner": 3,
-    "team": [3],
     "status": "completed",
     "creation_date": "1 Oct 2023"
   },
@@ -27,7 +24,6 @@
     "id": 3,
     "project_name": "Schedula febbraio 2023",
     "project_owner": 4,
-    "team": [7],
     "status": "completed",
     "creation_date": "19 Sept 2023"
   },
@@ -35,7 +31,6 @@
     "id": 4,
     "project_name": "Schedule 2024",
     "project_owner": 1,
-    "team": [7, 1],
     "status": "completed",
     "creation_date": "23 Sept 2023"
   },
@@ -43,7 +38,6 @@
     "id": 5,
     "project_name": "Schedula Marzo",
     "project_owner": 1,
-    "team": [9],
     "status": "completed",
     "creation_date": "9 Sept 2023"
   },
@@ -51,7 +45,6 @@
     "id": 6,
     "project_name": "Schedula Novembre",
     "project_owner": 3,
-    "team": [3],
     "status": "archived",
     "creation_date": "17 Aug 2023"
   },
@@ -59,7 +52,6 @@
     "id": 7,
     "project_name": "schedula",
     "project_owner": 2,
-    "team": [3, 4],
     "status": "completed",
     "creation_date": "11 Aug 2023"
   },
@@ -67,7 +59,6 @@
     "id": 8,
     "project_name": "Prova design",
     "project_owner": 4,
-    "team": [7],
     "status": "archived",
     "creation_date": "9 Aug 2023"
   }

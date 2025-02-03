@@ -5,21 +5,22 @@ import { User } from '../types'
 
 defineProps({
   privileges: {
-    type: String as PropType<User['privileges']>,
+    type: String,
     required: true,
   },
 })
 
-const badgeColorMap: Record<User['privileges'], string> = {
+const badgeColorMap = {
   viewer: 'primary',
   admin: 'warning',
 }
 function translateStatus(status: string) {
-  const dictStatus = {
-    'viewer': 'Visualizzatore',
-    'admin': 'Admin',
+  if (status === 'viewer') {
+    return 'Visualizzatore'
   }
-  return dictStatus[status]
+  else if (status === 'admin') {
+    return 'Admin'
+  }
 }
 </script>
 

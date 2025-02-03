@@ -4,6 +4,7 @@ export interface INavigationRoute {
   meta: { icon: string }
   display: boolean
   children?: INavigationRoute[]
+  requiresAdminPrivileges: boolean
 }
 
 export default {
@@ -19,6 +20,7 @@ export default {
         icon: 'vuestic-iconset-dashboard',
       },
       display: true,
+      requiresAdminPrivileges: false,
     },
     {
       name: 'history',
@@ -27,34 +29,48 @@ export default {
         icon: 'folder_shared',
       },
       display: true,
+      requiresAdminPrivileges: false,
     },
     {
       name: 'schedule',
-      displayName: 'Nuova Schedula',
+      displayName: 'Nuova schedula',
       meta: {
         icon: 'group',
       },
       display: true,
+      requiresAdminPrivileges: true
     },
     {
       name: 'upload',
-      displayName: 'Carica Schedula',
+      displayName: 'Analizza schedula',
+      meta: {
+        icon: 'speed',
+      },
+      display: true,
+      requiresAdminPrivileges: true
+    },
+    {
+      name: 'cleaner',
+      displayName: 'Filtra lista',
       meta: {
         icon: 'upload',
       },
       display: true,
+      requiresAdminPrivileges: true
     },
     {
       name: 'settings',
       displayName: 'Impostazioni',
       meta: {},
       display: false,
+      requiresAdminPrivileges: true,
     },
     {
       name: 'profile',
       displayName: 'Profilo',
       meta: {},
       display: false,
+      requiresAdminPrivileges: false,
     }
   ] as INavigationRoute[],
 }
