@@ -36,7 +36,7 @@
     "ionicons": "^7.4.0",
     "js-file-download": "^0.4.12",
     "medium-editor": "^5.23.3",
-    "pinia": "^2.1.7",
+    "pinia": "^3.0.1",
     "register-service-worker": "^1.7.1",
     "sass": "^1.69.5",
     "serve": "^14.2.1",
