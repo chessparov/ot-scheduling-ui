@@ -28,7 +28,7 @@
     "apexcharts": "^4.4.0",
     "axios": "^1.7.9",
     "chart.js": "^4.4.7",
-    "chartjs-chart-geo": "^4.2.8",
+    "chartjs-chart-geo": "^4.3.4",
     "d3": "^7.9.0",
     "epic-spinners": "^2.0.0",
     "flag-icons": "^7.3.2",
