@@ -307,14 +307,12 @@ onMounted(() => {requestStats();});
               type="radio"
               style="--va-option-list-line-height: 3rem; font-size: 13px;font-weight: bold; max-width: 40%"
           />
-          <VaInnerLoading class="pie">
+          <div class="pie">
             <GenericPie v-if="computedSeriesPie.length" :series="computedSeriesPie" :labels="computedLabelsPie" :legend-position="width" :title="computedTitle" :palette="palette"/>
-          </VaInnerLoading>
+          </div>
         </div>
-        <div class="flex bar" style="margin: auto" >
-          <VaInnerLoading>
-            <GenericBar v-if="computedSeriesBar.length" :series="computedSeriesBar" :labels="computedLabelsBar" :title="computedTitle" :palette="palette"/>
-          </VaInnerLoading>
+        <div class="bar">
+          <GenericBar v-if="computedSeriesBar.length" :series="computedSeriesBar" :labels="computedLabelsBar" :title="computedTitle" :palette="palette"/>
         </div>
       </div>
     </VaInnerLoading>
@@ -337,7 +335,11 @@ onMounted(() => {requestStats();});
 }
 .pie {
   margin: auto;
+  //width: 100%;
+  //min-width: 40%;
   max-width: 500px;
+  min-width: 500px;
+  //max-height: 500px;
   @media (min-width: 1640px) {
     width: 100%;
     margin: 0 auto 0 auto;

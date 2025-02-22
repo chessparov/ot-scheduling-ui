@@ -10,6 +10,7 @@ const {currentPresetName} = useColors();
 const chartOptions = computed(() => ({
   chart: {
     type: 'pie',
+    height: 500,
   },
   colors: props.palette,
   labels: props.labels,
@@ -32,9 +33,9 @@ const chartOptions = computed(() => ({
   },
   legend: {
     position: props.legendPosition > 1640 ? 'bottom' : 'right',
-    // floating: true,
     show: true,
     height: props.legendPosition > 1640 ? 75 : undefined,
+    width: props.legendPosition > 1640 ? undefined : 150,
     labels: {
       colors: currentPresetName.value === 'light' ? undefined : 'rgba(255,255,255,0.82)',
     }
